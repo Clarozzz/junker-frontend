@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import Link from "next/link";
 
 export default function Page() {
@@ -18,6 +19,7 @@ export default function Page() {
           <Link href='/perfil'>Ver mi perfil</Link>
         </li>
       </ul>
+      <Footer/>
     </>
   );
 }

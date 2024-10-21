@@ -2,8 +2,9 @@
 "use client"; // Indica que este es un Client Component
 
 import { useState } from 'react';
-import Image from 'next/image'; // Importa el componente Image de Next.js
+// import Image from 'next/image'; 
 import { useRouter } from 'next/navigation'; // Importa el hook useRouter para redireccionar
+import LogoJunker from '@/components/logo-junker';
 
 const Registro = () => {
   const router = useRouter(); // Inicializa el router
@@ -93,9 +94,9 @@ const Registro = () => {
       <div className="flex w-full md:w-1/2 justify-center items-center bg-white">
         <div className="max-w-md w-full p-8">
           {/* Logo */}
-          <div className="flex items-center justify-center mb-8">
-            <Image src="/path-to-your-logo.png" alt="Logo" className="h-12 mr-3" width={48} height={48} />
-            <span className="text-6xl font-bold text-custom-blue">Junker</span>
+          <div className="flex items-center justify-center mb-2">
+            <LogoJunker />
+            <span className="text-6xl font-bold font-sans text-custom-blue">Junker</span>
           </div>
 
           {/* Form Title */}
