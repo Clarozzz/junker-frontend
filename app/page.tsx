@@ -6,7 +6,10 @@ export default function Page() {
     <>
       <ul>
         <li>
-          <Link href='#'>Iniciar sesion</Link>
+          <Link href='/login'>Iniciar sesion</Link>
+        </li>
+        <li>
+          <Link href='/registro'>Registrarse</Link>
         </li>
         <li>
           <Link href='#'>Publicar producto</Link>
