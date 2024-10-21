@@ -1,10 +1,12 @@
 import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
 import Link from "next/link";
 
 export default function Page() {
   
   return (
     <>
+      <Navbar />
       <ul>
         <li>
           <Link href='/login'>Iniciar sesion</Link>
@@ -19,7 +21,7 @@ export default function Page() {
           <Link href='/perfil'>Ver mi perfil</Link>
         </li>
       </ul>
-      <Footer/>
+      <Footer />
     </>
   );
 }

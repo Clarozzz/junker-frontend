@@ -58,7 +58,7 @@ const Login = () => {
           <div className="flex items-center justify-center mb-8">
           {/* <Image src="/path-to-your-logo.png" alt="Logo" className="h-12 mr-3" width={48} height={48} /> */}
             <LogoJunker/>
-            <span className="text-6xl font-bold text-custom-blue">Junker</span>
+            <span className="text-6xl font-bold text-custom-blue font-inter">Junker</span>
           </div>
 
           {/* Form Title */}
