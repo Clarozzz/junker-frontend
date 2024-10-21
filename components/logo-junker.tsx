@@ -6,7 +6,7 @@ export default function LogoJunker({
   className?: string;
 }) {
   return (
-    <div className= {`w-24 ${className}`}>
+    <div className= {` ${className}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"

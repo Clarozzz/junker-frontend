@@ -11,7 +11,7 @@ export default function Footer () {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
             <div className="sm:col-span-2">
               <div className="flex flex-row mx-auto">
-                <LogoJunker/>
+                <LogoJunker className='w-24'/>
                 <span className="flex text-6xl font-bold font-sans text-custom-blue items-center">Junker</span>
               </div>
               <h1 className="max-w-lg text-xl mt-3 font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">
