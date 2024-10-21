@@ -95,7 +95,7 @@ const Registro = () => {
         <div className="max-w-md w-full p-8">
           {/* Logo */}
           <div className="flex items-center justify-center mb-2">
-            <LogoJunker />
+            <LogoJunker className='w-24'/>
             <span className="text-6xl font-bold font-sans text-custom-blue">Junker</span>
           </div>
 

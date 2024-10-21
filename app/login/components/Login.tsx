@@ -1,5 +1,5 @@
 
-"use client";
+"use client"
 
 import { useState } from 'react';
 // import Image from 'next/image';
@@ -57,7 +57,7 @@ const Login = () => {
           {/* Logo */}
           <div className="flex items-center justify-center mb-8">
           {/* <Image src="/path-to-your-logo.png" alt="Logo" className="h-12 mr-3" width={48} height={48} /> */}
-            <LogoJunker/>
+            <LogoJunker className='w-24'/>
             <span className="text-6xl font-bold text-custom-blue font-inter">Junker</span>
           </div>
 

@@ -15,7 +15,7 @@ export default function Page() {
           <Link href='/registro'>Registrarse</Link>
         </li>
         <li>
-          <Link href='#'>Publicar producto</Link>
+          <Link href='/publicar'>Publicar producto</Link>
         </li>
         <li>
           <Link href='/perfil'>Ver mi perfil</Link>
