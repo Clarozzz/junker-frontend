@@ -1,9 +1,20 @@
+import Link from "next/link";
 
-export default function PersonasPage() {
+export default function Page() {
   
   return (
-    <div>
-      <h1>Lista de Personas</h1>
-    </div>
+    <>
+      <ul>
+        <li>
+          <Link href='#'>Iniciar sesion</Link>
+        </li>
+        <li>
+          <Link href='#'>Publicar producto</Link>
+        </li>
+        <li>
+          <Link href='/perfil'>Ver mi perfil</Link>
+        </li>
+      </ul>
+    </>
   );
 }
