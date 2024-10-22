@@ -25,8 +25,8 @@ export default function Page() {
         </li>
       </ul>
       {/* <Carousel/> */}
-      <Testimonios/>
       <ProductosSeccion/>
+      <Testimonios/>
       <Footer />
     </>
   );

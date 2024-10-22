@@ -87,7 +87,7 @@ const Registro = () => {
   return (
     <div className="flex h-screen">
       {/* Left side (image) */}
-      <div className="hidden md:flex w-1/2 bg-cover bg-center bg-[url('/path-to-your-image.jpg')] bg-slate-500">
+      <div className="hidden md:flex w-1/2 bg-cover bg-center bg-[url('https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/pexels-markusspiske-103286.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3BleGVscy1tYXJrdXNzcGlza2UtMTAzMjg2LndlYnAiLCJpYXQiOjE3Mjk1NzYwMDUsImV4cCI6MTc2MTExMjAwNX0.bSpivV4i73LAagJ9VQaLAwvcIN3OhYGgZSSrrBP1ZQA&t=2024-10-22T05%3A46%3A45.447Z')] bg-slate-500">
       </div>
 
       {/* Right side (register form) */}
