@@ -11,11 +11,7 @@ const Registro = () => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');
-  const [telefono, setTelefono] = useState('');
   const [password, setPassword] = useState('');
-  const [genero, setGenero] = useState('');
-  const [fecha_nacimiento, setFechaNacimiento] = useState('');
-  const [direccion, setDireccion] = useState('');
   const [accepted, setAccepted] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -23,18 +19,12 @@ const Registro = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Verifica si el checkbox no está marcado y muestra un error
     if (!accepted) {
       setError('Debes aceptar las políticas de privacidad y los términos de uso para poder registrarte.');
       return;
     }
 
-    // Verifica que el campo de género no esté vacío
-    if (!genero) {
-      setError('Debes seleccionar un género.');
-      return;
-    }
-
+    // * Post para registrar un usuario
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: 'POST',
@@ -46,10 +36,6 @@ const Registro = () => {
           password,
           nombre,
           apellido,
-          telefono,
-          genero,
-          fecha_nacimiento,
-          direccion,
         }),
       });
 
@@ -66,13 +52,8 @@ const Registro = () => {
       setNombre('');
       setApellido('');
       setEmail('');
-      setTelefono('');
       setPassword('');
-      setGenero('');
-      setFechaNacimiento('');
-      setDireccion('');
-      setAccepted(false);
-
+    
       // Redirigir a la página principal
       router.push('/'); // Redirige a la raíz
     } catch (error: unknown) {
@@ -158,61 +139,7 @@ const Registro = () => {
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
-            <div>
-              <input
-                type="tel"
-                id="telefono"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-                placeholder="Teléfono (opcional)"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
-              />
-            </div>
-
-            {/* Nuevo select de género */}
-            <div>
-              <select
-              title='Género'
-                id="genero"
-                value={genero}
-                onChange={(e) => setGenero(e.target.value)}
-            
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue text-gray-400"
-              >
-                <option value="" disabled>
-                  Selecciona tu género
-                </option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-                <option value="X">Otro</option>
-              </select>
-            </div>
-
-            {/* Input para la fecha de nacimiento */}
-            <div>
-              <input 
-                title='Fecha de Nacimiento'
-                type="date"
-                id="fechaNacimiento"
-                value={fecha_nacimiento}
-                onChange={(e) => setFechaNacimiento(e.target.value)}
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue text-gray-400"
-              />
-            </div>
-
-            {/* Input para la dirección */}
-            <div>
-              <input
-                type="text"
-                id="direccion"
-                value={direccion}
-                onChange={(e) => setDireccion(e.target.value)}
-                placeholder="Dirección"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
-              />
-            </div>
-
+         
             {error && <p className="text-red-500 text-center">{error}</p>}
             {success && <p className="text-green-500 text-center">{success}</p>}
 
