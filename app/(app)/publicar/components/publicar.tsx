@@ -1,7 +1,6 @@
 'use client'
 
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -58,7 +57,6 @@ export default function PublicarClient() {
 
   return (
     <>
-      <Navbar />
       <div className="h-screen flex flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row">
         <div className=" mt-6 flex flex-col w-full md:w-1/2 justify-center items-center">
           <div>

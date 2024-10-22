@@ -11,7 +11,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-background shadow-md">
+    <header className="bg-background shadow-md sticky top-0">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <div className='flex flex-row'>
