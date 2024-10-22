@@ -96,7 +96,7 @@ const Registro = () => {
           {/* Logo */}
           <div className="flex items-center justify-center mb-2">
             <LogoJunker className='w-24'/>
-            <span className="text-6xl font-bold font-sans text-custom-blue">Junker</span>
+            <span className="text-6xl font-bold font-sans text-custom-blue montserrat">Junker</span>
           </div>
 
           {/* Form Title */}
