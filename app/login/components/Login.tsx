@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <div className="flex h-screen">
       {/* Left side (image) */}
-      <div className="hidden md:flex w-1/2 bg-cover bg-gray-900 bg-opacity-50 bg-center bg-[url('https://wswsmaiixknecwdbruig.supabase.co/storage/v1/object/sign/web/login.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ3ZWIvbG9naW4ud2VicCIsImlhdCI6MTcyOTQ5OTk3MSwiZXhwIjoxNzYxMDM1OTcxfQ.jDwFAyqOrM3lpjo-w74Iz1jFnPnVXD3jao9ZY7wLIJA&t=2024-10-21T08%3A39%3A15.476Z')]">
+      <div className="hidden md:flex w-1/2 bg-cover bg-gray-900 bg-opacity-50 bg-center bg-[url('https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/pexels-alex-chistol-1715967-3283098.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3BleGVscy1hbGV4LWNoaXN0b2wtMTcxNTk2Ny0zMjgzMDk4LndlYnAiLCJpYXQiOjE3Mjk1NzYxODYsImV4cCI6MTc2MTExMjE4Nn0.slzOjZtcYjljd-TQ6VqmrwJTaJMMrr67yqNWB-BN7bU&t=2024-10-22T05%3A49%3A46.956Z')]">
         {/* <div className="absolute inset-0 bg-gray-900 bg-opacity-50"></div> */}
       </div>
 
