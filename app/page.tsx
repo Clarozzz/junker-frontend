@@ -1,38 +1,33 @@
-"use client"
-// pages/personas.tsx
-import { useState, useEffect } from 'react';
+import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
+import Link from "next/link";
+import Testimonios from "./components/testimonios";
+import ProductosSeccion from "./components/productos-seccion";
+// import Carousel from "./components/carousel";
 
-// Definir el tipo de Persona
-interface Persona {
-  id: number;
-  nombres: string;
-  apellidos: string;
-  genero: string;
-}
-
-export default function PersonasPage() {
-  // Definir el estado de personas con el tipo correcto
-  const [personas, setPersonas] = useState<Persona[]>([]);
-
-  useEffect(() => {
-    // Realizar fetch a la API de FastAPI
-    const fetchPersonas = async () => {
-      const res = await fetch('http://localhost:8000/personas');
-      const data: Persona[] = await res.json();
-      setPersonas(data);
-    };
-
-    fetchPersonas();
-  }, []); // El array vacío asegura que el fetch solo ocurra al cargar la página
-
+export default function Page() {
+  
   return (
-    <div>
-      <h1>Lista de Personas</h1>
+    <>
+      <Navbar />
       <ul>
-        {personas.map((persona) => (
-          <li key={persona.id}>{persona.nombres} {persona.apellidos} {persona.genero}</li>
-        ))}
+        <li>
+          <Link href='/login'>Iniciar sesion</Link>
+        </li>
+        <li>
+          <Link href='/registro'>Registrarse</Link>
+        </li>
+        <li>
+          <Link href='/publicar'>Publicar producto</Link>
+        </li>
+        <li>
+          <Link href='/perfil'>Ver mi perfil</Link>
+        </li>
       </ul>
-    </div>
+      {/* <Carousel/> */}
+      <Testimonios/>
+      <ProductosSeccion/>
+      <Footer />
+    </>
   );
 }
