@@ -5,6 +5,8 @@ import { useState } from 'react';
 // import Image from 'next/image'; 
 import { useRouter } from 'next/navigation'; // Importa el hook useRouter para redireccionar
 import LogoJunker from '@/components/logo-junker';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 const Registro = () => {
   const router = useRouter(); // Inicializa el router
@@ -53,7 +55,7 @@ const Registro = () => {
       setApellido('');
       setEmail('');
       setPassword('');
-    
+
       // Redirigir a la página principal
       router.push('/'); // Redirige a la raíz
     } catch (error: unknown) {
@@ -68,15 +70,23 @@ const Registro = () => {
   return (
     <div className="flex h-screen">
       {/* Left side (image) */}
-      <div className="hidden md:flex w-1/2 bg-cover bg-center bg-[url('https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/pexels-markusspiske-103286.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3BleGVscy1tYXJrdXNzcGlza2UtMTAzMjg2LndlYnAiLCJpYXQiOjE3Mjk1NzYwMDUsImV4cCI6MTc2MTExMjAwNX0.bSpivV4i73LAagJ9VQaLAwvcIN3OhYGgZSSrrBP1ZQA&t=2024-10-22T05%3A46%3A45.447Z')] bg-slate-500">
+      <div className="hidden md:flex w-1/2 bg-cover bg-center bg-[url('https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/sign-up.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3NpZ24tdXAud2VicCIsImlhdCI6MTcyOTYyMjMyOSwiZXhwIjoxNzYxMTU4MzI5fQ.XtHA6RHNiC2-EWRdZg3d6T7Aa9-Wrurg5AUFeK0CwOA&t=2024-10-22T18%3A38%3A49.836Z')] bg-slate-500">
       </div>
 
       {/* Right side (register form) */}
       <div className="flex w-full md:w-1/2 justify-center items-center bg-white">
+
+        <a href="/" className='absolute top-6 right-10'>
+          <Button variant={'outline'} size={'icon'} className="rounded-full w-10 h-10">
+            <X className="h-6 w-6" />
+            <span className="sr-only">Close</span>
+          </Button>
+        </a>
+
         <div className="max-w-md w-full p-8">
           {/* Logo */}
           <div className="flex items-center justify-center mb-2">
-            <LogoJunker className='w-24'/>
+            <LogoJunker className='w-24' />
             <span className="text-6xl font-bold font-sans text-custom-blue montserrat">Junker</span>
           </div>
 
@@ -139,7 +149,7 @@ const Registro = () => {
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
-         
+
             {error && <p className="text-red-500 text-center">{error}</p>}
             {success && <p className="text-green-500 text-center">{success}</p>}
 
