@@ -14,10 +14,14 @@ export default function PublicarClient() {
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-  
+    
+    if (files && files.length > 0) {
+      const selectedFile = files[0];
+      console.log("Archivo seleccionado:", selectedFile.name);
+    } 
   };
+
   const onDrop = async (acceptedFiles: File[]) => {
-    // Verifica que se haya seleccionado al menos un archivo
     console.log("Archivo seleccionado: ", acceptedFiles[0]);
   };
 
@@ -56,7 +60,7 @@ export default function PublicarClient() {
     <>
       <Navbar />
       <div className="h-screen flex flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row">
-        <div className="flex flex-col w-full md:w-1/2 justify-center items-center">
+        <div className=" mt-6 flex flex-col w-full md:w-1/2 justify-center items-center">
           <div>
             <h2 className="text-2xl text-center font-bold text-gray-800 mb-2">
               Subir Imagenes

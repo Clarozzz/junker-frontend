@@ -21,16 +21,16 @@ export default function Navbar() {
           </Link>
           </div>
           <nav className={`md:flex space-x-4 ${isMenuOpen ? 'block' : 'hidden'}`}>
-            <Link href="/" className="block md:inline-block py-2 hover:text-primary">
+            <Link href="/" className="text-center block md:inline-block py-2 hover:text-primary">
               Inicio
             </Link>
-            <Link href="/productos" className="block md:inline-block py-2 hover:text-primary">
+            <Link href="/productos" className="text-center block md:inline-block py-2 hover:text-primary">
               Productos
             </Link>
-            <Link href="/nosotros" className="block md:inline-block py-2 hover:text-primary">
+            <Link href="/nosotros" className="text-center block md:inline-block py-2 hover:text-primary">
               Sobre Nosotros
             </Link>
-            <Link href="/servicios" className="block md:inline-block py-2 hover:text-primary">
+            <Link href="/servicios" className="text-center block md:inline-block py-2 hover:text-primary">
               Servicios
             </Link>
           </nav>
