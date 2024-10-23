@@ -1,8 +1,10 @@
+import Navbar from "@/components/navbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Page() {
     return (
         <>
+            <Navbar />
             <div className="px-80">
                 <h1 className="mt-16 text-6xl montserrat font-bold">Mi cuenta</h1>
                 <div className="flex justify-between gap-20 mt-16">
