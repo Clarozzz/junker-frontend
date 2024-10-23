@@ -3,21 +3,21 @@
 const people = [
   {
     name: 'Miriam Velazquez',
-    role: 'Proveedor',
+    role: 'Marketing',
     imageUrl:
-      'https://kvcvdthsaepnfxzhvtmy.supabase.co/storage/v1/object/public/imagenes/Doctores/25e53ed6-6d82-4d4c-89d9-72cf8e8165a2.webp'
+      'https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/marketing.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL21hcmtldGluZy53ZWJwIiwiaWF0IjoxNzI5NjM1NTkxLCJleHAiOjE3NjExNzE1OTF9.SS1CzB7ZetwfB4IO33FI7PpYF_al3laGqSYGENvnVsM&t=2024-10-22T22%3A19%3A33.013Z'
   },
   {
     name: 'Miguel Rodriguez',
     role: 'Mecanico',
     imageUrl:
-      'https://kvcvdthsaepnfxzhvtmy.supabase.co/storage/v1/object/public/imagenes/Doctores/6c69eb30-a0b3-4d38-b670-fed0d4aafb46.webp'
+      'https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/mecanico.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL21lY2FuaWNvLndlYnAiLCJpYXQiOjE3Mjk2MzU1MjMsImV4cCI6MTc2MTE3MTUyM30.N-ZB0FFWeoUb-Da6PfyY_RAXrF8ufqt0M-KtI57ULwI&t=2024-10-22T22%3A18%3A24.712Z'
   },
   {
     name: 'Alexander fernandez',
     role: 'Vendedor',
     imageUrl:
-      'https://kvcvdthsaepnfxzhvtmy.supabase.co/storage/v1/object/public/imagenes/Doctores/6e6fa6d3-69e4-4a9f-9a81-376894a4a372.webp'
+      'https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/vendedor.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3ZlbmRlZG9yLndlYnAiLCJpYXQiOjE3Mjk2MzU1NjUsImV4cCI6MTc2MTE3MTU2NX0.7OSTCAuC0tz9wsEXHHaV0je6GVNqacVtW8WB0bDRCl0&t=2024-10-22T22%3A19%3A06.691Z'
   }
 ]
 
@@ -26,8 +26,8 @@ export default function Testimonios () {
     <section className="container mx-auto py-12 animate-scroll-fade-up" id="doctores">
       <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
         <div className="max-w-2xl text-center md:text-left">
-          <h2 className="text-3xl font-bold tracking-tight  sm:text-4xl">
-            Testimonios
+          <h2 className="text-3xl font-bold tracking-tight montserrat text-custom-blue sm:text-4xl">
+            Nuestro Equipo
           </h2>
         </div>
         <ul
