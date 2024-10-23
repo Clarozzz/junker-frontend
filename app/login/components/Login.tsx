@@ -36,9 +36,11 @@ const Login = () => {
   
         // * Guardar el access_token en las cookies
         if (rememberMe) {
-          Cookies.set("access_token", data.access_token, { expires: 7 }); 
+          Cookies.set("access_token", data.access_token, { expires: 7 });
+          Cookies.set("refresh_token", data.refresh_token, { expires: 7 }); 
         } else {
           Cookies.set("access_token", data.access_token);
+          Cookies.set("refresh_token", data.refresh_token);
         }
 
       // * Redirige al usuario a la página principal o a donde desees
