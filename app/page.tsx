@@ -1,8 +1,9 @@
 import Footer from "@/components/footer";
 import Link from "next/link";
 import Testimonios from "./components/testimonios";
-import ProductosSeccion from "./components/productos-seccion";
+// import ProductosSeccion from "./components/productos-seccion";
 import Navbar from "@/components/navbar";
+import CallSection from "./components/call";
 
 export default function Page() {
   
@@ -23,7 +24,8 @@ export default function Page() {
           <Link href='/perfil'>Ver mi perfil</Link>
         </li>
       </ul>
-      <ProductosSeccion/>
+      <CallSection/>
+      {/* <ProductosSeccion/> */}
       <Testimonios/>
       <Footer />
     </>
