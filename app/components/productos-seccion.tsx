@@ -1,70 +1,91 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import React from "react";
-
-const Productos = [
-  {
-    id: 1,
-    name: "Filtro de Aceite",
-    description: "Filtro de alta calidad para motores",
-    price: 15.99,
-    image_url: "https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/Designer.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL0Rlc2lnbmVyLndlYnAiLCJpYXQiOjE3Mjk1NzI3MjMsImV4cCI6MTc2MTEwODcyM30.H_cyhDWYwuS06OgWd1DRFwyBtMBlhYpvr9V-xLi6NVg&t=2024-10-22T04%3A51%3A44.718Z",
-  },
-  {
-    id: 2,
-    name: "Pastillas de Freno",
-    description: "Set de pastillas de freno duraderas",
-    price: 45.99,
-    image_url: "https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/disco.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL2Rpc2NvLndlYnAiLCJpYXQiOjE3Mjk2MzA2MTMsImV4cCI6MTc2MTE2NjYxM30.zx1-Gn1CwhqzC96Ih9pS1mGp4Szu4MtqIBplJEAOqhI&t=2024-10-22T20%3A56%3A34.413Z",
-  },
-  {
-    id: 3,
-    name: "Batería de Auto",
-    description: "Batería de larga duración",
-    price: 89.99,
-    image_url: "https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/bateria.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL2JhdGVyaWEud2VicCIsImlhdCI6MTcyOTYzMDY0NSwiZXhwIjoxNzYxMTY2NjQ1fQ.N1mOmfuRzFcqT4NH7crSIF8a1W3f4olcBLjGSYlOnQU&t=2024-10-22T20%3A57%3A06.702Z",
-  },
-  {
-    id: 4,
-    name: "Amortiguador",
-    description: "Amortiguadores de alta calidad",
-    price: 110.99,
-    image_url: "https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/amortiguador.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL2Ftb3J0aWd1YWRvci53ZWJwIiwiaWF0IjoxNzI5NjMwODQ0LCJleHAiOjE3NjExNjY4NDR9.xrd7Tuv1cgd_D6kvtsYmDliTpp5gcj9YV3kkx5qeGIs&t=2024-10-22T21%3A00%3A26.133Z",
-  }
-];
+import { Carousel, Card } from "@/components/ui/cards-carousel";
 
 export default function ProductosSeccion() {
+  const cards = data.map((card, index) => (
+    <Card key={card.src} card={card} index={index} />
+  ));
+
   return (
-    <div>
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center montserrat text-custom-blue mb-10">
-            Nuestros Productos Destacados
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Productos.map((product) => (
-              <motion.div key={product.id} whileHover={{ scale: 1.05 }}>
-                <Card>
-                  <CardContent className="p-4">
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="w-full h-48 object-cover mb-4 rounded"
-                    />
-                    <h3 className="text-lg font-semibold">{product.name}</h3>
-                    <p className="text-gray-600">${product.price.toFixed(2)}</p>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-custom-blue text-white hover:bg-blue-900 hover:text-white">Agregar al Carrito</Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+    <div className="w-full h-full py-20">
+      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
+        Get to know your iSad.
+      </h2>
+      <Carousel items={cards} />
     </div>
   );
 }
+
+const DummyContent = () => {
+  return (
+    <>
+      {[...new Array(3).fill(1)].map((_, index) => {
+        return (
+          <div
+            key={"dummy-content" + index}
+            className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 rounded-3xl mb-4"
+          >
+            <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-2xl font-sans max-w-3xl mx-auto">
+              <span className="font-bold text-neutral-700 dark:text-neutral-200">
+                The first rule of Apple club is that you boast about Apple club.
+              </span>{" "}
+              Keep a journal, quickly jot down a grocery list, and take amazing
+              class notes. Want to convert those notes to text? No problem.
+              Langotiya jeetu ka mara hua yaar is ready to capture every
+              thought.
+            </p>
+            <Image
+              src="https://assets.aceternity.com/macbook.png"
+              alt="Macbook mockup from Aceternity UI"
+              height="500"
+              width="500"
+              className="md:w-1/2 md:h-1/2 h-full w-full mx-auto object-contain"
+            />
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+const data = [
+  {
+    category: "Artificial Intelligence",
+    title: "You can do more with AI.",
+    src: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?q=80&w=3556&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <DummyContent />,
+  },
+  {
+    category: "Productivity",
+    title: "Enhance your productivity.",
+    src: "https://images.unsplash.com/photo-1531554694128-c4c6665f59c2?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <DummyContent />,
+  },
+  {
+    category: "Product",
+    title: "Launching the new Apple Vision Pro.",
+    src: "https://images.unsplash.com/photo-1713869791518-a770879e60dc?q=80&w=2333&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <DummyContent />,
+  },
+
+  {
+    category: "Product",
+    title: "Maps for your iPhone 15 Pro Max.",
+    src: "https://images.unsplash.com/photo-1599202860130-f600f4948364?q=80&w=2515&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <DummyContent />,
+  },
+  {
+    category: "iOS",
+    title: "Photography just got better.",
+    src: "https://images.unsplash.com/photo-1602081957921-9137a5d6eaee?q=80&w=2793&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <DummyContent />,
+  },
+  {
+    category: "Hiring",
+    title: "Hiring for a Staff Software Engineer",
+    src: "https://images.unsplash.com/photo-1511984804822-e16ba72f5848?q=80&w=2048&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    content: <DummyContent />,
+  },
+];
