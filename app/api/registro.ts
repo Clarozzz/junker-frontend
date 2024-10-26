@@ -2,6 +2,10 @@
 
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
+// Interfaz Login
+
 
 // Interface para el registro
 interface RegisterData {
@@ -14,7 +18,8 @@ interface RegisterData {
 // Interface para la respuesta
 interface RegisterResponse {
   message: string;
-  // Añade aquí otros campos que devuelva tu API
+  access_token: string;
+  refresh_token: string;
 }
 
 // Función principal de registro
@@ -29,6 +34,13 @@ export const registro = async (userData: RegisterData): Promise<RegisterResponse
         },
       }
     );
+    const { access_token, refresh_token } = response.data;
+
+     // * Guardar el access_token en las cookies
+     Cookies.set('access_token', access_token, { expires: 7 }); // expira en 7 días
+     // *  También puedes guardar el refresh_token si lo deseas
+     Cookies.set('refresh_token', refresh_token, { expires: 7 });
+
 
     return response.data;
     
