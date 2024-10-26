@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 // import { ThemeToggle } from '@/components/theme-toggle';
 import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -61,6 +62,15 @@ export default function Navbar() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <Menu className="h-5 w-5" />
+            </Button>
+            <Button
+              onClick={() => {
+              Cookies.remove("access_token");
+              Cookies.remove("refresh_token");
+              window.location.href = "login";
+              }}
+            >
+              Cerrar Sesión
             </Button>
           </div>
         </div>
