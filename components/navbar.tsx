@@ -1,13 +1,18 @@
 'use client'
 
 import React, { useState } from "react";
+
 import Link from "next/link";
-import { ShoppingCart, Menu, User, Search, Upload } from "lucide-react";
+import { ShoppingCart, Menu, User, Search, Upload, DoorOpen } from "lucide-react";
+
+
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 // import { ThemeToggle } from '@/components/theme-toggle';
 import { usePathname } from "next/navigation";
-import Cookies from "js-cookie";
+
+import Cookies from "js-cookie"
+import { useRouter } from 'next/navigation';
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -19,6 +24,7 @@ const pages = [
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <header className="bg-background shadow-md top-0 sticky z-20">
@@ -74,15 +80,18 @@ export default function Navbar() {
             >
               <Menu className="h-5 w-5" />
             </Button>
+
             <Button
+              variant="ghost" size="icon"
               onClick={() => {
               Cookies.remove("access_token");
               Cookies.remove("refresh_token");
-              window.location.href = "login";
+              router.push("/login");
               }}
-            >
-              Cerrar Sesión
-            </Button>
+              >
+              <DoorOpen className="h-5 w-5" />
+              </Button>
+
           </div>
         </div>
         <div
