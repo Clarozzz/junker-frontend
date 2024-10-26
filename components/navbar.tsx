@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Menu, User, Search } from "lucide-react";
+import { ShoppingCart, Menu, User, Search, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 // import { ThemeToggle } from '@/components/theme-toggle';
@@ -21,26 +21,26 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="bg-background shadow-md top-0">
+    <header className="bg-background shadow-md top-0 sticky z-20">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center mx-4 md:justify-between">
+        <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
           <div className="flex flex-row items-center justify-center md:justify-start w-full md:w-auto">
             <Link href="/">
               <LogoJunker className="w-11" />
             </Link>
-            <Link href="/" className="text-2xl font-bold flex items-center">
+            <Link href="/" className="text-2xl hidden md:inline-block font-bold items-center">
               Junker
             </Link>
           </div>
           <nav className="md:flex hidden space-x-8">
-            {pages.map((item) => (
+            {pages.map((vista) => (
               <Link
                 className="text-center block md:inline-block py-2 hover:text-primary"
-                key={item.ruta}
-                href={item.href}
-                aria-current={pathname === item.href ? "page" : undefined}
+                key={vista.ruta}
+                href={vista.href}
+                aria-current={pathname === vista.href ? "page" : undefined}
               >
-                {item.ruta}
+                {vista.ruta}
               </Link>
             ))}
           </nav>
@@ -52,8 +52,19 @@ export default function Navbar() {
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => window.location.href='/perfil'}
+            >
               <User className="h-5 w-5" />
+            </Button>
+            <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => window.location.href='/publicar'}
+            >
+              <Upload className="h-5 w-5" />
             </Button>
             <Button
               variant="ghost"
