@@ -2,18 +2,19 @@
 'use client'
 
 import { useState } from 'react';
-// import Image from 'next/image'; 
-import { useRouter } from 'next/navigation'; // Importa el hook useRouter para redireccionar
+import { useRouter } from 'next/navigation';
 import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
+import { registro } from '@/app/api/registro'; // Importamos la función register
 
 const Registro = () => {
-  const router = useRouter(); // Inicializa el router
+  const router = useRouter();
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confPass, setConfPass] = useState('');
   const [accepted, setAccepted] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -21,44 +22,37 @@ const Registro = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // ? Validaciones del formulario
     if (!accepted) {
       setError('Debes aceptar las políticas de privacidad y los términos de uso para poder registrarte.');
       return;
     }
 
-    // * Post para registrar un usuario
+    if (password != confPass){
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          nombre,
-          apellido,
-        }),
+      await registro({
+        email,
+        password,
+        nombre,
+        apellido,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || 'Error en el registro');
-      }
 
       setSuccess('Registro exitoso. ¡Bienvenido!');
       setError('');
 
-      // Limpiar el formulario
+      // * Limpiar el formulario
       setNombre('');
       setApellido('');
       setEmail('');
       setPassword('');
 
-      // Redirigir a la página principal
-      router.push('/'); // Redirige a la raíz
-    } catch (error: unknown) {
+      // * Redirigir a la página principal
+      router.push('/');
+    } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
@@ -75,7 +69,6 @@ const Registro = () => {
 
       {/* Right side (register form) */}
       <div className="flex w-full md:w-1/2 justify-center items-center bg-white">
-
         <a href="/" className='absolute top-6 right-10'>
           <Button variant={'outline'} size={'icon'} className="rounded-full w-10 h-10">
             <X className="h-6 w-6" />
@@ -145,6 +138,17 @@ const Registro = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                id="confpassword"
+                value={confPass}
+                onChange={(e) => setConfPass(e.target.value)}
+                placeholder="Confirma la contraseña"
                 required
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
