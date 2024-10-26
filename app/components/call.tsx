@@ -32,7 +32,7 @@ export default function CallSection() {
     },
   ];
   return (
-    <div className="flex flex-col items-center justify-center h-[30rem] bg-slate-100">
+    <div className="flex flex-col items-center justify-center h-[30rem] my-2 bg-slate-100">
       <p className="text-neutral-600 dark:text-neutral-200 text-base  mb-10">
       ¡El camino a la excelencia automotriz comienza aquí!
       </p>
@@ -45,7 +45,7 @@ export default function CallSection() {
           Iniciar Sesión
         </Button>
         <Button 
-        className="w-40 h-10 rounded-xl bg-white text-black border border-black  text-sm"
+        className="w-40 h-10 rounded-xl bg-white text-black border hover:bg-slate-100 border-black  text-sm"
         onClick={() => window.location.href='/registro'}
         >
           Registrarse
