@@ -30,11 +30,11 @@ export default function Navbar() {
     <header className="bg-background shadow-md top-0 sticky z-20">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
-          <div className="flex flex-row items-center justify-center md:justify-start w-full md:w-auto">
+          <div className="flex flex-row items-center md:justify-start sm:justify-start lg:justify-center xl:justify-center px-6 sm:px-2 w-full md:w-auto">
             <Link href="/">
               <LogoJunker className="w-11" />
             </Link>
-            <Link href="/" className="text-2xl hidden md:inline-block font-bold items-center">
+            <Link href="/" className="text-2xl hidden lg:inline-block font-bold items-center">
               Junker
             </Link>
           </div>
