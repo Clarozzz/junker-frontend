@@ -11,7 +11,7 @@ export default function ProductosSeccion() {
     { title: "Rines", image: "/images/rines.webp" },
     { title: "Faros", image: "/images/faros.webp" },
     { title: "Retrovisores", image: "/images/retrovisores.webp" },
-    { title: "Asientos", image: "/images/asientos2.webp" },
+    { title: "Asientos", image: "/images/asientos.webp" },
     { title: "Aceite", image: "/images/aceite.webp" },
     { title: "Pintura", image: "/images/pintura.webp" },
   ]
@@ -39,16 +39,17 @@ export default function ProductosSeccion() {
         ]}
         className="w-full"
       >
-        <CarouselContent className="ml-2 md:-ml-4">
+        <CarouselContent className="-ml-2 md:-ml-4">
           {cards.map((card, index) => (
             <CarouselItem key={index} className="pl-2 md:pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
               <div className="h-full">
                 <Card className="overflow-hidden h-full border-0">
-                  <CardContent className="p-0 relative aspect-[3/4]">
+                  <CardContent className="p-0 relative aspect-[2/3]">
                     <Image
                       src={card.image}
                       alt={card.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
                       className="image-cover"
                     />
                     <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent flex items-end">
