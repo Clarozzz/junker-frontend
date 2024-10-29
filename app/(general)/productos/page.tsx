@@ -1,13 +1,13 @@
 import React from 'react'
-import ProductosClient from './components/products-client'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
+import ProductosMain from './components/productos-main'
 
 export default function Productos() {
   return (
     <>
     <Navbar/>
-    <ProductosClient/>
+    <ProductosMain/>
     <Footer/>
     </>
   )

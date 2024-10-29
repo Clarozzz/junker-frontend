@@ -7,6 +7,7 @@ import { Label } from "@radix-ui/react-label";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { type DropzoneState, useDropzone } from "react-dropzone";
 import { useRef } from "react";
+import Image from "next/image"
 
 export default function PublicarClient() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -57,7 +58,7 @@ export default function PublicarClient() {
 
   return (
     <>
-      <div className="h-screen flex flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row">
+      <div className="min-h-screen xl:mx-36 2xl:mx-44 flex flex-col sm:flex-row md:flex-row lg:flex-row xl:flex-row">
         <div className=" mt-6 flex flex-col w-full md:w-1/2 justify-center items-center">
           <div>
             <h2 className="text-2xl text-center font-bold text-gray-800 mb-2">
@@ -113,7 +114,7 @@ export default function PublicarClient() {
             {/* Muestra la vista previa de la imagen seleccionada */}
             {acceptedFiles.length > 0 && (
               <div className="flex justify-center">
-                <img
+                <Image
                   src={URL.createObjectURL(acceptedFiles[0])}
                   alt=""
                   className="h-40 w-40 mt-2 mx-auto rounded-full aspect-square object-cover border-4 border-blue-500/50"
