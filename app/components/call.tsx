@@ -51,13 +51,13 @@ export default function CallSection() {
       <TypewriterEffect words={words} className="" />
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-6 mt-10">
         <Button
-          className="w-40 h-12 rounded-xl bg-blue-900 text-white text-md shadow-lg hover:bg-blue-700"
+          className="w-40 h-12 rounded-xl bg-blue-900 text-white text-md shadow-lg hover:bg-blue-900 hover:brightness-125 transition-all duration-300"
           onClick={() => window.location.href = '/login'}
         >
           Iniciar Sesión
         </Button>
         <Button
-          className="w-40 h-12 rounded-xl bg-custom-beige text-black text-md shadow-lg hover:bg-orange-200"
+          className="w-40 h-12 rounded-xl bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
           onClick={() => window.location.href = '/registro'}
         >
           Registrarse

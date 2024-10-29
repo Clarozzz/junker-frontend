@@ -17,13 +17,13 @@ export default function ProductosSeccion() {
   ]
 
   return (
-    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-blue py-16 text-custom-beige">
-      <div className="grid space-y-4 mb-16">
+    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-blue py-12 text-custom-beige">
+      <div className="grid space-y-4 mb-12">
         <h1 className="text-5xl montserrat font-bold">
           Productos
         </h1>
         <h2 className="text-2xl">
-          Explora algunos de nuestros productos
+          Publica tus productos en nuestro marketplace
         </h2>
       </div>
       <Carousel
@@ -48,8 +48,8 @@ export default function ProductosSeccion() {
                     <Image
                       src={card.image}
                       alt={card.title}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      className="image-cover"
                     />
                     <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent flex items-end">
                       <h3 className="text-white text-lg font-bold p-2">{card.title}</h3>
@@ -60,8 +60,8 @@ export default function ProductosSeccion() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="absolute left-0 h-full bg-transparent hover:bg-black/10 hover:text-custom-beige rounded-lg w-12 hidden md:flex" variant={"ghost"} />
-        <CarouselNext className="absolute right-0 h-full bg-transparent hover:bg-black/10 hover:text-custom-beige rounded-lg w-12 hidden md:flex" variant={"ghost"} />
+        <CarouselPrevious className="absolute left-0 h-full bg-transparent hover:bg-black/20 hover:text-custom-beige rounded-lg w-12 hidden md:flex" variant={"ghost"} />
+        <CarouselNext className="absolute right-0 h-full bg-transparent hover:bg-black/20 hover:text-custom-beige rounded-lg w-12 hidden md:flex" variant={"ghost"} />
       </Carousel>
 
       <div className="text-center">
