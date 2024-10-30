@@ -15,6 +15,7 @@ interface usuario {
     email: string;
     telefono: string;
     direccion: string;
+    avatar_url: string;
 }
 
 const token = Cookies.get('access_token');
