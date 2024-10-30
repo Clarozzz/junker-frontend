@@ -45,19 +45,19 @@ export default function CallSection() {
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
-      <p className="text-white dark:text-neutral-200 text-2xl mb-10">
+      <p className="text-white dark:text-neutral-200 text-lg lg:text-2xl mb-10 text-center px-10">
         ¡El camino a la excelencia automotriz comienza aquí!
       </p>
-      <TypewriterEffect words={words} className="" />
+      <TypewriterEffect words={words} className="px-4 text-3xl" />
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-6 mt-10">
         <Button
-          className="w-40 h-12 rounded-xl bg-blue-900 text-white text-md shadow-lg hover:bg-blue-700"
+          className="w-40 h-12 rounded-xl bg-blue-900 text-white text-md shadow-lg hover:bg-blue-900 hover:brightness-125 transition-all duration-300"
           onClick={() => window.location.href = '/login'}
         >
           Iniciar Sesión
         </Button>
         <Button
-          className="w-40 h-12 rounded-xl bg-custom-beige text-black text-md shadow-lg hover:bg-orange-200"
+          className="w-40 h-12 rounded-xl bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
           onClick={() => window.location.href = '/registro'}
         >
           Registrarse
