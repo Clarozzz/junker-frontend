@@ -1,17 +1,19 @@
+'use client'
 
-import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import Image from 'next/image'
+import { Card } from "@/components/ui/card"
+import { useState } from "react"
 
 export default function Categorias() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   const items = [
-    { title: "Accesorios internos", image: "/images/accesorios.jpg" },
-    { title: "Motor y transmisión", image: "/images/motores.jpg" },
-    { title: "Frenos y discos", image: "/images/discos.jpg" },
-    { title: "Ruedas", image: "/images/ruedas2.jpg" },
-    { title: "Carrocería", image: "/images/carroceria.jpg" },
-  ];
+    { title: "Accesorios internos", image: "/images/accesorios.webp" },
+    { title: "Motor y transmisión", image: "/images/motores.webp" },
+    { title: "Frenos y discos", image: "/images/discos.webp" },
+    { title: "Ruedas", image: "/images/ruedas2.webp" },
+    { title: "Carrocería", image: "/images/carroceria.webp" },
+  ]
 
   return (
     <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-beige py-12 text-custom-blue">
@@ -29,12 +31,15 @@ export default function Categorias() {
             key={index}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
-            className={`relative h-[600] transition-all duration-300 ease-in-out ${hoveredIndex === index ? 'w-3/5' : 'w-1/5'} cursor-pointer group`}
+            className={`relative h-[600px] transition-all duration-300 ease-in-out ${hoveredIndex === index ? 'w-3/5' : 'w-1/5'} cursor-pointer group overflow-hidden`}
           >
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${item.image})` }}
-            ></div>
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
+              className="transition-transform duration-300 group-hover:scale-110 image-cover"
+            />
 
             <div className="absolute inset-0 bg-black/50 opacity-100 group-hover:opacity-50 transition-opacity duration-300"></div>
 
@@ -45,5 +50,5 @@ export default function Categorias() {
         ))}
       </div>
     </div>
-  );
+  )
 }
