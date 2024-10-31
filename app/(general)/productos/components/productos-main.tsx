@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import React, { useState, useEffect, useRef } from "react";
 import {
   Accordion,
@@ -70,7 +70,7 @@ export default function ProductosMain() {
                                 name="precio[]"
                                 value="Lps. 0 - Lps. 500"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-precio-0"
@@ -85,7 +85,7 @@ export default function ProductosMain() {
                                 name="precio[]"
                                 value="Lps. 501 - Lps. 1000"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-precio-1"
@@ -101,7 +101,7 @@ export default function ProductosMain() {
                                 value="Lps. 1001 - Lps. 2000"
                                 type="checkbox"
                                 checked
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-precio-2"
@@ -116,7 +116,7 @@ export default function ProductosMain() {
                                 name="precio[]"
                                 value="Lps. 2001 - Lps. 3000"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-precio-3"
@@ -131,7 +131,7 @@ export default function ProductosMain() {
                                 name="precio[]"
                                 value="Lps. 5001 - Lps. 8000"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-precio-4"
@@ -146,7 +146,7 @@ export default function ProductosMain() {
                                 name="precio[]"
                                 value="Lps. 8001 - mas"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-precio-5"
@@ -170,7 +170,7 @@ export default function ProductosMain() {
                                 name="category[]"
                                 value="Neumaticos y Llantas"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-0"
@@ -185,7 +185,7 @@ export default function ProductosMain() {
                                 name="category[]"
                                 value="Motor y Transmision"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-1"
@@ -201,7 +201,7 @@ export default function ProductosMain() {
                                 value="Llaves"
                                 type="checkbox"
                                 checked
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-2"
@@ -216,7 +216,7 @@ export default function ProductosMain() {
                                 name="category[]"
                                 value="Iluminacion"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-3"
@@ -231,7 +231,7 @@ export default function ProductosMain() {
                                 name="category[]"
                                 value="Accesorios Internos"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-4"
@@ -246,7 +246,7 @@ export default function ProductosMain() {
                                 name="category[]"
                                 value="Frenos y Discos"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-5"
@@ -261,7 +261,7 @@ export default function ProductosMain() {
                                 name="category[]"
                                 value="Carroceria"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-category-6"
@@ -285,7 +285,7 @@ export default function ProductosMain() {
                                 name="estado[]"
                                 value="nuevo"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-size-0"
@@ -300,7 +300,7 @@ export default function ProductosMain() {
                                 name="estado[]"
                                 value="usado"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                               />
                               <label
                                 htmlFor="filter-size-1"
@@ -431,7 +431,7 @@ export default function ProductosMain() {
                               name="precio[]"
                               value="Lps. 0 - Lps. 500"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-precio-0"
@@ -446,7 +446,7 @@ export default function ProductosMain() {
                               name="precio[]"
                               value="Lps. 501 - Lps. 1000"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-precio-1"
@@ -462,7 +462,7 @@ export default function ProductosMain() {
                               value="Lps. 1001 - Lps. 2000"
                               type="checkbox"
                               checked
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-precio-2"
@@ -477,7 +477,7 @@ export default function ProductosMain() {
                               name="precio[]"
                               value="Lps. 2001 - Lps. 3000"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-precio-3"
@@ -492,7 +492,7 @@ export default function ProductosMain() {
                               name="precio[]"
                               value="Lps. 5001 - Lps. 8000"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-precio-4"
@@ -507,7 +507,7 @@ export default function ProductosMain() {
                               name="precio[]"
                               value="Lps. 8001 - mas"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-precio-5"
@@ -531,7 +531,7 @@ export default function ProductosMain() {
                               name="category[]"
                               value="Neumaticos y Llantas"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-0"
@@ -546,7 +546,7 @@ export default function ProductosMain() {
                               name="category[]"
                               value="Motor y Transmision"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-1"
@@ -562,7 +562,7 @@ export default function ProductosMain() {
                               value="Llaves"
                               type="checkbox"
                               checked
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-2"
@@ -577,7 +577,7 @@ export default function ProductosMain() {
                               name="category[]"
                               value="Iluminacion"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-3"
@@ -592,7 +592,7 @@ export default function ProductosMain() {
                               name="category[]"
                               value="Accesorios Internos"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-4"
@@ -607,7 +607,7 @@ export default function ProductosMain() {
                               name="category[]"
                               value="Frenos y Discos"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-5"
@@ -622,7 +622,7 @@ export default function ProductosMain() {
                               name="category[]"
                               value="Carroceria"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-category-6"
@@ -646,7 +646,7 @@ export default function ProductosMain() {
                               name="estado[]"
                               value="nuevo"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-size-0"
@@ -661,7 +661,7 @@ export default function ProductosMain() {
                               name="estado[]"
                               value="usado"
                               type="checkbox"
-                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                             />
                             <label
                               htmlFor="filter-size-1"
