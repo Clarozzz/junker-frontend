@@ -16,7 +16,7 @@ export default function Categorias() {
   ]
 
   return (
-    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-beige py-12 text-custom-blue">
+    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-beige py-14 text-custom-blue">
       <div className="grid space-y-4 mb-12">
         <h1 className="text-5xl montserrat font-bold">
           Categorías

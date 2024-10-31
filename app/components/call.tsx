@@ -39,7 +39,7 @@ export default function CallSection() {
     },
   ];
   return (
-    <div className="relative flex flex-col items-center justify-center h-[45rem] bg-slate-100"
+    <div className="relative flex flex-col items-center justify-center h-[54rem] bg-slate-100"
       style={{
         backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/landing11.webp')",
         backgroundSize: 'cover',
