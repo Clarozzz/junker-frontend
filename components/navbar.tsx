@@ -86,7 +86,7 @@ export default function Navbar() {
               onClick={() => {
               Cookies.remove("access_token");
               Cookies.remove("refresh_token");
-              router.push("/login");
+              router.push("/");
               }}
               >
               <DoorOpen className="h-5 w-5" />
