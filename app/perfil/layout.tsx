@@ -7,6 +7,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import Cookies from 'js-cookie';
+import Cargando from "@/components/ui/cargando"
 
 interface usuario {
     nombre: string;
@@ -83,7 +84,7 @@ export default function PerfilLayout({
         fetchUserData();
     }, []);
 
-    if (loading) return <p>Cargando...</p>;
+    if (loading) return <Cargando />;
     if (error) return <p>Error: {error}</p>;
 
     return (
