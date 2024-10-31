@@ -87,6 +87,7 @@ export default function Navbar() {
                 Cookies.remove("access_token");
                 Cookies.remove("refresh_token");
                 router.push("/");
+                router.refresh();
               }}
             >
               <DoorOpen className="h-5 w-5" />
