@@ -87,9 +87,7 @@ export default function Navbar() {
                 Cookies.remove("access_token");
                 Cookies.remove("refresh_token");
                 router.push("/");
-                setTimeout(() => {
-                  router.refresh() // Recarga la páginarouter.refresh() // Recarga la página
-                }, 100)
+                window.location.reload();
               }}
             >
               <DoorOpen className="h-5 w-5" />
