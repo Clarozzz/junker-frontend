@@ -84,10 +84,12 @@ export default function Navbar() {
             <Button
               variant="ghost" size="icon"
               onClick={() => {
+
                 Cookies.remove("access_token");
                 Cookies.remove("refresh_token");
                 router.push("/");
                 window.location.reload();
+
               }}
             >
               <DoorOpen className="h-5 w-5" />
