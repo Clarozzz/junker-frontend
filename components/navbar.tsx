@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import Link from "next/link";
-import { ShoppingCart, Menu, User, Search, Upload, DoorOpen } from "lucide-react";
+import { ShoppingCart, Menu, User, Search, Upload, DoorOpen, X } from "lucide-react";
 
 
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ export default function Navbar() {
             <Link href="/">
               <LogoJunker className="w-11" />
             </Link>
-            <Link href="/" className="text-2xl hidden lg:inline-block font-bold items-center">
+            <Link href="/" className="text-2xl hidden lg:inline-block font-bold items-center montserrat">
               Junker
             </Link>
           </div>
@@ -58,17 +58,17 @@ export default function Navbar() {
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
             </Button>
-            <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => window.location.href='/perfil'}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => window.location.href = '/perfil'}
             >
               <User className="h-5 w-5" />
             </Button>
-            <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => window.location.href='/publicar'}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => window.location.href = '/publicar'}
             >
               <Upload className="h-5 w-5" />
             </Button>
@@ -84,22 +84,29 @@ export default function Navbar() {
             <Button
               variant="ghost" size="icon"
               onClick={() => {
-              Cookies.remove("access_token");
-              Cookies.remove("refresh_token");
-              router.push("/");
+
+                Cookies.remove("access_token");
+                Cookies.remove("refresh_token");
+                router.push("/");
+                window.location.reload();
+
               }}
-              >
+            >
               <DoorOpen className="h-5 w-5" />
-              </Button>
+            </Button>
 
           </div>
         </div>
         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } md:hidden`}
+          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            } md:hidden`}
         >
           <nav className="p-4">
+            <div className="flex justify-end mb-4"
+              onClick={() => setIsMenuOpen(false)}>
+              <X className="h-8 w-8" />
+              <span className="sr-only">Close</span>
+            </div>
             <ul>
               <li className="mb-4">
                 <Link href="/" className="text-lg font-medium">

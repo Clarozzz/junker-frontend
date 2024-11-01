@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useEffect, useState } from "react"
 import Cookies from 'js-cookie';
+import Cargando from "@/components/ui/cargando"
 
 interface usuario {
     nombre: string;
@@ -15,6 +16,7 @@ interface usuario {
     email: string;
     telefono: string;
     direccion: string;
+    avatar_url: string;
 }
 
 const token = Cookies.get('access_token');
@@ -55,7 +57,7 @@ export default function Component() {
         fetchUserData();
     }, []);
 
-    if (loading) return <p>Cargando...</p>;
+    if (loading) return <Cargando />;
     if (error) return <p>Error: {error}</p>;
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

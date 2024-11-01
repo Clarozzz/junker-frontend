@@ -17,7 +17,7 @@ export default function ProductosSeccion() {
   ]
 
   return (
-    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-blue py-12 text-custom-beige">
+    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-blue py-14 text-custom-beige">
       <div className="grid space-y-4 mb-12">
         <h1 className="text-5xl montserrat font-bold">
           Productos
@@ -44,7 +44,7 @@ export default function ProductosSeccion() {
             <CarouselItem key={index} className="pl-2 md:pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
               <div className="h-full">
                 <Card className="overflow-hidden h-full border-0">
-                  <CardContent className="p-0 relative aspect-[2/3]">
+                  <CardContent className="p-0 relative aspect-[3/4] md:aspect-[2/3]">
                     <Image
                       src={card.image}
                       alt={card.title}

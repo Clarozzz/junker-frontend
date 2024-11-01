@@ -2,8 +2,18 @@
 const nextConfig = {
     reactStrictMode: false,
     images: {
-    domains: ['images.unsplash.com'], // Agrega aquí el dominio
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'images.unsplash.com',
+        },
+        {
+          protocol: 'https',
+          hostname: 'wgsthklptjwlberpnsqy.supabase.co',
+        },
+      ],
     },
-};
-
-export default nextConfig;
+  };
+  
+  export default nextConfig;
+  

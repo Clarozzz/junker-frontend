@@ -1,60 +1,85 @@
 'use client'
 
+import Image from 'next/image'
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+
 const people = [
   {
-    name: 'Miriam Velazquez',
-    role: 'Marketing',
-    imageUrl:
-      'https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/marketing.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL21hcmtldGluZy53ZWJwIiwiaWF0IjoxNzI5NjM1NTkxLCJleHAiOjE3NjExNzE1OTF9.SS1CzB7ZetwfB4IO33FI7PpYF_al3laGqSYGENvnVsM&t=2024-10-22T22%3A19%3A33.013Z'
+    name: 'Natalia Velazquez',
+    testimonial: 'Las mejores piezas a precios justos. Mi auto ahora funciona de maravilla gracias a ellos.',
+    imageUrl: '/images/cliente1.webp'
   },
   {
     name: 'Miguel Rodriguez',
-    role: 'Mecanico',
-    imageUrl:
-      'https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/mecanico.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL21lY2FuaWNvLndlYnAiLCJpYXQiOjE3Mjk2MzU1MjMsImV4cCI6MTc2MTE3MTUyM30.N-ZB0FFWeoUb-Da6PfyY_RAXrF8ufqt0M-KtI57ULwI&t=2024-10-22T22%3A18%3A24.712Z'
+    testimonial: 'Piezas originales a precios accesibles, ¡una combinación perfecta!',
+    imageUrl: '/images/cliente5.webp'
   },
   {
-    name: 'Alexander fernandez',
-    role: 'Vendedor',
-    imageUrl:
-      'https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/vendedor.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3ZlbmRlZG9yLndlYnAiLCJpYXQiOjE3Mjk2MzU1NjUsImV4cCI6MTc2MTE3MTU2NX0.7OSTCAuC0tz9wsEXHHaV0je6GVNqacVtW8WB0bDRCl0&t=2024-10-22T22%3A19%3A06.691Z'
+    name: 'Daniel Fernandez',
+    testimonial: 'Recomiendo esta página a todos. Repuestos de calidad y precios accesibles.',
+    imageUrl: '/images/cliente3.webp'
+  },
+  {
+    name: 'Erick Marin',
+    testimonial: 'El mejor lugar para encontrar autopartes difíciles de hallar. ¡Muy satisfecho!',
+    imageUrl: '/images/cliente2.webp'
   }
 ]
 
-export default function Testimonios () {
+export default function Testimonios() {
   return (
-    <section className="container mx-auto py-12 animate-scroll-fade-up" id="doctores">
-      <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
-        <div className="max-w-2xl text-center md:text-left">
-          <h2 className="text-3xl font-bold tracking-tight montserrat text-custom-blue sm:text-4xl">
-            Nuestro Equipo
+    <div className="relative w-full mx-auto lg:px-28 2xl:px-56 px-6 py-14 lg:py-24 2xl:py-32 text-custom-beige">
+      <Image
+        src="/images/landing37.webp"
+        alt="Fondo de testimonios de clientes"
+        fill
+        className="object-cover"
+        priority
+      />
+      <div className="absolute inset-0 bg-black bg-opacity-50" />
+      <div className="relative z-10">
+        <div className="grid space-y-4 mb-12">
+          <h1 className="text-5xl montserrat font-bold">
+            Testimonios
+          </h1>
+          <h2 className="text-2xl">
+            Conoce las experiencias de nuestros clientes
           </h2>
         </div>
-        <ul
-          role="list"
-          className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2"
-        >
-          {people.map((person) => (
-            <li key={person.name}>
-              <div className="flex items-center gap-x-6">
-                <img
-                  className="h-16 w-16 rounded-full"
-                  src={person.imageUrl}
-                  alt=""
-                />
-                <div>
-                  <h3 className="text-base font-semibold leading-7 tracking-tight ">
-                    {person.name}
-                  </h3>
-                  <p className="text-sm font-semibold leading-6 text-sec dark:text-sec">
-                    {person.role}
-                  </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {people.map((person, index) => (
+            <Card key={index} className="h-[450px] p-6 rounded-lg flex flex-col justify-between glass text-white border-none">
+              <CardHeader>
+                <div className="flex justify-center">
+                  <Avatar className="w-24 h-24 shadow-lg border-2 border-custom-beige relative">
+                    <Image
+                      src={person.imageUrl}
+                      alt=""
+                      fill
+                      className="object-cover rounded-full"
+                      sizes="(max-width: 96px) 100vw, 96px"
+                    />
+                    <AvatarFallback className="text-3xl font-semibold text-custom-blue">
+                      {person.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
-              </div>
-            </li>
+              </CardHeader>
+              <CardContent>
+                <p className="font-semibold text-lg text-center italic leading-relaxed">
+                  {`"${person.testimonial}"`}
+                </p>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <h2 className="text-center mt-4 text-custom-beige font-bold text-xl">
+                  {person.name}
+                </h2>
+              </CardFooter>
+            </Card>
           ))}
-        </ul>
+        </div>
       </div>
-    </section>
+    </div>
   )
 }

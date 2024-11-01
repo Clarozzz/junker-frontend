@@ -7,6 +7,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import Cookies from 'js-cookie';
+import Cargando from "@/components/ui/cargando"
 
 interface usuario {
     nombre: string;
@@ -16,6 +17,7 @@ interface usuario {
     email: string;
     telefono: string;
     direccion: string;
+    avatar_url: string;
 }
 
 const token = Cookies.get('access_token');
@@ -82,7 +84,7 @@ export default function PerfilLayout({
         fetchUserData();
     }, []);
 
-    if (loading) return <p>Cargando...</p>;
+    if (loading) return <Cargando />;
     if (error) return <p>Error: {error}</p>;
 
     return (
@@ -96,7 +98,7 @@ export default function PerfilLayout({
                             <div className="flex justify-center">
                                 <div>
                                     <Avatar className="w-24 h-24">
-                                        <AvatarImage src="https://github.com/shadcn.png" />
+                                        <AvatarImage src={`${userData?.avatar_url}`} className="image-cover" />
                                         <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                     <h2 className="mt-4 text-xl font-bold text-center">
