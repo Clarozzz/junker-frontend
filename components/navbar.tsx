@@ -43,8 +43,7 @@ export default function Navbar() {
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
     setIsAuthenticated(false);
-    router.push("/");
-    window.location.reload();
+    window.location.href='/';
   };
 
   const handleLogin = () => {
