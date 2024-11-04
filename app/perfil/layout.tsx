@@ -22,7 +22,7 @@ export default function PerfilLayout({
     const [error, setError] = useState<string | null>(null);
 
     const links = [
-        { nombre: 'Información de la cuenta', ruta: '/perfil', titulo: 'Mi cuenta' },
+        { nombre: 'Ajustes de la cuenta', ruta: '/perfil', titulo: 'Mi cuenta' },
         { nombre: 'Historial de compras', ruta: '/perfil/compras', titulo: 'Mis compras' },
         { nombre: 'Productos en venta', ruta: '/perfil/productos', titulo: 'Mis productos' },
         { nombre: 'Contraseña y Seguridad', ruta: '/perfil/password', titulo: 'Gestiona tu contraseña'}
@@ -59,8 +59,8 @@ export default function PerfilLayout({
             <Navbar />
             <UserProvider userData={userData} loading={loading}>
                 <div className="px-6 lg:px-40 2xl:px-72">
-                    <h1 className="mt-12 text-6xl montserrat font-bold">{titulo}</h1>
-                    <div className="lg:flex justify-between gap-20 mt-12">
+                    <h1 className="mt-8 text-6xl montserrat font-bold">{titulo}</h1>
+                    <div className="lg:flex justify-between gap-20 mt-8">
                         <div className="xl:w-1/4 lg:w-1/2">
                             <div className="bg-slate-100 px-6 py-10 rounded-lg">
                                 <div className="flex justify-center">
