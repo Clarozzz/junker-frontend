@@ -67,8 +67,10 @@ export default function ProductosSeccion() {
 
       <div className="text-center">
         <Link href='/productos'>
-          <Button className="mt-16 w-40 h-12 bg-custom-beige text-custom-blue hover:bg-custom-blue hover:text-custom-beige hover:border-custom-beige hover:border">
+          <Button className="mt-16 w-40 h-12 bg-custom-beige text-custom-blue hover:bg-amber-100 hover:text-custom-blue hover:border-custom-beige hover:border">
+            <p className="font-bold">
             Ver productos
+            </p>
           </Button>
         </Link>
       </div>
