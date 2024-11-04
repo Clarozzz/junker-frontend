@@ -45,8 +45,8 @@ interface Usuario {
   apellido: string;
   genero: string;
   fecha_nacimiento: string;
-  email: string;
-  telefono: string;
   direccion: string;
   avatar_url: string;
+  telefono: string;
+  email: string;
 }
