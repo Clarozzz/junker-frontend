@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
-import { registro } from '@/app/api/registro'; // Importamos la función register
+import { registro } from '@/app/api/registro';
 
 const Registro = () => {
   const router = useRouter();
@@ -21,18 +21,19 @@ const Registro = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // ? Validaciones del formulario
+    setError(null);
+    setSuccess('');
+  
     if (!accepted) {
       setError('Debes aceptar las políticas de privacidad y los términos de uso para poder registrarte.');
       return;
     }
-
-    if (password != confPass){
+  
+    if (password !== confPass) {
       setError('Las contraseñas no coinciden');
       return;
     }
-
+  
     try {
       await registro({
         email,
@@ -40,27 +41,22 @@ const Registro = () => {
         nombre,
         apellido,
       });
-
+  
       setSuccess('Registro exitoso. ¡Bienvenido!');
-      setError('');
-
-      // * Limpiar el formulario
       setNombre('');
       setApellido('');
       setEmail('');
       setPassword('');
-
-      // * Redirigir a la página principal
+      setConfPass('');
       router.push('/');
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError('Error desconocido');
+        setError('Error en el registro');
       }
     }
   };
-
   return (
     <div className="flex h-screen">
       {/* Left side (image) */}
@@ -154,8 +150,17 @@ const Registro = () => {
               />
             </div>
 
-            {error && <p className="text-red-500 text-center">{error}</p>}
-            {success && <p className="text-green-500 text-center">{success}</p>}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            )}
+            
+            {success && (
+              <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{success}</span>
+              </div>
+            )}
 
             {/* Terms and Conditions */}
             <div className="flex items-center">
@@ -166,7 +171,9 @@ const Registro = () => {
                   checked={accepted}
                   onChange={(e) => setAccepted(e.target.checked)}
                 />
-                <span className="ml-2 text-sm text-gray-600">Acepto las políticas de privacidad y los términos de uso</span>
+                <span className="ml-2 text-sm text-gray-600">
+                  Acepto las políticas de privacidad y los términos de uso
+                </span>
               </label>
             </div>
 

@@ -1,13 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NextResponse } from 'next/server';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// Interfaz Login
-
-
-// Interface para el registro
 interface RegisterData {
   nombre: string;
   apellido: string;
@@ -15,14 +9,28 @@ interface RegisterData {
   password: string;
 }
 
-// Interface para la respuesta
 interface RegisterResponse {
   message: string;
   access_token: string;
   refresh_token: string;
 }
 
-// Función principal de registro
+interface ValidationError {
+  detail: Array<{
+    type: string;
+    loc: string[];
+    msg: string;
+    input: string;
+    ctx: {
+      error: Record<string, unknown>;
+    };
+  }>;
+}
+
+interface SupabaseError {
+  detail: string;
+}
+
 export const registro = async (userData: RegisterData): Promise<RegisterResponse> => {
   try {
     const response = await axios.post<RegisterResponse>(
@@ -34,30 +42,30 @@ export const registro = async (userData: RegisterData): Promise<RegisterResponse
         },
       }
     );
+
     const { access_token, refresh_token } = response.data;
-
-     // * Guardar el access_token en las cookies
-     Cookies.set('access_token', access_token, { expires: 7 }); // expira en 7 días
-     // *  También puedes guardar el refresh_token si lo deseas
-     Cookies.set('refresh_token', refresh_token, { expires: 7 });
-
-
+    Cookies.set('access_token', access_token, { expires: 7 });
+    Cookies.set('refresh_token', refresh_token, { expires: 7 });
     return response.data;
-    
-  } catch (error: any) {
-    const errorMessage = error.response?.data?.detail || 'Error en el registro';
-    throw new Error(errorMessage);
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // * Manejo de error 400
+      if (error.response.status === 400) {
+        const errorData = error.response.data as SupabaseError;
+        throw new Error(errorData.detail.replace('Supabase error: ', ''));
+      }
+      
+      // * Manejo para error 422
+      const errorData = error.response.data as ValidationError;
+      if (errorData.detail && Array.isArray(errorData.detail) && errorData.detail.length > 0) {
+        const errorMessage = errorData.detail[0].msg
+          .replace('Value error, ', '')
+          .replace('Value error,', '')
+          .replace('Value error', '');
+        const cleanMessage = errorMessage.charAt(0).toUpperCase() + errorMessage.slice(1);
+        throw new Error(cleanMessage);
+      }
+    }
+    throw new Error('Error en el registro');
   }
 };
-
-// API Route para manejar la solicitud POST
-export async function POST(req: Request): Promise<NextResponse> {
-  try {
-    const userData = await req.json();
-    const registerResponse = await registro(userData);
-    return NextResponse.json(registerResponse);
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json({ message: errorMessage }, { status: 500 });
-  }
-}
