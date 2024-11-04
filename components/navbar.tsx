@@ -3,15 +3,15 @@
 import React, { useState } from "react";
 
 import Link from "next/link";
-import { ShoppingCart, Menu, User, Search, Upload, X } from "lucide-react";
+import { ShoppingCart, Menu, Search, Upload, X } from "lucide-react";
 
 
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
-// import { ThemeToggle } from '@/components/theme-toggle';
 import { usePathname } from "next/navigation";
 
 import Cookies from "js-cookie"
+
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/app/contexts/AuthContext";
 
@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
