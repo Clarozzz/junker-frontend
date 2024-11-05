@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
 const people = [
@@ -53,13 +53,7 @@ export default function Testimonios() {
               <CardHeader>
                 <div className="flex justify-center">
                   <Avatar className="w-24 h-24 shadow-lg border-2 border-custom-beige relative">
-                    <Image
-                      src={person.imageUrl}
-                      alt=""
-                      fill
-                      className="object-cover rounded-full"
-                      sizes="(max-width: 96px) 100vw, 96px"
-                    />
+                    <AvatarImage src={person.imageUrl} className="image-cover" />
                     <AvatarFallback className="text-3xl font-semibold text-custom-blue">
                       {person.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>

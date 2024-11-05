@@ -22,7 +22,7 @@ export default function Categorias() {
           Categorías
         </h1>
         <h2 className="text-2xl">
-          Explora produtos por categorías
+          Explora productos por categorías
         </h2>
       </div>
       <div className="grid grid-cols-2 gap-4 md:flex md:gap-4">

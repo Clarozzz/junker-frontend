@@ -3,16 +3,28 @@
 import React, { useState } from "react";
 
 import Link from "next/link";
-import { ShoppingCart, Menu, User, Search, Upload, DoorOpen, X } from "lucide-react";
+import { ShoppingCart, Menu, Search, Upload, X } from "lucide-react";
 
 
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
-// import { ThemeToggle } from '@/components/theme-toggle';
 import { usePathname } from "next/navigation";
 
 import Cookies from "js-cookie"
+
 import { useRouter } from 'next/navigation';
+import { useAuth } from "@/app/contexts/AuthContext";
+
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -25,6 +37,19 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
+
+  const handleLogout = () => {
+    Cookies.remove("access_token");
+    Cookies.remove("refresh_token");
+    setIsAuthenticated(false);
+    window.location.href='/';
+  };
+
+  const handleLogin = () => {
+    router.push("/login");
+  };
+
 
   return (
     <header className="bg-background shadow-md top-0 sticky z-20">
@@ -61,13 +86,6 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => window.location.href = '/perfil'}
-            >
-              <User className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
               onClick={() => window.location.href = '/publicar'}
             >
               <Upload className="h-5 w-5" />
@@ -81,19 +99,32 @@ export default function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
 
-            <Button
-              variant="ghost" size="icon"
-              onClick={() => {
-
-                Cookies.remove("access_token");
-                Cookies.remove("refresh_token");
-                router.push("/");
-                window.location.reload();
-
-              }}
-            >
-              <DoorOpen className="h-5 w-5" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">Menu</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuItem onClick={() => router.push('/perfil')}>
+                      Perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/publicar')}>
+                      Publicar
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <DropdownMenuItem onClick={handleLogin}>
+                    Iniciar Sesión
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
           </div>
         </div>

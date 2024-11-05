@@ -1,13 +1,13 @@
 import Navbar from '@/components/navbar'
 import React from 'react'
-import Nosotros from './nosotros'
+import Politicas from './politicas'
 import Footer from '@/components/footer'
 
-export default function NosotrosPage() {
+export default function PagePoliticas() {
   return (
     <>
     <Navbar/>
-    <Nosotros/>
+    <Politicas/>
     <Footer/>
     </>
   )

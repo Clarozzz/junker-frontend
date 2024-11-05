@@ -2,17 +2,20 @@
 
 import Link from 'next/link'
 import LogoJunker from './logo-junker'
+import { PhoneIcon } from 'lucide-react'
+import { EnvelopeOpenIcon } from '@radix-ui/react-icons'
 
 export default function Footer () {
   return (
     <>
-      <footer className="bg-custom-beige dark:bg-gray-900" id="contacto">
+      <footer className="bg-custom-beige dark:bg-gray-900" id="footer">
         <div className="container px-6 py-12 mx-auto">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-5">
             <div className="sm:col-span-2">
               <div className="flex flex-row mx-auto">
-                <LogoJunker className='w-24'/>
-                <span className="flex text-6xl font-bold font-sans text-custom-blue items-center">Junker</span>
+                <Link href="/">
+                <LogoJunker className='w-20'/></Link>
+                <span className="flex text-6xl font-bold montserrat text-custom-blue items-center">Junker</span>              
               </div>
               <h1 className="max-w-lg text-xl mt-3 font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">
               Bienvenido a nuestra pagina de venta de autopartes.
@@ -21,27 +24,48 @@ export default function Footer () {
 
             <div>
               <p className="font-semibold text-gray-800 dark:text-white">
-                Importante
+                Más Información
               </p>
 
               <div className="flex flex-col items-start mt-5 space-y-2">
                 <Link
                   href="/nosotros"
-                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-sec-var-400 hover:underline hover:text-sec"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:underline hover:text-custom-blue"
                 >
                   Nosotros
                 </Link>
                 <Link
                   href="/productos"
-                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-sec-var-400 hover:underline hover:text-sec"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:underline hover:text-custom-blue"
                 >
                   Productos
                 </Link>
                 <Link
                   href="/servicios"
-                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-sec-var-400 hover:underline hover:text-sec"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:underline hover:text-custom-blue"
                 >
                   Servicios
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <p className="font-semibold text-gray-800 dark:text-white">
+                Leyes
+              </p>
+
+              <div className="flex flex-col items-start mt-5 space-y-2">
+                <Link
+                  href="/terminos"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:underline hover:text-custom-blue"
+                >
+                  Términos y Condiciones
+                </Link>
+                <Link
+                  href="/politicas"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:underline hover:text-custom-blue"
+                >
+                  Politicas de privacidad
                 </Link>
               </div>
             </div>
@@ -53,31 +77,26 @@ export default function Footer () {
 
               <div className="flex flex-col items-start mt-5 space-y-2">
                 <div className='flex flex-row'>
-                  <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-2">
-                    <path fillRule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clipRule="evenodd"></path>
-                  </svg>
+                  <div className='flex items-center'>
+                    <PhoneIcon className="h-5 w-5"/>
                   </div>
                   <div>
                   <p
-                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-sec-var-400 hover:text-sec cursor-default"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:text-custom-blue ml-2 cursor-default"
                   >
-                  Teléfono: +504-9999-9999
+                  Teléfono: +504-0000-0000
                 </p>
                   </div>
                 </div>
                 <div className='flex flex-row'>
                   <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 mr-2">
-                    <path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path>
-                    <path d="M1 5L12 12L23 5"></path>
-                  </svg>
+                  <EnvelopeOpenIcon className='h-5 w-5'/>
                   </div>
                   <div>
                   <p
-                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-sec-var-400 hover:text-sec cursor-default"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:text-custom-blue ml-2 cursor-default"
                   >
-                  Correo: rrhh@junker.hn
+                  Correo: junkerhn@gmail.com
                 </p>
                   </div>
                 </div>
@@ -89,7 +108,7 @@ export default function Footer () {
                   </div>
                   <div>
                   <p
-                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-sec-var-400 hover:text-sec cursor-default"
+                  className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-custom-blue-var-400 hover:text-custom-blue cursor-default"
                   >
                   Dirección: UNAH.
                   </p>
@@ -102,14 +121,14 @@ export default function Footer () {
           <hr className="my-6 border-gray-200 md:my-8 dark:border-gray-700" />
 
           <div className="flex items-center mx-12 justify-between">
-            <Link href='/'>
-            {/* <LogoJunker className=" cursor-pointer h-6 w-6"/> */}
-            </Link>
+              <div>
+                <p>Junker 2024. Todos los derechos reservados</p>
+              </div>
 
             <div className="flex -mx-2">
               <a
                 href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-sec dark:hover:text-sec-var-400"
+                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-custom-blue dark:hover:text-custom-blue-var-400"
                 aria-label="Reddit"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 fill-current" viewBox="0 0 50 50"><path d="M 16 3 C 8.8324839 3 3 8.8324839 3 16 L 3 34 C 3 41.167516 8.8324839 47 16 47 L 34 47 C 41.167516 47 47 41.167516 47 34 L 47 16 C 47 8.8324839 41.167516 3 34 3 L 16 3 z M 16 5 L 34 5 C 40.086484 5 45 9.9135161 45 16 L 45 34 C 45 40.086484 40.086484 45 34 45 L 16 45 C 9.9135161 45 5 40.086484 5 34 L 5 16 C 5 9.9135161 9.9135161 5 16 5 z M 37 11 A 2 2 0 0 0 35 13 A 2 2 0 0 0 37 15 A 2 2 0 0 0 39 13 A 2 2 0 0 0 37 11 z M 25 14 C 18.936712 14 14 18.936712 14 25 C 14 31.063288 18.936712 36 25 36 C 31.063288 36 36 31.063288 36 25 C 36 18.936712 31.063288 14 25 14 z M 25 16 C 29.982407 16 34 20.017593 34 25 C 34 29.982407 29.982407 34 25 34 C 20.017593 34 16 29.982407 16 25 C 16 20.017593 20.017593 16 25 16 z"/></svg>
@@ -117,7 +136,7 @@ export default function Footer () {
 
               <a
                 href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-sec dark:hover:text-sec-var-400"
+                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-custom-blue dark:hover:text-custom-blue-var-400"
                 aria-label="Facebook"
               >
                 <svg
@@ -132,7 +151,7 @@ export default function Footer () {
 
               <a
                 href="#"
-                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-sec dark:hover:text-sec-var-400"
+                className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-custom-blue dark:hover:text-custom-blue-var-400"
                 aria-label="Github"
               >
                 <svg
