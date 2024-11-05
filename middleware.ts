@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import axios from 'axios';
 
 // ! Rutas públicas que no requieren autenticación
-const publicRoutes = ['/', '/login', '/register,', '/reset', '/forgot'];
+const publicRoutes = ['/', '/login', '/register,', '/reset', '/forgot', '/nosotros', '/servicios'];
 
 const isPublicRoute = (path: string) => {
   const isPublic = publicRoutes.includes(path);
@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
 
   console.log('Middleware ejecutándose en:', path);
 
-  
+
   // Verificar si la ruta es pública
   if (isPublicRoute(path)) {
     console.log('Ruta pública, acceso permitido');
