@@ -39,6 +39,36 @@ interface ProductDetailProps {
   vendedor_calificacion: number;
 }
 
+  interface ProductoCreate {
+    nombre: string;
+    descripcion: string;
+    precio: number;
+    estado_producto: string;
+    imagen_url: string[];
+    id_vendedor: string;
+    id_categoria: string;
+    stock: number;
+  }
+
+  interface Producto extends ProductoCreate {
+    id: string;
+    created_at: string;
+  }
+
+  interface ProductoResponse {
+    message: string;
+  }
+
+  interface Categoria {
+    id: string;
+    nombre: string;
+  }
+
+  interface CategoriaError {
+    message: string;
+    status?: number;
+  }
+
 interface Usuario {
   id: string;
   nombre: string;
