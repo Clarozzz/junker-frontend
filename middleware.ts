@@ -74,6 +74,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // ! Definocion de todas las rutas como privadas
-    '/((?!_next/static|_next/image|favicon.ico).*)'
+    '/((?!_next/static|_next/image|favicon.ico|images).*)'
   ]
 };
