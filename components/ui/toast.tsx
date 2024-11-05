@@ -1,4 +1,3 @@
-// src/components/ui/use-toast.tsx
 "use client";
 
 import { ToastContainer, toast, ToastOptions } from 'react-toastify';
