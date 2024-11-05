@@ -17,7 +17,7 @@ export default function Politicas() {
           </div>
           <div className="grid grid-cols-12">
             <div className="col-span-12">
-              <div className="space-y-12 px-2 xl:px-16 mt-12 mx-4">
+              <div className="space-y-12 px-2 xl:px-16 mt-12 sm:px-4">
                 <div className="mt-4 flex">
                   <div>
                     <div className="flex items-center h-16">

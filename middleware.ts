@@ -2,24 +2,19 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import axios from 'axios';
 
-// ! Rutas públicas que no requieren autenticación
-const publicRoutes = ['/', '/login', '/register,', '/reset', '/forgot', '/nosotros', '/servicios'];
+//  Rutas públicas que no requieren autenticación
+const publicRoutes = ['/', '/login', '/register,', '/reset', '/forgot', '/nosotros', '/servicios', '/politicas', '/productos', '/terminos'];
 
 const isPublicRoute = (path: string) => {
   const isPublic = publicRoutes.includes(path);
-  console.log('isPublicRoute check:', path, '->', isPublic); // Log para verificar
   return isPublic;
 };
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  console.log('Middleware ejecutándose en:', path);
-
-
   // Verificar si la ruta es pública
   if (isPublicRoute(path)) {
-    console.log('Ruta pública, acceso permitido');
     return NextResponse.next();
   }
 
@@ -27,7 +22,6 @@ export async function middleware(request: NextRequest) {
     const access_token = request.cookies.get('access_token')?.value;
 
     if (!access_token) {
-      console.log('No hay access_token, redirigiendo a login');
       return NextResponse.redirect(new URL('/login', request.url));
     }
 
@@ -40,7 +34,6 @@ export async function middleware(request: NextRequest) {
     });
 
     if (verifyResponse.status === 200) {
-      console.log('Token válido, continuando');
       return NextResponse.next();
     } else {
       throw new Error('Token inválido');
@@ -50,7 +43,7 @@ export async function middleware(request: NextRequest) {
     console.error('Error en verificación de token:', error);
 
     // Redirigir al login si el token es inválido o hay un error
-    const redirectResponse = NextResponse.redirect(new URL('/login', request.url));
+    const redirectResponse = NextResponse.redirect(new URL('/', request.url));
 
     // Limpiar cookies manteniendo las opciones originales
     redirectResponse.cookies.set({

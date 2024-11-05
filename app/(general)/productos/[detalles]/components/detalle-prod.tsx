@@ -30,8 +30,8 @@ export default function DetalleProducto({
             <Image
               src={selectedImage.url}
               alt={selectedImage.alt}
-              width={1000}
-              height={1000}
+              width={2000}
+              height={2000}
               className="h-full w-full object-cover object-center"
             />
           </div>

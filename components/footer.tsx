@@ -9,7 +9,7 @@ export default function Footer () {
   return (
     <>
       <footer className="bg-custom-beige dark:bg-gray-900" id="footer">
-        <div className="container px-6 py-12 mx-auto">
+        <div className="container px-10 md:px-24 py-14 mx-auto">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-5">
             <div className="sm:col-span-2">
               <div className="flex flex-row mx-auto">
@@ -17,7 +17,7 @@ export default function Footer () {
                 <LogoJunker className='w-20'/></Link>
                 <span className="flex text-6xl font-bold montserrat text-custom-blue items-center">Junker</span>              
               </div>
-              <h1 className="max-w-lg text-xl mt-3 font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">
+              <h1 className="max-w-lg text-xl mt-6 font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">
               Bienvenido a nuestra pagina de venta de autopartes.
               </h1>
             </div>
@@ -118,9 +118,9 @@ export default function Footer () {
             </div>
           </div>
 
-          <hr className="my-6 border-gray-200 md:my-8 dark:border-gray-700" />
+          <hr className="my-6 border-gray-500 md:my-8 dark:border-gray-700" />
 
-          <div className="flex items-center mx-12 justify-between">
+          <div className="flex items-center justify-between">
               <div>
                 <p>Junker 2024. Todos los derechos reservados</p>
               </div>
