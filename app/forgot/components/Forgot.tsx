@@ -35,7 +35,7 @@ export default function Forgot() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Forgot Password</h2>
+        <h2 className="text-2xl font-bold mb-4">Restablecer contraseña</h2>
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -47,7 +47,7 @@ export default function Forgot() {
             onChange={(e) => setEmail(e.target.value)}
             required
             className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter your email"
+            placeholder="Ingresa tu email"
           />
         </div>
 
@@ -55,7 +55,7 @@ export default function Forgot() {
           onClick={handleForgotPassword}
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Send Reset Email
+          Enviar correo de reinicio
         </button>
 
         {message && (
