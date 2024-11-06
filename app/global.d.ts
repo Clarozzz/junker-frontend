@@ -81,12 +81,12 @@ interface Usuario {
   email: string;
 }
 
-export interface ProductosResponse {
+interface ProductosResponse {
   items: Producto[];
   total: number;
 }
 
-export interface ProductoVista {
+interface ProductoVista {
   id: string;
   nombre: string;
   descripcion: string;

@@ -22,7 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { getCategorias } from "@/app/api/categorias";
-import { Categoria } from "@/app/global";
 
 
 const productSchema = z.object({

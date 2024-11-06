@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Categoria } from "../global";
+
 
 export const getCategorias = async (): Promise<Categoria[]> => {
     try {
