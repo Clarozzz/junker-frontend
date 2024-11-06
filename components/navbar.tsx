@@ -1,20 +1,15 @@
-'use client'
+"use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
-import { ShoppingCart, Menu, Search, Upload, X } from "lucide-react";
-
-
+import { ShoppingCart, Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 import { usePathname } from "next/navigation";
-
-import Cookies from "js-cookie"
-
-import { useRouter } from 'next/navigation';
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/contexts/AuthContext";
-
 
 import {
   DropdownMenu,
@@ -24,7 +19,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getUser } from "@/app/api/usuarios";
+import Cargando from "./ui/cargando";
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -38,18 +35,43 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const [userData, setUserData] = useState<Usuario>();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = Cookies.get("access_token") || "";
+    const loadUserData = async () => {
+      try {
+        const data = await getUser(token);
+        setUserData(data);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Error desconocido");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  if (loading) return <Cargando />;
+  if (error) return <p>Error: {error}</p>;
 
   const handleLogout = () => {
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
     setIsAuthenticated(false);
-    window.location.href='/';
+    window.location.href = "/";
   };
 
   const handleLogin = () => {
     router.push("/login");
   };
-
 
   return (
     <header className="bg-background shadow-md top-0 sticky z-20">
@@ -59,23 +81,31 @@ export default function Navbar() {
             <Link href="/">
               <LogoJunker className="w-11" />
             </Link>
-            <Link href="/" className="text-2xl hidden lg:inline-block font-bold items-center montserrat">
+            <Link
+              href="/"
+              className="text-2xl hidden lg:inline-block text-custom-blue font-bold items-center montserrat"
+            >
               Junker
             </Link>
           </div>
           <nav className="md:flex hidden space-x-8">
             {pages.map((vista) => (
               <Link
-                className="text-center block md:inline-block py-2 hover:text-primary"
+                // className="text-center block md:inline-block py-2 hover:text-primary"
                 key={vista.ruta}
                 href={vista.href}
+                className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${
+                  pathname === vista.href
+                    ? 'bg-gray-200/75 w-24 rounded-full text-gray-900'
+                    : 'text-gray-900 hover:bg-gray-200/75 w-24 rounded-full hover:text-gray-900'
+                }`}
                 aria-current={pathname === vista.href ? "page" : undefined}
               >
                 {vista.ruta}
               </Link>
             ))}
           </nav>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 pr-6">
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
             </Button>
@@ -86,80 +116,95 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => window.location.href = '/publicar'}
-            >
-              <Upload className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
               className="absolute left-0 md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <Menu className="h-5 w-5" />
             </Button>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Menu</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {isAuthenticated ? (
-                  <>
-                    <DropdownMenuItem onClick={() => router.push('/perfil')}>
+            
+              {isAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    {userData?.avatar_url ? (
+                      <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
+                        <AvatarImage
+                          src={userData?.avatar_url}
+                          alt={userData?.nombre}
+                          className="image-cover"
+                        />
+                        <AvatarFallback>Usuario</AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
+                        {(userData?.nombre?.charAt(0) ?? "").toUpperCase() +
+                          (userData?.apellido?.charAt(0) ?? "").toUpperCase()}
+                      </span>
+                    )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="cursor-pointer">
+                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => router.push("/perfil")}
+                      className="cursor-pointer">
                       Perfil
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/publicar')}>
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => router.push("/publicar")}
+                    >
                       Publicar
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                       Cerrar Sesión
                     </DropdownMenuItem>
-                  </>
-                ) : (
-                  <DropdownMenuItem onClick={handleLogin}>
-                    Iniciar Sesión
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
+                  </DropdownMenuContent>
+                </DropdownMenu>   
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <p className="hover:underline underline-offset-4 cursor-pointer">
+                      Login
+                    </p>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={handleLogin}>
+                      Iniciar Sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
           </div>
         </div>
         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
-            } md:hidden`}
+          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${
+            isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          } md:hidden`}
         >
           <nav className="p-4">
-            <div className="flex justify-end mb-4"
-              onClick={() => setIsMenuOpen(false)}>
+            <div
+              className="flex justify-end mb-4"
+              onClick={() => setIsMenuOpen(false)}
+            >
               <X className="h-8 w-8" />
               <span className="sr-only">Close</span>
             </div>
-            <ul>
-              <li className="mb-4">
-                <Link href="/" className="text-lg font-medium">
-                  Inicio
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/productos" className="text-lg font-medium">
-                  Productos
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/nosotros" className="text-lg font-medium">
-                  Sobre Nosotros
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="/servicios" className="text-lg font-medium">
-                  Servicios
-                </Link>
-              </li>
-            </ul>
+              <div className="space-y-2">
+                {pages.map((vista) => (
+                  <Link
+                    // className="text-center block md:inline-block py-2 hover:text-primary"
+                    key={vista.ruta}
+                    href={vista.href}
+                    className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${
+                      pathname === vista.href
+                        ? 'bg-gray-200/75 w-full text-gray-900'
+                        : 'text-gray-900 hover:bg-gradient-to-r hover:from-gray-200 hover:via-gray-100 hover:to-white w-full hover:text-gray-900'
+                    }`}
+                    aria-current={pathname === vista.href ? "page" : undefined}
+                  >
+                    {vista.ruta}
+                  </Link>
+                ))}
+              </div>
           </nav>
         </div>
         {isMenuOpen && (

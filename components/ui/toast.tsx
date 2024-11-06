@@ -1,6 +1,4 @@
-"use client";
-
-import { ToastContainer, toast, ToastOptions } from 'react-toastify';
+import { ToastContainer, toast, ToastOptions, ToastContainerProps } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type ToastVariant = "info" | "success" | "warning" | "error" | "destructive";
@@ -50,4 +48,22 @@ export const useToast = () => {
 };
 
 // Este componente se monta en el root para manejar los toasts
-export const ToastProvider = () => <ToastContainer />;
+const ToastProvider: React.FC<ToastContainerProps> = (props) => {
+  return (
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+      {...props}
+    />
+  );
+};
+
+export { ToastProvider };

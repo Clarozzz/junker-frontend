@@ -34,15 +34,15 @@ const productSchema = z.object({
     .min(0.01, { message: 'El precio debe ser mayor a 0' }),
   estado_producto: z
     .string()
-    .min(2, { message: 'La condición debe tener al menos 2 caracteres' })
+    .min(2, { message: 'Debe seleccionar el estado del producto' })
     .max(50, { message: 'La condición no puede exceder 50 caracteres' }),
   descripcion: z
     .string()
-    .min(1, { message: 'La descripción debe tener al menos 1 caracter' })
+    .min(20, { message: 'La descripción debe tener al menos 20 caracteres' })
     .max(1000, { message: 'La descripción no puede tener mas de 1000 caracteres' }),
   stock: z
     .number()
-    .min(0, { message: 'La cantidad debe ser mayor a 0' }),  
+    .min(1, { message: 'La cantidad debe ser mayor a 0' }),  
     id_categoria: z
     .string()
     .min(1, { message: 'Debe seleccionar una categoría' })
@@ -110,7 +110,8 @@ export default function PublicarClient() {
 
       showToast({
         title: "Success",
-        description: "Imagenes agregadas correctamente",
+        description: "Imagen agregada correctamente",
+        variant: "success",
       })
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "error al subir las imagenes"
@@ -163,6 +164,7 @@ export default function PublicarClient() {
       showToast({
         title: "Success",
         description: "Producto creado con exito",
+        variant: "success",
       })
 
       // Resetear formulario y las imagenes
@@ -314,6 +316,12 @@ export default function PublicarClient() {
             {/* Formulario */}
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div>
+                <Label
+                  htmlFor="cover-photo"
+                  className="block font-mediumtext-gray-900"
+                >
+                  Nombre del Producto
+                </Label>
                 <Input
                   type="text"
                   id="producto"
@@ -326,8 +334,14 @@ export default function PublicarClient() {
                 )}
               </div>
               <div>
+                <Label
+                  htmlFor="cover-photo"
+                  className="block font-mediumtext-gray-900"
+                >
+                  Precio
+                </Label>
                 <Input
-                  type="text"
+                  type="number"
                   id="precio"
                   placeholder="Precio"
                   {...register('precio', { valueAsNumber: true })}
@@ -340,8 +354,14 @@ export default function PublicarClient() {
                 )}
               </div>
               <div>
+                <Label
+                  htmlFor="cover-photo"
+                  className="block font-mediumtext-gray-900"
+                >
+                  Cantidad
+                </Label>
                 <Input
-                  type="number"
+                  type="text"
                   id="stock"
                   placeholder="Cantidad"
                   {...register('stock', { valueAsNumber: true })}
@@ -352,33 +372,31 @@ export default function PublicarClient() {
                 {errors.stock && (
                   <p className="text-red-500 text-sm mt-1">{errors.stock.message}</p>
                 )}
-              </div>
+              </div>      
               <div>
-                <Input
-                  type="text"
-                  id="estado"
-                  placeholder="Estado del producto"
-                  {...register('estado_producto')}
-                  className={`mt-1 block w-full ${errors.estado_producto ? 'border-red-500' : ''}`}
-                />
-                {errors.estado_producto && (
-                  <p className="text-red-500 text-sm mt-1">{errors.estado_producto.message}</p>
+              <Controller
+                name="estado_producto"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <SelectTrigger className={`w-full ${errors.estado_producto ? 'border-red-500' : ''} focus:ring-custom-blue`}>
+                      <SelectValue placeholder="Estado del producto" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Nuevo">Nuevo</SelectItem>
+                      <SelectItem value="Usado">Usado</SelectItem>
+                    </SelectContent>
+                  </Select>
                 )}
-              </div>
-              <div>
-                <textarea
-                  id="descripcion"
-                  placeholder="Descripcion"
-                  {...register('descripcion')}
-                  className={`mt-1 block w-full min-h-40 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue ${
-                    errors.descripcion ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                />
-                {errors.descripcion && (
-                  <p className="text-red-500 text-sm mt-1">{errors.descripcion.message}</p>
-                )}
-              </div>
-              <div>
+              />
+              {errors.estado_producto && (
+                <p className="text-red-500 text-sm mt-1">{errors.estado_producto.message}</p>
+              )}
+            </div>
+            <div>
               <Controller
                 name="id_categoria"
                 control={control}
@@ -410,13 +428,39 @@ export default function PublicarClient() {
                 <p className="text-red-500 text-sm mt-1">{errors.id_categoria.message}</p>
               )}
             </div>
-
-              <Button
+              <div>
+                <textarea
+                  id="descripcion"
+                  placeholder="Descripcion"
+                  {...register('descripcion')}
+                  className={`mt-1 block w-full min-h-40 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue ${
+                    errors.descripcion ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {errors.descripcion && (
+                  <p className="text-red-500 text-sm mt-1">{errors.descripcion.message}</p>
+                )}
+              </div>    
+              {/* <Button
                 type="submit"
-                disabled={isLoading || uploadedImages.length === 0}
+                // disabled={isLoading || uploadedImages.length === 0}
                 className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50"
               >
                 {isLoading ? "Publicando..." : "Publicar"}
+              </Button> */}
+              <Button
+                type="submit"
+                disabled={isLoading || uploadedImages.length === 0}
+                className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 flex items-center justify-center"
+              >
+                {isLoading ? (
+                  <>
+                    <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-white border-opacity-50 mr-2"></span>
+                    Publicando...
+                  </>
+                ) : (
+                  "Publicar"
+                )}
               </Button>
             </form>
           </div>
