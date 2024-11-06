@@ -1,15 +1,5 @@
 import axios from "axios";
 
-// export const getProductos = async (): Promise<Producto[]> => {
-//   try {
-//     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/productos`);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error en getProductos:", error);
-//     throw error; 
-//   }
-// };
-
 import { ProductosResponse, ProductoCreate, ProductoResponse, Producto} from '../global';
 
 export const getProductos = async (page: number, limit: number): Promise<ProductosResponse> => {
