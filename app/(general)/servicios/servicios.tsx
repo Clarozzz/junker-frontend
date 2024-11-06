@@ -15,7 +15,7 @@ const services = [
     description:
       "Encuentra fácilmente las piezas exactas para tu vehículo con nuestro sistema de búsqueda inteligente. Utiliza filtros por precio, estado del producto y categoría de producto para obtener resultados precisos.",
     icon: Search,
-    image: "/images/carroceria.webp",
+    image: "/images/landing22.webp",
     features: ["Filtros avanzados por productos", "Sugerencias inteligentes"],
   },
   {
@@ -23,7 +23,7 @@ const services = [
     description:
       "Disfruta de un proceso de compra simplificado con múltiples opciones de pago y garantía de satisfacción. Nuestra plataforma utiliza encriptación de última generación para proteger tus datos.",
     icon: ShoppingCart,
-    image: "/images/pintura.webp",
+    image: "/images/landing1.webp",
     features: [
       "Múltiples métodos de pago",
       "Proceso de checkout simplificado",
@@ -35,7 +35,7 @@ const services = [
     description:
       "Recibe asistencia directa de nuestro equipo de expertos para asegurarte de que encuentres el repuesto adecuado para tu vehículo. Ofrecemos ayuda en tiempo real y asesoramiento personalizado.",
     icon: User,
-    image: "/images/landing11.webp",
+    image: "/images/landing25.webp",
     features: [
       "Asistencia en tiempo real",
       "Asesoramiento personalizado",
@@ -47,7 +47,7 @@ const services = [
     description:
       "Accede a la única plataforma en línea en el país dedicada exclusivamente a la venta de repuestos y accesorios para vehículos. Encuentra lo que necesitas de manera rápida y conveniente desde cualquier lugar.",
     icon: Globe,
-    image: "/images/landing37.webp",
+    image: "/images/landing10.webp",
     features: [
       "Acceso exclusivo en línea",
       "Comodidad y rapidez",
@@ -59,8 +59,8 @@ const services = [
 export default function Servicios() {
   return (
     <div>
-      <div className="container mx-auto py-12 px-4">
-        <h1 className="text-4xl font-bold text-center mb-10 text-custom-blue">
+      <div className="container mx-auto py-12 px-8 max-w-7xl">
+        <h1 className="text-6xl font-bold mb-10 text-black">
           Nuestros Servicios
         </h1>
         <p className="text-xl mb-12 max-w-7xl mx-auto">
@@ -72,20 +72,25 @@ export default function Servicios() {
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
           {services.map((service, index) => (
             <Card key={index} className="flex flex-col h-full overflow-hidden">
-              <Image
-                src={service.image}
-                alt={`Imagen ilustrativa de ${service.title}`}
-                width={700}
-                height={500}
-                className="w-full h-48 object-cover"
-              />
-              <CardHeader>
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center mb-4">
-                  <service.icon className="w-6 h-6 text-primary-foreground" />
+              <div className="relative">
+                <Image
+                  src={service.image}
+                  alt={`Imagen ilustrativa de ${service.title}`}
+                  width={700}
+                  height={500}
+                  className="w-full h-72 object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-50" />
+                <div className="absolute inset-0 flex flex-col justify-center items-center text-custom-beige px-6">
+                  <div className="rounded-full bg-black p-4">
+                    <service.icon className="w-10 h-10" />
+                  </div>
                 </div>
-                <CardTitle className="text-xl">{service.title}</CardTitle>
-              </CardHeader>
+              </div>
               <CardContent>
+                <CardHeader className="pl-0">
+                  <CardTitle className="text-2xl">{service.title}</CardTitle>
+                </CardHeader>
                 <CardDescription className="text-base mb-4">
                   {service.description}
                 </CardDescription>

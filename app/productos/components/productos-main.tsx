@@ -9,6 +9,7 @@ import {
 import ProductosVista from "./productos-vista";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
+import Image from "next/image";
 
 export default function ProductosMain() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,9 +34,20 @@ export default function ProductosMain() {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      <div id="imagen" className="">
-        <h2>imagen</h2>
+    <div>
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-12 md:px-12 lg:px-12 xl:px-12 mt-4">
+        <div className="relative w-full h-[200px] md:h-[300px] xl:h-[400px]">
+          <Image
+            src='/images/landing24.webp'
+            alt="foto"
+            fill
+            className="object-cover rounded-2xl"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50 rounded-2xl" />
+          <div className="absolute inset-0 flex justify-center items-center text-white text-4xl montserrat font-bold px-6">
+            Encuentra las autopartes que necesitas
+          </div>
+        </div>
       </div>
 
       <div>
@@ -43,9 +55,8 @@ export default function ProductosMain() {
         <div className="relative z-40 lg:hidden">
           <>
             <div
-              className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${
-                isMenuOpen ? "translate-x-0" : "-translate-x-full"
-              } lg:hidden`}
+              className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+                } lg:hidden`}
             >
               <div className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                 <div className="flex items-center justify-between px-4">
@@ -328,7 +339,7 @@ export default function ProductosMain() {
 
         <main className="mx-auto max-w-screen-2xl px-4 sm:px-12 md:px-12 lg:px-12 xl:px-12">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-14 mr-10 sm:mr-10">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-5xl font-bold tracking-tight text-gray-900">
               Productos
             </h1>
             <div className="flex items-center">
@@ -411,19 +422,15 @@ export default function ProductosMain() {
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <h2 id="products-heading" className="sr-only">
-              Products
-            </h2>
-
             <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row lg:gap-x-8 gap-y-10">
-              <div className="lg:w-1/5">
-                <form className="hidden lg:block py-24">
+              <div className="lg:w-1/6">
+                <form className="hidden lg:block pt-14">
                   <h3 className="sr-only">Categories</h3>
-                  <Accordion type="single" collapsible className="w-full py-6">
+                  <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1">
                       <AccordionTrigger>Precio</AccordionTrigger>
                       <AccordionContent>
-                        <div className="pt-6 px-2" id="filter-section-0">
+                        <div className="px-2" id="filter-section-0">
                           <div className="space-y-4">
                             <div className="flex items-center">
                               <input
@@ -677,7 +684,7 @@ export default function ProductosMain() {
                   </Accordion>
                 </form>
               </div>
-              <div className="lg:w-4/5">
+              <div className="lg:w-5/6">
                 <ProductosVista />
               </div>
             </div>

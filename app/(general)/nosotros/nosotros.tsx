@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function Nosotros() {
   return (
     <div className="container mx-auto py-10 px-8 md:px-28">
-      <h1 className="text-4xl font-bold text-center text-custom-blue mb-10">
+      <h1 className="text-6xl font-bold text-black mb-10">
         Sobre Nosotros
       </h1>
 
@@ -36,8 +36,8 @@ export default function Nosotros() {
               src="/images/historia2.webp"
               alt="Vintage car workshop"
               className="rounded-lg shadow-xl w-full h-[400px] object-cover"
-              width={500}
-              height={500}
+              width={1000}
+              height={1000}
             />
           </div>
         </div>
@@ -45,11 +45,11 @@ export default function Nosotros() {
         <div className="flex flex-col-reverse lg:flex-row items-center gap-12 mb-24">
           <div className="lg:w-1/2">
             <Image
-              src="/images/mision.webp"
+              src="/images/landing3.webp"
               alt="Modern car parts"
               className="rounded-lg shadow-xl w-full h-[400px] object-cover"
-              width={500}
-              height={500}
+              width={1000}
+              height={1000}
             />
           </div>
           <div className="lg:w-1/2 space-y-6">
@@ -105,11 +105,11 @@ export default function Nosotros() {
           </div>
           <div className="lg:w-1/2">
             <Image
-              src="/images/vision.webp"
+              src="/images/landing21.webp"
               alt="Vision"
               className="rounded-lg shadow-xl w-full h-[400px] object-cover"
-              width={700}
-              height={700}
+              width={1000}
+              height={1000}
             />
           </div>
         </div>
@@ -117,11 +117,11 @@ export default function Nosotros() {
         <div className="flex flex-col-reverse lg:flex-row items-center gap-12 mb-24">
           <div className="lg:w-1/2">
             <Image
-              src="/images/calidad.webp"
+              src="/images/landing8.webp"
               alt="Modern car parts"
               className="rounded-lg shadow-xl w-full h-[400px] object-cover"
-              width={500}
-              height={500}
+              width={1000}
+              height={1000}
             />
           </div>
           <div className="lg:w-1/2 space-y-6">

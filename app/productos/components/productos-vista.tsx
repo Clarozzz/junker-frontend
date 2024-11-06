@@ -46,12 +46,9 @@ export default function ProductosVista() {
         <div id="tarjetas" className="flex flex-col w-full justify-center items-center">
           <section className="py-14 bg-background">
             <div className="container mx-auto">
-              <h2 className="text-3xl font-bold text-center montserrat text-custom-blue mb-10">
-                Repuestos y Accesorios
-              </h2>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
                 {productos.map((product) => (
-                  <motion.div key={product.id} whileHover={{ scale: 1.05 }}>
+                  <motion.div key={product.id} onClick={() => { handleCardClick(product) }} className="cursor-pointer">
                     <Card>
                       <CardContent className="p-4">
                         <Image
