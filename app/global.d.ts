@@ -80,3 +80,21 @@ interface Usuario {
   telefono: string;
   email: string;
 }
+
+interface ProductosResponse {
+  items: Producto[];
+  total: number;
+}
+
+interface ProductoVista {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  id_vendedor: string;
+  productos_imagenes: { url: string; orden: number }[];
+  productos_categorias: { categorias: { nombre: string } }[];
+  vendedores: {
+    usuarios: { email: string; nombre: string; apellido: string };
+  };
+}
