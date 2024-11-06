@@ -9,7 +9,7 @@ import LogoJunker from "./logo-junker";
 import { usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/contexts/AuthContext";
+// import { useAuth } from "@/app/contexts/AuthContext";
 
 import {
   DropdownMenu,
@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUser } from "@/app/api/usuarios";
-import Cargando from "./ui/cargando";
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -34,10 +33,9 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  // const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [userData, setUserData] = useState<Usuario>();
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = Cookies.get("access_token") || "";
@@ -51,26 +49,18 @@ export default function Navbar() {
         } else {
           setError("Error desconocido");
         }
-      } finally {
-        setLoading(false);
       }
     };
 
     loadUserData();
   }, []);
 
-  if (loading) return <Cargando />;
-  if (error) return <p>Error: {error}</p>;
 
   const handleLogout = () => {
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
-    setIsAuthenticated(false);
+    // setIsAuthenticated(false);
     window.location.href = "/";
-  };
-
-  const handleLogin = () => {
-    router.push("/login");
   };
 
   return (
@@ -122,7 +112,7 @@ export default function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
             
-              {isAuthenticated ? (
+              {!error ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     {userData?.avatar_url ? (
@@ -160,18 +150,9 @@ export default function Navbar() {
                   </DropdownMenuContent>
                 </DropdownMenu>   
               ) : (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <p className="hover:underline underline-offset-4 cursor-pointer">
-                      Login
-                    </p>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={handleLogin}>
+                    <Link href="/login" className="hover:underline underline-offset-4 cursor-pointer">
                       Iniciar Sesión
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    </Link>
               )}
           </div>
         </div>
