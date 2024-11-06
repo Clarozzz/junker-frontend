@@ -1,4 +1,6 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
 
 import { Button } from "@/components/ui/button";
@@ -63,11 +65,8 @@ export default function ProductosVista() {
         )
       }
       <div id="tarjetas" className="flex flex-col w-full justify-center items-center">
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center montserrat text-custom-blue mb-10">
-              Nuestros Productos Destacados
-            </h2>
+        <section className="py-14 bg-background">
+          <div className="container mx-auto">
             {/* Selector de cantidad de elementos por página */}
             <div className="mb-4 flex justify-end items-center">
               <label htmlFor="items-per-page" className="mr-2">Elementos por página:</label>
@@ -86,29 +85,30 @@ export default function ProductosVista() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
               {productos.map((product) => (
-                <motion.div key={product.id} whileHover={{ scale: 1.05 }}>
+                <motion.div key={product.id} onClick={() => { handleCardClick(product) }} className="cursor-pointer">
                   <Card>
                     <CardContent className="p-4">
                       <Image
                         src={product.productos_imagenes[0]?.url}
                         alt={product.nombre}
-                        width={300}
-                        height={300}
-                        className="w-full h-48 object-cover mb-4 rounded"
+                        width={400}
+                        height={400}
+                        className="w-52 h-52 mb-4 rounded object-cover object-center"
                       />
-                      <h3 className="text-lg font-semibold">{product.nombre}</h3>
+                      <h3 className="text-lg font-semibold truncate max-w-40">{product.nombre}</h3>
                       <p className="text-gray-600">Lps. {product.precio.toFixed(2)}</p>
                       <p className="text-sm text-gray-500">Categoría: {product.productos_categorias[0]?.categorias.nombre}</p>
                       <p className="text-sm text-gray-500">Vendedor: {product.vendedores.usuarios.nombre}</p>
                     </CardContent>
                     <CardFooter>
                       <Button
-                        onClick={() => { handleCardClick(product) }}
-                        className={`w-full bg-custom-blue text-white hover:bg-blue-900 hover:text-white ${
-                          productosSeleccion?.id === product.id ? 'ring-2 ring-ring ring-sec ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ' : ''
-                        }`}
-                      >
-                        <p className="truncate max-w-32">Ver más detalles</p>
+                          onClick={() => { handleCardClick(product) }}
+                          className={`w-full bg-custom-blue text-white hover:bg-blue-900 hover:text-white ${
+                            productosSeleccion?.id ===  product.id ? 'ring-2 ring-ring ring-sec ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ' : ''
+
+                          }`}
+                          >
+                          <p className="truncate max-w-32">Ver más detalles</p>
                       </Button>
                     </CardFooter>
                   </Card>
