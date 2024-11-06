@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import { ProductosResponse, ProductoCreate, ProductoResponse, Producto} from '../global';
-
 // * Hola 
 export const getProductos = async (page: number, limit: number): Promise<ProductosResponse> => {
   try {

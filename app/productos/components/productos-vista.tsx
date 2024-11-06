@@ -11,7 +11,6 @@ import Image from "next/image"
 import { getProductos } from "@/app/api/productos";
 import { usePathname, useRouter } from "next/navigation";
 import Cargando from "@/components/ui/cargando";
-import { Producto, ProductosResponse } from "../../global";
 
 export default function ProductosVista() {
   const [productos, setProductos] = useState<Producto[]>([]);
