@@ -1,17 +1,22 @@
 import axios from "axios";
+import { ProductosResponse, ProductoCreate, ProductoVista } from '../global';
 
-export const getProductos = async (): Promise<Producto[]> => {
+export const getProductos = async (page: number, limit: number): Promise<ProductosResponse> => {
   try {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/productos`);
+    const response = await axios.get<ProductosResponse>(`${process.env.NEXT_PUBLIC_API_URL}/productos`, {
+      params: {
+        page,
+        limit,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error en getProductos:", error);
-    throw error; 
+    throw error;
   }
 };
 
-
-export const getProducto = async (product_id: string): Promise<Producto> => {
+export const getProducto = async (product_id: string): Promise<ProductoVista> => {
   try {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/productos/${product_id}`);
     return response.data;
@@ -29,7 +34,7 @@ class ProductosService {
     this.baseURL = process.env.NEXT_PUBLIC_API_URL || '';
   }
 
-  async createProducto(productoData: ProductoCreate): Promise<ProductoResponse> {
+  async createProducto(productoData: ProductoCreate): Promise<ProductosResponse> {
     try {
       const response = await axios.post(`${this.baseURL}/productos`, productoData, {
         headers: {
