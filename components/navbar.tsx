@@ -81,7 +81,6 @@ export default function Navbar() {
           <nav className="md:flex hidden space-x-8">
             {pages.map((vista) => (
               <Link
-                // className="text-center block md:inline-block py-2 hover:text-primary"
                 key={vista.ruta}
                 href={vista.href}
                 className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${
@@ -172,7 +171,6 @@ export default function Navbar() {
               <div className="space-y-2">
                 {pages.map((vista) => (
                   <Link
-                    // className="text-center block md:inline-block py-2 hover:text-primary"
                     key={vista.ruta}
                     href={vista.href}
                     className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${
