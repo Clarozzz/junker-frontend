@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Link from "next/link";
 import { ShoppingCart, Menu, Search, X } from "lucide-react";
@@ -9,7 +9,6 @@ import LogoJunker from "./logo-junker";
 import { usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-// import { useAuth } from "@/app/contexts/AuthContext";
 
 import {
   DropdownMenu,
@@ -20,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getUser } from "@/app/api/usuarios";
+import { useUser } from "@/context/UserContext";
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -33,33 +32,12 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  // const { isAuthenticated, setIsAuthenticated } = useAuth();
-  const [userData, setUserData] = useState<Usuario>();
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const token = Cookies.get("access_token") || "";
-    const loadUserData = async () => {
-      try {
-        const data = await getUser(token);
-        setUserData(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Error desconocido");
-        }
-      }
-    };
-
-    loadUserData();
-  }, []);
-
+  const { userData, setUserData } = useUser();
 
   const handleLogout = () => {
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
-    // setIsAuthenticated(false);
+    setUserData(null);
     window.location.href = "/";
   };
 
@@ -81,7 +59,6 @@ export default function Navbar() {
           <nav className="md:flex hidden space-x-8">
             {pages.map((vista) => (
               <Link
-                // className="text-center block md:inline-block py-2 hover:text-primary"
                 key={vista.ruta}
                 href={vista.href}
                 className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${
@@ -112,48 +89,40 @@ export default function Navbar() {
               <Menu className="h-5 w-5" />
             </Button>
             
-              {!error ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    {userData?.avatar_url ? (
-                      <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
-                        <AvatarImage
-                          src={userData?.avatar_url}
-                          alt={userData?.nombre}
-                          className="image-cover"
-                        />
-                        <AvatarFallback>Usuario</AvatarFallback>
-                      </Avatar>
-                    ) : (
-                      <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
-                        {(userData?.nombre?.charAt(0) ?? "").toUpperCase() +
-                          (userData?.apellido?.charAt(0) ?? "").toUpperCase()}
-                      </span>
-                    )}
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="cursor-pointer">
-                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => router.push("/perfil")}
-                      className="cursor-pointer">
-                      Perfil
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => router.push("/publicar")}
-                    >
-                      Publicar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                      Cerrar Sesión
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>   
-              ) : (
-                    <Link href="/login" className="hover:underline underline-offset-4 cursor-pointer">
-                      Iniciar Sesión
-                    </Link>
-              )}
+              {userData ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  {userData.avatar_url ? (
+                    <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
+                      <AvatarImage src={userData.avatar_url} alt={userData.nombre} className="image-cover" />
+                      <AvatarFallback>Usuario</AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
+                      {(userData.nombre?.charAt(0) ?? "").toUpperCase() +
+                        (userData.apellido?.charAt(0) ?? "").toUpperCase()}
+                    </span>
+                  )}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="cursor-pointer">
+                  <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
+                    Perfil
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/publicar")} className="cursor-pointer">
+                    Publicar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    Cerrar Sesión
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login" className="hover:underline underline-offset-4 cursor-pointer">
+                Iniciar Sesión
+              </Link>
+            )}
           </div>
         </div>
         <div
@@ -172,7 +141,6 @@ export default function Navbar() {
               <div className="space-y-2">
                 {pages.map((vista) => (
                   <Link
-                    // className="text-center block md:inline-block py-2 hover:text-primary"
                     key={vista.ruta}
                     href={vista.href}
                     className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${
