@@ -16,7 +16,7 @@ export default function SidebarProductos() {
 
       <form className="mt-4 border-t border-gray-200">
         <h3 className="sr-only">Categorías</h3>
-        <Accordion type="single" collapsible className="w-full py-6 px-4">
+        <Accordion type="multiple" className="w-full py-6 px-4">
           <AccordionItem value="item-1">
             <AccordionTrigger>Precio</AccordionTrigger>
             <AccordionContent>
@@ -27,7 +27,7 @@ export default function SidebarProductos() {
                       id="filter-precio-0"
                       name="precio[]"
                       value="Lps. 0 - Lps. 500"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -42,7 +42,7 @@ export default function SidebarProductos() {
                       id="filter-precio-1"
                       name="precio[]"
                       value="Lps. 501 - Lps. 1000"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -57,8 +57,7 @@ export default function SidebarProductos() {
                       id="filter-precio-2"
                       name="precio[]"
                       value="Lps. 1001 - Lps. 2000"
-                      type="checkbox"
-                      checked
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -73,7 +72,7 @@ export default function SidebarProductos() {
                       id="filter-precio-3"
                       name="precio[]"
                       value="Lps. 2001 - Lps. 3000"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -88,7 +87,7 @@ export default function SidebarProductos() {
                       id="filter-precio-4"
                       name="precio[]"
                       value="Lps. 5001 - Lps. 8000"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -103,7 +102,7 @@ export default function SidebarProductos() {
                       id="filter-precio-5"
                       name="precio[]"
                       value="Lps. 8001 - mas"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -127,7 +126,7 @@ export default function SidebarProductos() {
                       id="filter-category-0"
                       name="category[]"
                       value="Neumaticos y Llantas"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -142,7 +141,7 @@ export default function SidebarProductos() {
                       id="filter-category-1"
                       name="category[]"
                       value="Motor y Transmision"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -157,8 +156,7 @@ export default function SidebarProductos() {
                       id="filter-category-2"
                       name="category[]"
                       value="Llaves"
-                      type="checkbox"
-                      checked
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -173,7 +171,7 @@ export default function SidebarProductos() {
                       id="filter-category-3"
                       name="category[]"
                       value="Iluminacion"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -188,7 +186,7 @@ export default function SidebarProductos() {
                       id="filter-category-4"
                       name="category[]"
                       value="Accesorios Internos"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -203,7 +201,7 @@ export default function SidebarProductos() {
                       id="filter-category-5"
                       name="category[]"
                       value="Frenos y Discos"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -218,7 +216,7 @@ export default function SidebarProductos() {
                       id="filter-category-6"
                       name="category[]"
                       value="Carroceria"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -242,7 +240,7 @@ export default function SidebarProductos() {
                       id="filter-size-0"
                       name="estado[]"
                       value="nuevo"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label
@@ -257,7 +255,7 @@ export default function SidebarProductos() {
                       id="filter-size-1"
                       name="estado[]"
                       value="usado"
-                      type="checkbox"
+                      type="radio"
                       className="h-4 w-4 rounded border-gray-300 text-custom-blue focus:ring-indigo-500"
                     />
                     <label

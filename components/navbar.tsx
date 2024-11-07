@@ -162,7 +162,7 @@ export default function Navbar() {
         >
           <nav className="p-4">
             <div
-              className="flex justify-end mb-4"
+              className="flex justify-end mb-4 cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >
               <X className="h-8 w-8" />
