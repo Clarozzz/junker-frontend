@@ -1,40 +1,31 @@
-'use client'
+// UserContext.tsx
+import { createContext, useContext, ReactNode } from "react";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { getUser } from "@/app/api/usuarios";
+interface UserContextType {
+  userData: Usuario | undefined;
+  loading: boolean;
+}
 
-export const UserContext = createContext<{
-  userData: Usuario | null;
-  setUserData: React.Dispatch<React.SetStateAction<Usuario | null>>;
-}>({
-  userData: null,
-  setUserData: () => {},
-});
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userData, setUserData] = useState<Usuario | null>(null);
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) throw new Error("useUser must be used within UserProvider");
+  return context;
+};
 
-  useEffect(() => {
-    const token = Cookies.get("access_token");
-    if (token && !userData) {
-      const loadUserData = async () => {
-        try {
-          const data = await getUser(token);
-          setUserData(data);
-        } catch {
-          setUserData(null);
-        }
-      };
-      loadUserData();
-    }
-  }, [userData]);
-
+export function UserProvider({
+  children,
+  userData,
+  loading,
+}: {
+  children: ReactNode;
+  userData: Usuario | undefined;
+  loading: boolean;
+}) {
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ userData, loading }}>
       {children}
     </UserContext.Provider>
   );
-};
-
-export const useUser = () => useContext(UserContext);
+}
