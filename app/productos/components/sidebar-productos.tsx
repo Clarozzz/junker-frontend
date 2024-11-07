@@ -1,6 +1,5 @@
 "use client";
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
@@ -9,14 +8,7 @@ import {
 export default function SidebarProductos() {
 
   return (
-    <div className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-      <div className="flex items-center justify-between px-4">
-        <h2 className="text-lg font-medium text-gray-900">Filtro</h2>
-      </div>
-
-      <form className="mt-4 border-t border-gray-200">
-        <h3 className="sr-only">Categorías</h3>
-        <Accordion type="multiple" className="w-full py-6 px-4">
+        <>
           <AccordionItem value="item-1">
             <AccordionTrigger>Precio</AccordionTrigger>
             <AccordionContent>
@@ -269,8 +261,6 @@ export default function SidebarProductos() {
               </div>
             </AccordionContent>
           </AccordionItem>
-        </Accordion>
-      </form>
-    </div>
+        </> 
   );
 }
