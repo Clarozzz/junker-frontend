@@ -1,12 +1,13 @@
 import axios from "axios";
 
-// * Hola 
-export const getProductos = async (page: number, limit: number): Promise<ProductosResponse> => {
+// * primera version de filtrado
+export const getProductos = async (page: number, limit: number, categoria: string | null = null): Promise<ProductosResponse> => {
   try {
     const response = await axios.get<ProductosResponse>(`${process.env.NEXT_PUBLIC_API_URL}/productos`, {
       params: {
         page,
         limit,
+        categoria
       },
     });
     return response.data;

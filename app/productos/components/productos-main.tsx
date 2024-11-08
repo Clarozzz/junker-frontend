@@ -1,8 +1,7 @@
+
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Accordion,
-} from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import ProductosVista from "./productos-vista";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
@@ -12,7 +11,13 @@ import SidebarProductos from "./sidebar-productos";
 export default function ProductosMain() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null); // Referencia al menú
+  const [filters, setFilters] = useState({
+    precio: "",
+    categoria: "",
+    estado: "",
+  });
+
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
@@ -20,16 +25,20 @@ export default function ProductosMain() {
 
   const closeMenu = (e: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-      setIsOpen(false); // Cierra el menú si se hace clic fuera
+      setIsOpen(false);
     }
   };
 
   useEffect(() => {
     document.addEventListener("click", closeMenu);
     return () => {
-      document.removeEventListener("click", closeMenu); // Limpia el evento al desmontar
+      document.removeEventListener("click", closeMenu);
     };
   }, []);
+
+  const handleFilterChange = (newFilters: { precio: string; categoria: string; estado: string }) => {
+    setFilters(newFilters); // Actualiza el estado con los nuevos filtros
+  };
 
   return (
     <div>
@@ -49,7 +58,6 @@ export default function ProductosMain() {
       </div>
 
       <div>
-        {/* SidebarProductos*/}
         <div className="relative z-40 lg:hidden">
           <>
             <div
@@ -61,11 +69,10 @@ export default function ProductosMain() {
                 <div className="flex items-center justify-between px-4">
                   <h2 className="text-lg font-medium text-gray-900">Filtro</h2>
                 </div>
-
                 <form className="mt-4 border-t border-gray-200">
                   <h3 className="sr-only">Categorías</h3>
                   <Accordion type="multiple" className="w-full py-6 px-4">
-                    <SidebarProductos />
+                    <SidebarProductos onFilterChange={handleFilterChange}/>
                   </Accordion>
                 </form>
               </div>
@@ -78,7 +85,7 @@ export default function ProductosMain() {
             )}
           </>
         </div>
-        {/* FinSidebarProductos*/}
+
         <main className="mx-auto max-w-screen-2xl px-4 sm:px-12 md:px-12 lg:px-12 xl:px-12">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-14 mr-10 sm:mr-10">
             <h1 className="text-5xl font-bold tracking-tight text-gray-900">
@@ -91,7 +98,6 @@ export default function ProductosMain() {
                     type="button"
                     className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
                     id="menu-button"
-                    aria-expanded={isOpen}
                     aria-haspopup="true"
                     onClick={toggleMenu}
                   >
@@ -167,14 +173,21 @@ export default function ProductosMain() {
             <div className="flex flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row 2xl:flex-row lg:gap-x-8 gap-y-10">
               <div className="lg:w-1/6">
                 <form className="hidden lg:block pt-14">
-                  <h3 className="sr-only">Categories</h3>
+                  <h3 className="sr-only">Categorias</h3>
                   <Accordion type="multiple" className="w-full">
-                    <SidebarProductos/>
+                    <SidebarProductos onFilterChange={handleFilterChange} />
                   </Accordion>
                 </form>
               </div>
               <div className="lg:w-5/6">
-                <ProductosVista />
+                {/* <ProductosVista categoria={filters.categoria} /> */}
+             
+                <ProductosVista 
+                  categoria={filters.categoria} 
+          
+    
+                />
+
               </div>
             </div>
           </section>
@@ -183,3 +196,4 @@ export default function ProductosMain() {
     </div>
   );
 }
+
