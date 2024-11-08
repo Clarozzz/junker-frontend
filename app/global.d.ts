@@ -90,6 +90,7 @@ interface ProductoVista {
   nombre: string;
   descripcion: string;
   precio: number;
+  estado: string;
   id_vendedor: string;
   productos_imagenes: { url: string; orden: number }[];
   productos_categorias: { categorias: { nombre: string } }[];
