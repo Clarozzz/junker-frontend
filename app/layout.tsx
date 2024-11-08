@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
+import { UserProvider } from "@/context/UserContext";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable} antialiased`}>
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <UserProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </UserProvider>
       </body>
     </html>
   );

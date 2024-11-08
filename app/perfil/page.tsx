@@ -30,12 +30,12 @@ const emailSchema = z.object({
 });
 
 export default function Component() {
-    const { userData, loading } = useUser();
+    const { userData } = useUser();
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
     const [emailErrors, setEmailErrors] = useState<Record<string, string>>({});
 
-    if (loading) return <Cargando />;
+    if (!userData) return <Cargando />;
     if (error) return <p>Error: {error}</p>;
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
