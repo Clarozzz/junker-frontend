@@ -7,6 +7,9 @@ import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import { registro } from '@/app/api/registro';
+import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const Registro = () => {
   const router = useRouter();
@@ -18,30 +21,33 @@ const Registro = () => {
   const [accepted, setAccepted] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess('');
-  
+
     if (!accepted) {
       setError('Debes aceptar las políticas de privacidad y los términos de uso para poder registrarte.');
       return;
     }
-  
+
     if (password !== confPass) {
       setError('Las contraseñas no coinciden');
       return;
     }
-  
+
     try {
+      setIsLoading(true)
       await registro({
         email,
         password,
         nombre,
         apellido,
       });
-  
+
       setSuccess('Registro exitoso. ¡Bienvenido!');
       setNombre('');
       setApellido('');
@@ -55,6 +61,8 @@ const Registro = () => {
       } else {
         setError('Error en el registro');
       }
+    } finally {
+      setIsLoading(false)
     }
   };
   return (
@@ -86,90 +94,73 @@ const Registro = () => {
           <div className="text-center mb-6">
             <span className="text-sm text-gray-600">
               Ya tienes una cuenta?{' '}
-              <a href="/login" className="text-custom-blue hover:underline">
+              <Link href="/login" className="text-custom-blue hover:underline">
                 Iniciar Sesión
-              </a>
+              </Link>
             </span>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <input
+              <Input
                 type="text"
                 id="nombre"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="Nombre"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
             <div>
-              <input
+              <Input
                 type="text"
                 id="apellido"
                 value={apellido}
                 onChange={(e) => setApellido(e.target.value)}
                 placeholder="Apellido"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
             <div>
-              <input
+              <Input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Correo electrónico"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
             <div>
-              <input
+              <Input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
             <div>
-              <input
+              <Input
                 type="password"
                 id="confpassword"
                 value={confPass}
                 onChange={(e) => setConfPass(e.target.value)}
                 placeholder="Confirma la contraseña"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded relative" role="alert">
-                <span className="block sm:inline">{error}</span>
-              </div>
-            )}
-            
-            {success && (
-              <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded relative" role="alert">
-                <span className="block sm:inline">{success}</span>
-              </div>
-            )}
 
             {/* Terms and Conditions */}
             <div className="flex items-center">
               <label className="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  className="form-checkbox"
+                <Checkbox
+                  className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-primary-foreground'
                   checked={accepted}
-                  onChange={(e) => setAccepted(e.target.checked)}
+                  onCheckedChange={() => setAccepted(true)}
                 />
                 <span className="ml-2 text-sm text-gray-600">
                   Acepto las políticas de privacidad y los términos de uso
@@ -177,13 +168,33 @@ const Registro = () => {
               </label>
             </div>
 
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            )}
+
+            {success && (
+              <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{success}</span>
+              </div>
+            )}
+
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
-              className="w-full bg-custom-blue text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none"
+              disabled={isLoading}
+              className="w-full bg-custom-blue hover:bg-blue-900  transition-all duration-200"
             >
-              Registrarse
-            </button>
+              {isLoading ? (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                  Registrando...
+                </>
+              ) : (
+                "Registrarse"
+              )}
+            </Button>
           </form>
         </div>
       </div>

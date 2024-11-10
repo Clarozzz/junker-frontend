@@ -7,28 +7,35 @@ import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
 import { X } from "lucide-react";
 import { login } from '@/app/api/login'; // Importamos la función login
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
 
     try {
+      setIsLoading(true)
       const { access_token, refresh_token } = await login(email, password);
-      
+
       // *  Configurar las cookies con la duración según rememberMe
       const expiryDays = rememberMe ? 7 : 1;
       Cookies.set('access_token', access_token, { expires: expiryDays });
       Cookies.set('refresh_token', refresh_token, { expires: expiryDays });
 
-      window.location.href = '/'; 
+      window.location.href = '/';
     } catch (err) {
       setError((err as Error).message);
+    } finally{
+      setIsLoading(false)
     }
   };
 
@@ -63,34 +70,32 @@ const Login = () => {
           <div className="text-center mb-6">
             <span className="text-sm text-gray-600">
               ¿Aún no tienes cuenta?{' '}
-              <a href="/registro" className="text-custom-blue hover:underline">
+              <Link href="/registro" className="text-custom-blue hover:underline">
                 Regístrate
-              </a>
+              </Link>
             </span>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <input
+              <Input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Correo electrónico"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
             <div>
-              <input
+              <Input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-custom-blue"
               />
             </div>
 
@@ -99,28 +104,35 @@ const Login = () => {
             {/* Remember Me */}
             <div className="flex items-center justify-between">
               <label className="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  className="form-checkbox"
+                <Checkbox
+                  className='data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 data-[state=checked]:text-primary-foreground'
                   checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
+                  onCheckedChange={() => setRememberMe(true)}
                 />
                 <span className="ml-2 text-sm text-gray-600">Recordarme</span>
               </label>
 
               {/* Forgot Password */}
-              <a href="/forgot" className="text-sm text-custom-blue hover:underline">
+              <Link href="/forgot" className="text-sm text-custom-blue hover:underline">
                 ¿Has olvidado la contraseña?
-              </a>
+              </Link>
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
-              className="w-full bg-custom-blue text-white py-2 px-4 rounded-md hover:opacity-90 focus:outline-none"
+              disabled={isLoading}
+              className="w-full bg-custom-blue hover:bg-blue-900  transition-all duration-200"
             >
-              Iniciar sesión
-            </button>
+              {isLoading ? (
+                  <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                    Iniciando Sesión...
+                  </>
+                ) : (
+                  "Iniciar Sesión"
+                )}
+            </Button>
           </form>
         </div>
       </div>

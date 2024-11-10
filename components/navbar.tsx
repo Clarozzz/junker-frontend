@@ -93,19 +93,23 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="flex items-center space-x-4 pr-6">
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className={`h-5 w-5 ${getTextColor()}`} />
+            <Button variant="ghost" size="icon" className="group hover:text-custom-blue">
+              <ShoppingCart className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-0 md:hidden"
+              className="absolute left-0 md:hidden group hover:text-custom-blue"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <Menu className={`h-5 w-5 ${getTextColor()}`} />
+              <Menu className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
 
-            {userData ? (
+            {!userData ? (
+              <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
+                Iniciar Sesión
+              </Link>
+            ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-2 cursor-pointer">
@@ -135,10 +139,6 @@ export default function Navbar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
-                Iniciar Sesión
-              </Link>
             )}
           </div>
         </div>
@@ -159,8 +159,8 @@ export default function Navbar() {
                 <Link
                   key={vista.ruta}
                   href={vista.href}
-                  className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${pathname === vista.href
-                    ? 'bg-gray-200/75 w-full text-gray-900'
+                  className={`text-left pl-3 rounded-md block md:inline-block py-2 transition-colors ${pathname === vista.href
+                    ? 'bg-gray-200/75 w-full text-gray-900 border-l-4 border-custom-blue2'
                     : `hover:bg-gray-200/75 w-full hover:text-gray-900`
                     }`}
                   aria-current={pathname === vista.href ? "page" : undefined}
