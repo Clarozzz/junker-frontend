@@ -28,7 +28,7 @@ export default function CallSection() {
   ];
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-[54rem] md:h-[54.5rem] overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
       <Image
         src="/images/landing11.webp"
         alt="Background"

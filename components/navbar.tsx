@@ -1,21 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Menu, Search, X } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 import { usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -30,9 +26,23 @@ const pages = [
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { userData, setUserData } = useUser();
+
+  const isLandingPage = pathname === "/";
+
+  useEffect(() => {
+    if (!isLandingPage) return;
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 1);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLandingPage]);
 
   const handleLogout = () => {
     Cookies.remove("access_token");
@@ -41,8 +51,19 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
+  // Función para determinar el color de texto según la ruta actual
+  const getTextColor = () => {
+    if (isScrolled || !isLandingPage) return "text-gray-900"; // color cuando se hace scroll o no estamos en la landing page
+    return "text-white"; // color por defecto en la landing page
+  };
+
   return (
-    <header className="bg-background shadow-md top-0 sticky z-20">
+    <header
+      className={`${isLandingPage
+        ? "bg-transparent fixed transition-all duration-300"
+        : "bg-background shadow-md sticky"
+        } top-0 z-20 w-screen ${isScrolled ? "bg-white shadow-md text-gray-900" : ""}`}
+    >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
           <div className="flex flex-row items-center md:justify-start sm:justify-start lg:justify-center xl:justify-center px-6 sm:px-2 w-full md:w-auto">
@@ -51,7 +72,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/"
-              className="text-2xl hidden lg:inline-block text-custom-blue font-bold items-center montserrat"
+              className={`text-2xl hidden lg:inline-block font-bold items-center montserrat ${getTextColor()}`}
             >
               Junker
             </Link>
@@ -61,11 +82,10 @@ export default function Navbar() {
               <Link
                 key={vista.ruta}
                 href={vista.href}
-                className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${
-                  pathname === vista.href
-                    ? 'bg-gray-200/75 w-24 rounded-full text-gray-900'
-                    : 'text-gray-900 hover:bg-gray-200/75 w-24 rounded-full hover:text-gray-900'
-                }`}
+                className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${pathname === vista.href
+                  ? 'bg-gray-200/75 w-24 rounded-full text-gray-900'
+                  : `hover:bg-gray-200/75 w-24 rounded-full ${getTextColor()} hover:text-gray-900`
+                  }`}
                 aria-current={pathname === vista.href ? "page" : undefined}
               >
                 {vista.ruta}
@@ -74,11 +94,7 @@ export default function Navbar() {
           </nav>
           <div className="flex items-center space-x-4 pr-6">
             <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-            {/* <ThemeToggle /> */}
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className={`h-5 w-5 ${getTextColor()}`} />
             </Button>
             <Button
               variant="ghost"
@@ -86,27 +102,28 @@ export default function Navbar() {
               className="absolute left-0 md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className={`h-5 w-5 ${getTextColor()}`} />
             </Button>
-            
-              {userData ? (
+
+            {userData ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  {userData.avatar_url ? (
-                    <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
-                      <AvatarImage src={userData.avatar_url} alt={userData.nombre} className="image-cover" />
-                      <AvatarFallback>Usuario</AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
-                      {(userData.nombre?.charAt(0) ?? "").toUpperCase() +
-                        (userData.apellido?.charAt(0) ?? "").toUpperCase()}
-                    </span>
-                  )}
+                  <div className="flex items-center space-x-2 cursor-pointer">
+                    {userData.avatar_url ? (
+                      <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
+                        <AvatarImage src={userData.avatar_url} alt={userData.nombre} className="image-cover" />
+                        <AvatarFallback>Usuario</AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
+                        {(userData.nombre?.charAt(0) ?? "").toUpperCase() +
+                          (userData.apellido?.charAt(0) ?? "").toUpperCase()}
+                      </span>
+                    )}
+                    <span className={getTextColor()}>{userData.nombre}</span>
+                  </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="cursor-pointer">
-                  <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
                     Perfil
                   </DropdownMenuItem>
@@ -119,16 +136,15 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link href="/login" className="hover:underline underline-offset-4 cursor-pointer">
+              <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
                 Iniciar Sesión
               </Link>
             )}
           </div>
         </div>
         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } md:hidden`}
+          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            } md:hidden`}
         >
           <nav className="p-4">
             <div
@@ -138,22 +154,21 @@ export default function Navbar() {
               <X className="h-8 w-8" />
               <span className="sr-only">Close</span>
             </div>
-              <div className="space-y-2">
-                {pages.map((vista) => (
-                  <Link
-                    key={vista.ruta}
-                    href={vista.href}
-                    className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${
-                      pathname === vista.href
-                        ? 'bg-gray-200/75 w-full text-gray-900'
-                        : 'text-gray-900 hover:bg-gradient-to-r hover:from-gray-200 hover:via-gray-100 hover:to-white w-full hover:text-gray-900'
+            <div className="space-y-2">
+              {pages.map((vista) => (
+                <Link
+                  key={vista.ruta}
+                  href={vista.href}
+                  className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${pathname === vista.href
+                    ? 'bg-gray-200/75 w-full text-gray-900'
+                    : `hover:bg-gray-200/75 w-full hover:text-gray-900`
                     }`}
-                    aria-current={pathname === vista.href ? "page" : undefined}
-                  >
-                    {vista.ruta}
-                  </Link>
-                ))}
-              </div>
+                  aria-current={pathname === vista.href ? "page" : undefined}
+                >
+                  {vista.ruta}
+                </Link>
+              ))}
+            </div>
           </nav>
         </div>
         {isMenuOpen && (
