@@ -58,8 +58,8 @@ export default function ResetPassword() {
       Cookies.remove('refresh_token')
       
       setTimeout(() => {
-        router.push("/")
-      }, 2000)
+        router.push("/login")
+      }, 3000)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data?.detail || "Error al actualizar la contraseña")
