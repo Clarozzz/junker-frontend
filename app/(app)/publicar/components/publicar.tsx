@@ -391,43 +391,43 @@ export default function PublicarClient() {
                     </SelectContent>
                   </Select>
                 )}
-              />
-              {errors.estado_producto && (
-                <p className="text-red-500 text-sm mt-1">{errors.estado_producto.message}</p>
-              )}
-            </div>
-            <div>
-              <Controller
-                name="id_categoria"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
-                    <SelectTrigger className="w-full focus:ring-custom-blue">
-                      <SelectValue placeholder="Seleccione una categoría" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Categorías</SelectLabel>
-                        {categorias.map((categoria) => (
-                          <SelectItem 
-                            key={categoria.id} 
-                            value={categoria.id}
-                          >
-                            {categoria.nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                />
+                {errors.estado_producto && (
+                  <p className="text-red-500 text-sm mt-1">{errors.estado_producto.message}</p>
                 )}
-              />
-              {errors.id_categoria && (
-                <p className="text-red-500 text-sm mt-1">{errors.id_categoria.message}</p>
-              )}
-            </div>
+              </div>
+              <div>
+                <Controller
+                  name="id_categoria"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="w-full focus:ring-custom-blue">
+                        <SelectValue placeholder="Seleccione una categoría" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Categorías</SelectLabel>
+                          {categorias.map((categoria) => (
+                            <SelectItem 
+                              key={categoria.id} 
+                              value={categoria.id}
+                            >
+                              {categoria.nombre}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.id_categoria && (
+                  <p className="text-red-500 text-sm mt-1">{errors.id_categoria.message}</p>
+                )}
+              </div>
               <div>
                 <textarea
                   id="descripcion"

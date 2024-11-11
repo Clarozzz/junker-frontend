@@ -30,8 +30,8 @@ export default function DetalleProducto({
             <Image
               src={selectedImage.url}
               alt={selectedImage.alt}
-              width={2000}
-              height={2000}
+              width={1500}
+              height={1500}
               className="h-full w-full object-cover object-center"
             />
           </div>
@@ -48,8 +48,8 @@ export default function DetalleProducto({
                 <Image
                   src={image.url}
                   alt={image.alt}
-                  width={300}
-                  height={300}
+                  width={500}
+                  height={500}
                   className="h-full w-full object-cover object-center"
                 />
               </button>

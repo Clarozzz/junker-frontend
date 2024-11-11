@@ -98,3 +98,27 @@ interface ProductoVista {
     usuarios: { email: string; nombre: string; apellido: string };
   };
 }
+
+interface ProductoXCarrito {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  stock: number;
+  productos_imagenes: { url: string }[];
+  vendedores: {
+    calificacion: number;
+    usuarios: {
+      nombre: string;
+      apellido: string;
+    };
+  };
+}
+
+interface Carrito {
+  id: string; 
+  productos: ProductoXCarrito; 
+  cantidad: number;
+  id_carrito: string;
+}
