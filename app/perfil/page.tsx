@@ -11,6 +11,8 @@ import Cookies from 'js-cookie';
 import { updateEmail, updateUser } from "../api/usuarios";
 import { z } from "zod";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, CircleCheck } from "lucide-react";
 
 const userSchema = z.object({
     nombre: z.string().min(1, "El nombre es obligatorio"),
@@ -34,9 +36,11 @@ export default function Component() {
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
     const [emailErrors, setEmailErrors] = useState<Record<string, string>>({});
+    const [message, setMessage] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false)
+
 
     if (!userData) return <Cargando />;
-    if (error) return <p>Error: {error}</p>;
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -71,8 +75,12 @@ export default function Component() {
         const data = Object.fromEntries(formData.entries());
 
         setEmailErrors({});
+        setError(null)
+        setMessage(null)
 
         try {
+            setIsLoading(true)
+
             const parsedData = emailSchema.parse(data);
             const token = Cookies.get('access_token');
 
@@ -83,7 +91,10 @@ export default function Component() {
 
             // Aquí puedes agregar la lógica para actualizar el correo si es necesario.
             const response = await updateEmail(userData.id, token, parsedData.email)
-            console.log(response);
+
+            if (response) {
+                setMessage("Correo enviado!")
+            }
         } catch (err) {
             if (err instanceof z.ZodError) {
                 const emailErrors: Record<string, string> = {};
@@ -92,8 +103,10 @@ export default function Component() {
                 });
                 setEmailErrors(emailErrors);
             } else {
-                setError(`Error al actualizar el correo: ${err}`);
+                setError(`${err}`);
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -139,8 +152,19 @@ export default function Component() {
                                         {emailErrors.emailConfirm && <p className="text-red-500">{emailErrors.emailConfirm}</p>}
                                     </div>
                                     <div className="flex justify-between">
-                                        <Button type="submit" className="bg-custom-blue hover:bg-blue-900  transition-all duration-200">
-                                            Guardar cambios
+                                        <Button
+                                            type="submit"
+                                            className="bg-custom-blue hover:bg-blue-900  transition-all duration-200"
+                                            disabled={isLoading}
+                                        >
+                                            {isLoading ? (
+                                                <>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                                                    Guardando...
+                                                </>
+                                            ) : (
+                                                "Guardar Cambios"
+                                            )}
                                         </Button>
                                         <DialogClose>
                                             <Button type="button" className="bg-gray-500 hover:bg-gray-500 hover:brightness-110 transition-all duration-200">
@@ -149,6 +173,22 @@ export default function Component() {
                                         </DialogClose>
                                     </div>
                                 </form>
+                                {message && (
+                                    <Alert className="mt-4 border-green-500 text-green-600">
+                                        <CircleCheck className="h-4 w-4" color='#22c55e' />
+                                        <AlertTitle>Hecho</AlertTitle>
+                                        <AlertDescription>{message}</AlertDescription>
+                                    </Alert>
+                                )}
+                                {error && (
+                                    <Alert variant="destructive" className='mt-4'>
+                                        <AlertCircle className="h-4 w-4" />
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>
+                                            {error}
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
                             </DialogContent>
                         </Dialog>
                     </div>

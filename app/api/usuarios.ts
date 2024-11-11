@@ -34,7 +34,7 @@ export const updateUser = async (id: string, token: string, userData: object): P
 export const updateEmail = async (id: string, token: string, email: string) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/updateEmail/${id}`;
 
-    try{
+    try {
         const res = await axios.put(url, { email }, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -42,6 +42,10 @@ export const updateEmail = async (id: string, token: string, email: string) => {
         });
         return res.data
     } catch (error) {
-        throw new Error(`Error: ${error}`)
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data.detail || "Error enviando el correo")
+        } else {
+            throw new Error("Ocurrio algo inesperado")
+        }
     }
 }
