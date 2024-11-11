@@ -42,9 +42,8 @@ export default function ForgotPassword() {
           <CardDescription>
             Ingresa tu email para recibir instrucciones de restablecimiento.
             <br />
-            Puedes solicitar un correo de reestablecimiento cada:
-            <br />
-            <span className='text-custom-blue2 font-bold'>60 segundos</span></CardDescription>
+            Puedes solicitar un nuevo correo cada:
+            <span className='text-custom-blue2 font-bold'> 60 segundos</span></CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle, CircleCheck } from 'lucide-react'
 
 export default function ResetPassword() {
   const router = useRouter()
@@ -74,10 +75,10 @@ export default function ResetPassword() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Restablecer Contraseña</CardTitle>
+          <CardTitle className='text-3xl'>Restablecer Contraseña</CardTitle>
           <CardDescription>Ingresa tu nueva contraseña para actualizar tu cuenta.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className='pb-0'>
           <form onSubmit={handlePasswordReset}>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -111,15 +112,21 @@ export default function ResetPassword() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           {message && (
-            <Alert className="w-full border-green-500">
-              <AlertDescription>{message}</AlertDescription>
-            </Alert>
-          )}
-          {error && (
-            <Alert className="w-full border-destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+              <Alert className="mt-4 border-green-500 text-green-600">
+                <CircleCheck className="h-4 w-4" color='#22c55e' />
+                <AlertTitle>Hecho</AlertTitle>
+                <AlertDescription>{message}</AlertDescription>
+              </Alert>
+            )}
+            {error && (
+              <Alert variant="destructive" className='mt-4'>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  {error}
+                </AlertDescription>
+              </Alert>
+            )}
         </CardFooter>
       </Card>
     </div>
