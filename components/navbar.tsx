@@ -60,9 +60,9 @@ export default function Navbar() {
   return (
     <header
       className={`${isLandingPage
-        ? "bg-transparent fixed transition-all duration-300"
+        ? "bg-transparent fixed transition-all duration-300 w-screen"
         : "bg-background shadow-md sticky"
-        } top-0 z-20 w-screen ${isScrolled ? "bg-white shadow-md text-gray-900" : ""}`}
+        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""}`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
@@ -132,7 +132,7 @@ export default function Navbar() {
                     Perfil
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/publicar")} className="cursor-pointer">
-                    Publicar
+                    Vender
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                     Cerrar Sesión

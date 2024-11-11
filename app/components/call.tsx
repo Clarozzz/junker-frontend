@@ -1,20 +1,10 @@
-'use client'
-
-import Image from 'next/image'
-import { Button } from "@/components/ui/button"
-import { TypewriterEffect } from "@/components/ui/typewriter-effect"
-import Cookies from 'js-cookie'
-import { useEffect, useState } from 'react'
+import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import { TypewriterEffect } from "@/components/ui/typewriter-effect";
+import { useUser } from '@/context/UserContext';
 
 export default function CallSection() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const token = Cookies.get('access_token');
-    setIsAuthenticated(!!token);
-    setLoading(false);
-  }, []);
+  const { userData, loading } = useUser();
 
   const words = [
     { text: "Los", className: "montserrat text-white" },
@@ -45,28 +35,36 @@ export default function CallSection() {
 
         {!loading && (
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-6 mt-10 z-20">
-            {!isAuthenticated ? (
+            {!userData ? (
               <>
                 <Button
-                  className="w-40 h-12 rounded-xl bg-blue-900 text-white text-md shadow-lg hover:bg-blue-900 hover:brightness-125 transition-all duration-300"
+                  className="w-40 h-12 rounded-lg bg-blue-900 text-white text-md shadow-lg hover:bg-blue-900 hover:brightness-125 transition-all duration-300"
                   onClick={() => window.location.href = '/login'}
                 >
                   Iniciar Sesión
                 </Button>
                 <Button
-                  className="w-40 h-12 rounded-xl bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
+                  className="w-40 h-12 rounded-lg bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
                   onClick={() => window.location.href = '/registro'}
                 >
                   Registrarse
                 </Button>
               </>
             ) : (
-              <Button
-                className="w-40 h-12 rounded-xl bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
-                onClick={() => window.location.href = '/productos'}
+              <>
+                <Button
+                  className="w-40 h-12 rounded-lg bg-custom-blue2 text-black text-md shadow-lg hover:bg-blue-600 hover:brightness-125 transition-all duration-300"
+                  onClick={() => window.location.href = '/productos'}
                 >
-                Ver productos
-              </Button>
+                  Ver tienda
+                </Button>
+                <Button
+                  className="w-40 h-12 rounded-lg bg-custom-orange text-black text-md shadow-lg hover:bg-amber-600 hover:brightness-125 transition-all duration-300"
+                  onClick={() => window.location.href = '/publicar'}
+                >
+                  Vender
+                </Button>
+              </>
             )}
           </div>
         )}

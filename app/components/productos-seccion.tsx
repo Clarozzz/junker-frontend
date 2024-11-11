@@ -3,8 +3,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import Image from "next/image"
 import Autoplay from "embla-carousel-autoplay"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 export default function ProductosSeccion() {
   const cards = [
@@ -17,7 +15,7 @@ export default function ProductosSeccion() {
   ]
 
   return (
-    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-blue py-14 text-custom-beige">
+    <div className="w-full mx-auto lg:px-28 2xl:px-56 px-6 bg-custom-blue py-20 text-custom-beige">
       <div className="grid space-y-4 mb-12">
         <h1 className="text-5xl montserrat font-bold">
           Productos
@@ -64,16 +62,6 @@ export default function ProductosSeccion() {
         <CarouselPrevious className="absolute left-0 h-full bg-transparent hover:bg-black/20 hover:text-custom-beige rounded-lg w-12 hidden md:flex" variant={"ghost"} />
         <CarouselNext className="absolute right-0 h-full bg-transparent hover:bg-black/20 hover:text-custom-beige rounded-lg w-12 hidden md:flex" variant={"ghost"} />
       </Carousel>
-
-      <div className="text-center">
-        <Link href='/productos'>
-          <Button className="mt-16 w-40 h-12 bg-custom-beige text-custom-blue hover:bg-amber-100 hover:text-custom-blue hover:border-custom-beige hover:border">
-            <p className="font-bold">
-            Ver productos
-            </p>
-          </Button>
-        </Link>
-      </div>
     </div>
   )
 }

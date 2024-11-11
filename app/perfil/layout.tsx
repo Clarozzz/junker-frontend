@@ -29,18 +29,18 @@ export default function PerfilLayout({
     if (!userData) return <Cargando />;
 
     return (
-        <>
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100">
             <Navbar />
             <div className="px-6 lg:px-40 2xl:px-72">
                 <h1 className="mt-8 text-6xl montserrat font-bold">{titulo}</h1>
-                <div className="lg:flex justify-between gap-20 mt-8">
+                <div className="lg:flex justify-between gap-20 my-8">
                     <div className="xl:w-1/4 lg:w-1/2">
-                        <div className="bg-slate-100 px-6 py-10 rounded-lg">
+                        <div className="bg-white px-6 py-10 rounded-xl shadow-md">
                             <div className="flex justify-center">
                                 <div>
                                     <Avatar className="w-24 h-24">
                                         <AvatarImage src={userData?.avatar_url} className="image-cover" />
-                                        <AvatarFallback>CN</AvatarFallback>
+                                        <AvatarFallback>{userData?.nombre?.slice(0, 2).toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                     <h2 className="mt-4 text-xl font-bold text-center">
                                         {userData?.nombre}
@@ -48,20 +48,20 @@ export default function PerfilLayout({
                                 </div>
                             </div>
                             <ul className="mt-8">
-                                {links.map((link) => (
-                                    <li key={link.ruta} className={`my-6 transition-colors ${pathname === link.ruta ? 'text-black underline underline-offset-8' : 'text-slate-500 hover:text-black hover:underline hover:underline-offset-8'}`}>
-                                        <Link href={link.ruta}>{link.nombre}</Link>
-                                    </li>
-                                ))}
-                            </ul>
+                            {links.map((link) => (
+                                <li key={link.ruta} className={`my-6 transition-colors ${pathname === link.ruta ? 'text-black underline underline-offset-8' : 'text-slate-500 hover:text-black hover:underline hover:underline-offset-8'}`}>
+                                    <Link href={link.ruta}>{link.nombre}</Link>
+                                </li>
+                            ))}
+                        </ul>
                         </div>
                     </div>
-                    <div className="xl:w-3/4 mt-10 lg:mt-0 lg:w-1/2">
+                    <div className="xl:w-3/4 mt-10 lg:mt-0 lg:w-1/2 bg-white p-8 rounded-xl shadow-md">
                         {children}
                     </div>
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     );
 }
