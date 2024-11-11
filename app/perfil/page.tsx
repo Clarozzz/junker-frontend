@@ -290,14 +290,7 @@ export default function Component() {
                                             <div className="text-center">
                                                 <PhotoIcon className="mx-auto h-12 w-12 text-neutral-400" aria-hidden="true" />
                                                 <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                                    <label
-                                                        htmlFor="file-upload"
-                                                        className="relative cursor-pointer rounded-md  font-semibold text-sec focus-within:outline-none focus-within:ring-2 focus-within:ring-sec focus-within:ring-offset-2 hover:text-sec"
-                                                    >
-                                                        <span className="text-blue-600">Subir un archivo</span>
-                                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                                                    </label>
-                                                    <p className="pl-1">o arrastra y suelta</p>
+                                                    <p className="pl-1"><span className="text-blue-600">Sube </span>o arrastra y suelta una imagen</p>
                                                 </div>
                                                 <p className="text-xs leading-5 text-gray-600">PNG, JPG hasta 10MB</p>
                                             </div>

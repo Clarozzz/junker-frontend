@@ -1,7 +1,6 @@
 'use client';
 
 import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -30,7 +29,6 @@ export default function PerfilLayout({
 
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100">
-            <Navbar />
             <div className="px-6 lg:px-40 2xl:px-72">
                 <h1 className="mt-8 text-6xl montserrat font-bold">{titulo}</h1>
                 <div className="lg:flex justify-between gap-20 my-8">

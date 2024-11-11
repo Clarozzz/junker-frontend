@@ -4,6 +4,7 @@ import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
 import { UserProvider } from "@/context/UserContext";
+import Navbar from "@/components/navbar";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body>
         <UserProvider>
           <AuthProvider>
+            <Navbar />
             {children}
           </AuthProvider>
         </UserProvider>
