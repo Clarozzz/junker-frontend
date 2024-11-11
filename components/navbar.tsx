@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, User, HandCoins, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 import { usePathname } from "next/navigation";
@@ -32,6 +32,8 @@ export default function Navbar() {
   const { userData, setUserData } = useUser();
 
   const isLandingPage = pathname === "/";
+  const isLogin = pathname === "/login";
+  const isRegistro = pathname === "/registro";
 
   useEffect(() => {
     if (!isLandingPage) return;
@@ -60,9 +62,9 @@ export default function Navbar() {
   return (
     <header
       className={`${isLandingPage
-        ? "bg-transparent fixed transition-all duration-300 w-screen"
+        ? "bg-transparent absolute transition-colors duration-300 w-full"
         : "bg-background shadow-md sticky"
-        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""}`}
+        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isLogin || isRegistro ? "hidden" : ""}`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
@@ -113,28 +115,24 @@ export default function Navbar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-2 cursor-pointer">
-                    {userData.avatar_url ? (
-                      <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
-                        <AvatarImage src={userData.avatar_url} alt={userData.nombre} className="image-cover" />
-                        <AvatarFallback>Usuario</AvatarFallback>
-                      </Avatar>
-                    ) : (
-                      <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
-                        {(userData.nombre?.charAt(0) ?? "").toUpperCase() +
-                          (userData.apellido?.charAt(0) ?? "").toUpperCase()}
-                      </span>
-                    )}
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={userData?.avatar_url} className="image-cover" />
+                      <AvatarFallback>{userData?.nombre?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
                     <span className={getTextColor()}>{userData.nombre}</span>
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="cursor-pointer">
                   <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
+                    <User />
                     Perfil
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/publicar")} className="cursor-pointer">
+                  <DropdownMenuItem onClick={() => router.push("/publicar")} className="cursor-pointer text-green-700">
+                    <HandCoins />
                     Vender
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    <LogOut />
                     Cerrar Sesión
                   </DropdownMenuItem>
                 </DropdownMenuContent>

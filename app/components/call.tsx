@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import { useUser } from '@/context/UserContext';
+import Link from 'next/link';
 
 export default function CallSection() {
   const { userData, loading } = useUser();
@@ -39,30 +40,38 @@ export default function CallSection() {
               <>
                 <Button
                   className="w-40 h-12 rounded-lg bg-blue-900 text-white text-md shadow-lg hover:bg-blue-900 hover:brightness-125 transition-all duration-300"
-                  onClick={() => window.location.href = '/login'}
+                  asChild
                 >
-                  Iniciar Sesión
+                  <Link href="/login">
+                    Iniciar Sesión
+                  </Link>
                 </Button>
                 <Button
                   className="w-40 h-12 rounded-lg bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
-                  onClick={() => window.location.href = '/registro'}
+                  asChild
                 >
-                  Registrarse
+                  <Link href="/registro">
+                    Registrarse
+                  </Link>
                 </Button>
               </>
             ) : (
               <>
                 <Button
-                  className="w-40 h-12 rounded-lg bg-custom-blue2 text-black text-md shadow-lg hover:bg-blue-600 hover:brightness-125 transition-all duration-300"
-                  onClick={() => window.location.href = '/productos'}
+                  className="w-40 h-12 rounded-lg text-md shadow-lg bg-slate-950 hover:bg-slate-800 text-white transition-all duration-200"
+                  asChild
                 >
-                  Ver tienda
+                  <Link href="/productos">
+                    Ver tienda
+                  </Link>
                 </Button>
                 <Button
-                  className="w-40 h-12 rounded-lg bg-custom-orange text-black text-md shadow-lg hover:bg-amber-600 hover:brightness-125 transition-all duration-300"
-                  onClick={() => window.location.href = '/publicar'}
+                  className="w-40 h-12 rounded-lg bg-custom-blue2 text-black text-md shadow-lg hover:bg-custom-blue2 hover:brightness-125 transition-all duration-300"
+                  asChild
                 >
-                  Vender
+                  <Link href="/publicar">
+                    Vender
+                  </Link>
                 </Button>
               </>
             )}
