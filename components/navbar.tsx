@@ -2,20 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Menu, X, User, HandCoins, LogOut } from "lucide-react";
+import { ShoppingCart, Menu, X, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoJunker from "./logo-junker";
 import { usePathname } from "next/navigation";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUser } from "@/context/UserContext";
+import DropdownMenu from "./menu";
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -28,8 +20,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
-  const { userData, setUserData } = useUser();
+  const { userData } = useUser();
 
   const isLandingPage = pathname === "/";
   const isLogin = pathname === "/login";
@@ -46,17 +37,9 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLandingPage]);
 
-  const handleLogout = () => {
-    Cookies.remove("access_token");
-    Cookies.remove("refresh_token");
-    setUserData(null);
-    window.location.href = "/";
-  };
-
-  // Función para determinar el color de texto según la ruta actual
   const getTextColor = () => {
-    if (isScrolled || !isLandingPage) return "text-gray-900"; // color cuando se hace scroll o no estamos en la landing page
-    return "text-white"; // color por defecto en la landing page
+    if (isScrolled || !isLandingPage) return "text-gray-900";
+    return "text-white";
   };
 
   return (
@@ -112,31 +95,7 @@ export default function Navbar() {
                 Iniciar Sesión
               </Link>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="flex items-center space-x-2 cursor-pointer">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={userData?.avatar_url} className="image-cover" />
-                      <AvatarFallback>{userData?.nombre?.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <span className={getTextColor()}>{userData.nombre}</span>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="cursor-pointer">
-                  <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
-                    <User />
-                    Perfil
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/publicar")} className="cursor-pointer text-green-700">
-                    <HandCoins />
-                    Vender
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                    <LogOut />
-                    Cerrar Sesión
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <DropdownMenu userName={userData.nombre} avatarUrl={userData.avatar_url}  />
             )}
           </div>
         </div>
