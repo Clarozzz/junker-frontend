@@ -62,7 +62,7 @@ export default function Navbar() {
   return (
     <header
       className={`${isLandingPage
-        ? "bg-transparent absolute transition-colors duration-300 w-full"
+        ? "bg-transparent fixed transition-colors duration-300 w-full"
         : "bg-background shadow-md sticky"
         } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isLogin || isRegistro ? "hidden" : ""}`}
     >
