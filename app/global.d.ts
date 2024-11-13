@@ -80,6 +80,7 @@ interface Usuario {
   email: string;
   vendedores: { 
     id: string 
+    descripcion: string
   }[];
   carrito: { 
     id: string 

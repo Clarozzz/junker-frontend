@@ -18,7 +18,7 @@ export default function PerfilLayout({
     const links = [
         { nombre: 'Ajustes de la cuenta', ruta: '/perfil', titulo: 'Mi cuenta' },
         { nombre: 'Historial de compras', ruta: '/perfil/compras', titulo: 'Mis compras' },
-        { nombre: 'Productos en venta', ruta: '/perfil/productos', titulo: 'Mis productos' },
+        { nombre: 'Perfil de vendedor', ruta: '/perfil/vendedor', titulo: 'Mis productos' },
         { nombre: 'Contraseña y Seguridad', ruta: '/perfil/password', titulo: 'Gestiona tu contraseña' }
     ];
 
