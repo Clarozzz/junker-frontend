@@ -30,7 +30,7 @@ export default function PerfilLayout({
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="px-6 lg:px-40 2xl:px-72">
-                <h1 className="mt-8 text-6xl montserrat font-bold">{titulo}</h1>
+                <h1 className="pt-8 text-6xl montserrat font-bold">{titulo}</h1>
                 <div className="lg:flex justify-between gap-20 my-8">
                     <div className="xl:w-1/4 lg:w-1/2">
                         <div className="bg-white px-6 py-10 rounded-xl shadow-md">
