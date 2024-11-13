@@ -78,6 +78,12 @@ interface Usuario {
   avatar_url: string;
   telefono: string;
   email: string;
+  vendedores: { 
+    id: string 
+  }[];
+  carrito: { 
+    id: string 
+  }[];
 }
 
 interface ProductosResponse {
