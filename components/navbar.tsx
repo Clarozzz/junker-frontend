@@ -146,7 +146,7 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-[150] p-1 bg-white rounded-lg shadow-2xl ring-1 ring-gray-200 focus:outline-none z-20"
+                      className="absolute right-0 mt-2 w-max p-1 bg-white rounded-lg shadow-2xl ring-1 ring-gray-200 focus:outline-none z-20"
                     >
                       <Link
                         href="/perfil"
