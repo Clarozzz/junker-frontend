@@ -14,7 +14,7 @@ export default function NotFound() {
 
     return (
         <>
-            <div className="h-screen relative">
+            <div className="relative" style={{ height: "calc(100vh - 74.42px)" }}>
                 <Image
                     src="/images/landing7.webp"
                     alt="Hubo un problema"
