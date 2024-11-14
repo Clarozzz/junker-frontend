@@ -32,7 +32,7 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
         <AccordionTrigger>Precio</AccordionTrigger>
         <AccordionContent>
           {["Lps. 500", "Lps. 1000", "Lps. 2000", "Lps. 3000", "Lps. 8000", "Lps. 8001 - mas"].map((range, index) => (
-            <div key={index} className="flex items-center">
+            <div key={index} className="flex items-center pl-2 pt-1">
               <input
                 id={`filter-precio-${index}`}
                 name="precio"
@@ -53,8 +53,8 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
       <AccordionItem value="item-2">
         <AccordionTrigger>Categoría</AccordionTrigger>
         <AccordionContent>
-          {["Neumaticos y Llantas", "Motor y Transmision", "Llaves", "Iluminacion", "Accesorios Internos", "Frenos y Discos", "Carroceria"].map((category, index) => (
-            <div key={index} className="flex items-center">
+          {["Ruedas", "Motor y Transmision", "Llaves", "Iluminacion", "Accesorios Internos", "Frenos y Discos", "Carroceria"].map((category, index) => (
+            <div key={index} className="flex items-center pl-2 pt-1">
               <input
                 id={`filter-categoria-${index}`}
                 name="categoria"
@@ -76,7 +76,7 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
         <AccordionTrigger>Estado</AccordionTrigger>
         <AccordionContent>
           {["Nuevo", "Usado"].map((estado, index) => (
-            <div key={index} className="flex items-center">
+            <div key={index} className="flex items-center pl-2 pt-1">
               <input
                 id={`filter-estado-${index}`}
                 name="estado"
