@@ -21,17 +21,6 @@ export default function Descripcion() {
     const { userData } = useUser();
     const [error, setError] = useState<string | null>(null);
 
-    if (error) {
-        return (
-            <Alert variant="destructive" className='mt-4'>
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                    {error}
-                </AlertDescription>
-            </Alert>)
-    }
-
     const handleDescripcion = async (event: React.FocusEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -89,6 +78,15 @@ export default function Descripcion() {
                         )}
                     </Button>
                 </form>
+                {error && (
+                    <Alert variant="destructive" className='mt-4'>
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            {error}
+                        </AlertDescription>
+                    </Alert>
+                )}
             </CardContent>
         </Card>
     )

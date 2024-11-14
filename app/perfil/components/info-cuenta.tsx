@@ -28,17 +28,6 @@ export default function InfoCuenta() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null);
 
-    if (error) {
-        return (
-            <Alert variant="destructive" className='mt-4'>
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                    {error}
-                </AlertDescription>
-            </Alert>)
-    }
-
     const handleEmail = async (event: React.FocusEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
