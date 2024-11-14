@@ -36,8 +36,8 @@ export default function CarritoCLient() {
 
   return (
     <div className="flex flex-col">
-      <div className="pt-10 px-10">
-        <h2 className="text-2xl font-bold text-gray-900" id="slide-over-title">
+      <div className="pt-10 px-16">
+        <h2 className="text-3xl  md:text-4xl font-bold montserrat text-custom-blue" id="slide-over-title">
           Carrito de compras
         </h2>
       </div>
@@ -61,10 +61,10 @@ export default function CarritoCLient() {
             <div className="flex flex-col gap-6 mt-8">
               {carritos.map((carrito) => (
                 <motion.div key={carrito.id} className="cursor-pointer">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-row 2xl:flex-row">
                     <div className="-my-6 divide-y divide-gray-200">
                       <div className="flex py-6">
-                        <div className="h-48 w-48 shrink-0 overflow-hidden rounded-md border border-gray-200">
+                        <div className="h-28 w-28 shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <Image
                             src={
                               carrito.productos.productos_imagenes[0]?.url ||
@@ -72,26 +72,26 @@ export default function CarritoCLient() {
                             }
                             alt={carrito.productos.nombre}
                             className="h-full w-full object-cover object-center"
-                            width={200}
-                            height={200}
+                            width={500}
+                            height={500}
                           />
                         </div>
                         <div className="ml-4 flex flex-col">
                           <div className="flex justify-between text-base font-medium text-gray-900">
                             <h3>
-                              <a href="#">{carrito.productos.nombre}</a>
+                              <a href="#">{carrito.productos?.nombre}</a>
                             </h3>
                           </div>
                           <div>
-                            <p>{carrito.productos.estado_producto}</p>
+                            <p>{carrito.productos?.estado_producto}</p>
                           </div>
-                          <div className="max-w-28 truncate">
-                            <p>{carrito.productos.descripcion}</p>
+                          <div className="max-w-28 truncate text-sm">
+                            <p>{carrito.productos?.descripcion}</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-between lg:w-96">
+                    <div className="flex justify-between py-4 sm:py-4 lg:py-0 lg:w-96">
                       <div className="flex flex-row">
                         <div className="pr-2 pt-2">
                           <p>Cant.</p>
@@ -113,7 +113,7 @@ export default function CarritoCLient() {
                                     <SelectLabel>Cantidad</SelectLabel>
                                     {carritos.map((carr) => (
                                       <SelectItem key={carr.id} value={carr.id}>
-                                        {carr.productos.stock}
+                                        {carr.productos?.stock}
                                       </SelectItem>
                                     ))}
                                   </SelectGroup>
@@ -131,7 +131,7 @@ export default function CarritoCLient() {
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-end justify-end text-sm">
+                    <div className="flex items-end justify-end text-sm pt-4">
                       <div className="flex px-3">
                           <button
                             type="button"
@@ -158,7 +158,7 @@ export default function CarritoCLient() {
           {/* )}   */}
         </div>
 
-        <div className="bg-slate-100 bg-opacity-75 grid grid-cols-1 items-start lg:w-1/3">
+        <div className="bg-slate-100 bg-opacity-75 grid grid-cols-1 items-start min-w-96 lg:w-1/3">
           <div className="flex flex-col border-t border-gray-200 px-16 py-10">
             <div className="flex justify-between py-4 text-base font-medium text-gray-900">
               <p>Subtotal</p>

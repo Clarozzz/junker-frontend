@@ -26,6 +26,7 @@ interface ProductImage {
 }
 
 interface ProductDetailProps {
+  id_producto: string;
   titulo: string;
   precio: number;
   descripcion: string;
@@ -121,4 +122,14 @@ interface Carrito {
   productos: ProductoXCarrito; 
   cantidad: number;
   id_carrito: string;
+}
+
+interface CarritoCreate {
+  id_carrito: string;
+  id_producto: string;
+  cantidad: number;
+}
+
+interface CarritoResponse {
+  message: string;
 }

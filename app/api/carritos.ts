@@ -16,6 +16,20 @@ class CarritoService {
           throw error; 
         }
       };
+
+      async agregarCarrito(carritoData: CarritoCreate): Promise<CarritoResponse> {
+        try {
+          const response = await axios.post(`${this.baseURL}/carrito`, carritoData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          return response.data;
+        } catch (error) {
+          console.error("Error al agregar producto al carrito:", error);
+          throw error;
+        }
+      }
   }
   
   
