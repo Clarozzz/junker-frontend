@@ -8,6 +8,8 @@ import Image from "next/image";
 import { useUser } from "@/context/UserContext";
 import { carritoService } from "@/app/api/carritos";
 import { useToast } from "@/components/ui/toast";
+import { Lens } from "@/components/ui/lens";
+import { motion } from "framer-motion";
 
 // const defaultImage = {
 //   id: 'default',
@@ -33,6 +35,7 @@ export default function DetalleProducto({
   const [isLoading, setIsLoading] = useState(false);
   const { userData } = useUser();
   const { showToast } = useToast();
+  const [hovering, setHovering] = useState(false);
 
   const handleAgregarCarrito = async () => {
     if (!userData?.id) {
@@ -75,14 +78,23 @@ export default function DetalleProducto({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Seccionde las imagenes */}
         <div className="space-y-4">
-          <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-            <Image
-              src={selectedImage.url}
-              alt={selectedImage.alt}
-              width={1500}
-              height={1500}
-              className="h-full w-full object-cover object-center"
-            />
+          <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 relative z-10">
+            <Lens hovering={hovering} setHovering={setHovering}>
+              <Image
+                src={selectedImage.url}
+                alt={selectedImage.alt}
+                width={1500}
+                height={1500}
+                className="h-full w-full object-cover object-center"
+              />
+            </Lens>
+            <motion.div
+            animate={{
+              filter: hovering ? "blur(2px)" : "blur(0px)",
+            }}
+            className="py-4 relative z-20"
+          >
+          </motion.div>
           </div>
           <div className="grid grid-cols-4 gap-4">
             {imagenes.map((image) => (
@@ -188,8 +200,6 @@ export default function DetalleProducto({
                 <li>Contacto: {contacto_vendedor} </li>
                 <li>Descripcion: {vendedor_descripcion}</li>
                 <li>Calificación: {vendedor_calificacion} %</li>
-                <li>Calificación: {id_producto} %</li>
-                <li>Calificación: {userData?.id} %</li>
               </ul>
             </div>
           </div>
