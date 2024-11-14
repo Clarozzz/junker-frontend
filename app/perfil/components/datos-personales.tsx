@@ -8,12 +8,13 @@ import { useUser } from "@/context/UserContext";
 import React, { useState } from "react";
 import Cookies from 'js-cookie';
 import { z } from "zod";
-import { Calendar, MapPin, Phone } from "lucide-react";
+import { AlertCircle, Calendar, MapPin, Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type DropzoneState, useDropzone } from 'react-dropzone';
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { updateUser, uploadAvatarUser } from "@/app/api/usuarios";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const userSchema = z.object({
     nombre: z.string().min(1, "El nombre es obligatorio"),
@@ -44,8 +45,6 @@ export default function DatosPersonales() {
         multiple: false,
         maxSize: 10000000
     });
-
-    if (error) return <p>{error}</p>;
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -215,6 +214,15 @@ export default function DatosPersonales() {
                         )}
                     </Button>
                 </form>
+                {error && (
+                    <Alert variant="destructive" className='mt-4'>
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            {error}
+                        </AlertDescription>
+                    </Alert>
+                )}
             </CardContent>
         </Card>
     );

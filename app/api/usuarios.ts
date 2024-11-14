@@ -69,29 +69,47 @@ export const updateDescripcion = async (id: string, token: string, descripcion: 
     }
 }
 
-export async function uploadAvatarUser ({ file }: { file: File }) {
+export async function uploadAvatarUser({ file }: { file: File }) {
     try {
         const formData = new FormData();
         formData.append("file", file);
         formData.append(
-          "upload_preset",
-          process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? ""
+            "upload_preset",
+            process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? ""
         );
         formData.append(
-          "cloud_name",
-          process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? ""
+            "cloud_name",
+            process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? ""
         );
-  
+
         const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${
-            process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-          }/image/upload`,
-          formData
+            `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+            }/image/upload`,
+            formData
         );
-  
+
         return response.data.secure_url;
-      } catch (error) {
+    } catch (error) {
         console.error("Error al subir a cloudinary:", error);
         throw error;
-      }
-  }
+    }
+}
+
+export const verifyPass = async (id: string, token: string, updatePass: UpdatePassword) => {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/verifyPassword/${id}`;
+
+    try {
+        const res = await axios.post(url, updatePass , {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return res.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data.detail || "Error verificando la contrasena")
+        } else {
+            throw new Error("Ocurrio algo inesperado")
+        }
+    }
+}

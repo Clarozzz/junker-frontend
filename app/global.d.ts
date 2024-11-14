@@ -105,3 +105,9 @@ interface ProductoVista {
     usuarios: { email: string; nombre: string; apellido: string };
   };
 }
+
+interface UpdatePassword {
+  password: string;
+  newPassword: string;
+  confirmPass: string;
+}
