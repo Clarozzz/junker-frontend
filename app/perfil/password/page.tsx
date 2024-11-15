@@ -11,6 +11,7 @@ import { useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 import { verifyPass } from "@/app/api/usuarios";
+import Cargando from "@/components/ui/cargando";
 
 const passSchema = z.object({
   password: z.string().min(1, "Contraseña incorrecta"),
@@ -24,7 +25,7 @@ const passSchema = z.object({
 
 export default function Password() {
   const [isLoading, setIsLoading] = useState(false);
-  const { userData } = useUser();
+  const { userData, loading } = useUser();
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [passErrors, setPassErrors] = useState<Record<string, string>>({});
@@ -71,6 +72,8 @@ export default function Password() {
       setIsLoading(false);
     }
   }
+    
+  if (loading) return <Cargando />;
 
   return (
     <Card>

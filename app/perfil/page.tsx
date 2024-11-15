@@ -6,9 +6,9 @@ import { useUser } from "@/context/UserContext";
 import InfoCuenta from "./components/info-cuenta";
 
 export default function Component() {
-    const { userData } = useUser();
+    const { loading } = useUser();
     
-    if (!userData) return <Cargando />;
+    if (loading) return <Cargando />;
 
     return (
         <div className="space-y-8">

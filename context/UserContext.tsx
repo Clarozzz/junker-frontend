@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { readUser } from "@/app/api/login";
+import { readSession } from "@/app/api/login";
 import { getUser } from "@/app/api/usuarios";
 
 export const UserContext = createContext<{
@@ -21,12 +21,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const { data: { user } } = await readUser()
-        if (!user) {
+        const { data: { session } } = await readSession()
+        if (!session) {
           throw new Error("Error al obtener el usuario");
         }
 
-        const usuario = await getUser(user.id)
+        const usuario = await getUser(session.user.id)
         if (usuario) {
           setUserData(usuario)
         }

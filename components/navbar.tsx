@@ -28,8 +28,8 @@ export default function Navbar() {
   const { userData, setUserData, loading } = useUser()
 
   const isLandingPage = pathname === "/"
-  const isLogin = pathname === "/login"
-  const isRegistro = pathname === "/registro"
+  const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated"];
+  const isHidden = hiddenRoutes.includes(pathname);
 
   const handleToggle = (event: React.MouseEvent) => {
     event?.stopPropagation()
@@ -74,7 +74,7 @@ export default function Navbar() {
       className={`${isLandingPage
         ? "bg-transparent fixed transition-colors duration-300 w-full"
         : "bg-background shadow-md sticky"
-        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isLogin || isRegistro ? "hidden" : ""}`}
+        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isHidden ? "hidden" : ""}`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
