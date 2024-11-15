@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import Image from "next/image";
 import SidebarProductos from "./sidebar-productos";
-import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { SearchInput } from "@/components/ui/search-input";
 
 
 export default function ProductosMain() {
@@ -20,8 +20,8 @@ export default function ProductosMain() {
   });
 
   const placeholders = [
-    "Productos por categorias",
-    "Productos por precio",
+    "Buscar por categorias",
+    "Buscar por nombre",
     "Esdado del producto",
   ];
  
@@ -114,7 +114,7 @@ export default function ProductosMain() {
           </div>
           <div className="flex items-baseline justify-between border-b lg:pl-80 border-gray-200 pb-6 pt-6 mr-10 sm:mr-10">
             <div>
-            <PlaceholdersAndVanishInput
+            <SearchInput
               placeholders={placeholders}
               onChange={handleChange}
               onSubmit={onSubmit}
