@@ -13,7 +13,7 @@ export default function PerfilLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const { userData } = useUser();
+    const { userData, loading } = useUser();
 
     const links = [
         { nombre: 'Ajustes de la cuenta', ruta: '/perfil', titulo: 'Mi cuenta' },
@@ -25,7 +25,7 @@ export default function PerfilLayout({
     const currentLink = links.find((link) => link.ruta === pathname);
     const titulo = currentLink ? currentLink.titulo : 'Página no encontrada';
 
-    if (!userData) return <Cargando />;
+    if (loading) return <Cargando />;
 
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100">
@@ -45,13 +45,17 @@ export default function PerfilLayout({
                                     </h2>
                                 </div>
                             </div>
-                            <ul className="mt-8">
-                            {links.map((link) => (
-                                <li key={link.ruta} className={`my-6 transition-colors ${pathname === link.ruta ? 'text-black underline underline-offset-8' : 'text-slate-500 hover:text-black hover:underline hover:underline-offset-8'}`}>
-                                    <Link href={link.ruta}>{link.nombre}</Link>
-                                </li>
-                            ))}
-                        </ul>
+                            <div className="mt-8 space-y-6 flex flex-col">
+                                {links.map((link) => (
+                                    <Link
+                                        key={link.ruta}
+                                        href={link.ruta}
+                                        className={`transition-colors ${pathname === link.ruta ? 'text-black underline underline-offset-8' : 'text-slate-500 hover:text-black hover:underline hover:underline-offset-8'}`}
+                                    >
+                                        {link.nombre}
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <div className="xl:w-3/4 mt-10 lg:mt-0 lg:w-1/2 bg-white p-8 rounded-xl shadow-md">

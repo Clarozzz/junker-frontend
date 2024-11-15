@@ -21,3 +21,8 @@ export async function readUser() {
   const supabase = await createClient()
   return await supabase.auth.getUser()
 }
+
+export async function readSession() {
+  const supabase = await createClient()
+  return await supabase.auth.getSession()
+}
