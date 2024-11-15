@@ -1,73 +1,73 @@
-"use client";
+'use client'
 
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { ShoppingCart, Menu, X, User, HandCoins, LogOut, } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import LogoJunker from "./logo-junker";
-import { usePathname } from "next/navigation";
-import { useUser } from "@/context/UserContext";
-import Cookies from "js-cookie";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { ShoppingCart, Menu, X, User, HandCoins, LogOut } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import LogoJunker from "./logo-junker"
+import { usePathname } from "next/navigation"
+import { useUser } from "@/context/UserContext"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { AnimatePresence, motion } from "framer-motion"
+import { signOut } from "@/app/api/login"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
   { ruta: "Productos", href: "/productos", current: false },
   { ruta: "Nosotros", href: "/nosotros", current: false },
   { ruta: "Servicios", href: "/servicios", current: false },
-];
+]
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const pathname = usePathname();
-  const { userData, setUserData } = useUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement | null>(null)
+  const pathname = usePathname()
+  const { userData, setUserData, loading } = useUser()
 
-  const isLandingPage = pathname === "/";
-  const isLogin = pathname === "/login";
-  const isRegistro = pathname === "/registro";
+  const isLandingPage = pathname === "/"
+  const isLogin = pathname === "/login"
+  const isRegistro = pathname === "/registro"
 
-  const handleToggle = (event: React.MouseEvent) => { 
-    event?.stopPropagation();
+  const handleToggle = (event: React.MouseEvent) => {
+    event?.stopPropagation()
     setIsOpen(prev => !prev)
-  };
+  }
 
   useEffect(() => {
-    if (!isLandingPage) return;
+    if (!isLandingPage) return
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 1);
-    };
+      setIsScrolled(window.scrollY > 1)
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLandingPage]);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isLandingPage])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        setIsOpen(false)
       }
     }
 
-    document.addEventListener("click", handleClickOutside);
-    return () => { document.removeEventListener("click", handleClickOutside); };
-  }, [isOpen]);
+    document.addEventListener("click", handleClickOutside)
+    return () => { document.removeEventListener("click", handleClickOutside) }
+  }, [isOpen])
 
   const getTextColor = () => {
-    if (isScrolled || !isLandingPage) return "text-gray-900";
-    return "text-white";
-  };
+    if (isScrolled || !isLandingPage) return "text-gray-900"
+    return "text-white"
+  }
 
-  const handleLogout = () => {
-    Cookies.remove("access_token");
-    Cookies.remove("refresh_token");
-    setUserData(null);
-    window.location.href = "/";
-  };
+  const handleLogout = async () => {
+    await signOut()
+    setUserData(null)
+    window.location.href = "/"
+  }
 
   return (
     <header
@@ -116,68 +116,76 @@ export default function Navbar() {
             >
               <Menu className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
-
-            {!userData ? (
-              <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
-                Iniciar Sesión
-              </Link>
-            ) : (
-              <div className="relative inline-block text-left">
-                <button
-                  onClick={handleToggle}
-                  className="flex items-center space-x-2 cursor-pointer focus:outline-none"
-                >
-                  <div className="flex items-center space-x-2 cursor-pointer">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={userData.avatar_url} className="image-cover" />
-                      <AvatarFallback>
-                        {userData.nombre.slice(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className={getTextColor()}>{userData.nombre}</span>
-                  </div>
-                </button>
-
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      ref={dropdownRef}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-max p-1 bg-white rounded-lg shadow-2xl ring-1 ring-gray-200 focus:outline-none z-20"
-                    >
-                      <Link
-                        href="/perfil"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center px-2 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
-                      >
-                        <User className="mr-2 h-4 w-4" />
-                        Perfil
-                      </Link>
-                      <Link
-                        href="/publicar"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center px-2 py-2 text-sm text-green-600 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
-                      >
-                        <HandCoins className="mr-2 h-4 w-4 text-green-500" />
-                        Vender
-                      </Link>
-                      <button
-                        onClick={() => {
-                          setIsOpen(false);
-                          handleLogout();
-                        }}
-                        className="flex items-center w-full px-2 py-2 text-sm hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
-                      >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Cerrar Sesión
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <Skeleton className="w-8 h-8 rounded-full" />
+                <Skeleton className="w-16 h-6" />
               </div>
+            ) : (
+              <>
+                {!userData ? (
+                  <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
+                    Iniciar Sesión
+                  </Link>
+                ) : (
+                  <div className="relative inline-block text-left">
+                    <button
+                      onClick={handleToggle}
+                      className="flex items-center space-x-2 cursor-pointer focus:outline-none"
+                    >
+                      <div className="flex items-center space-x-2 cursor-pointer">
+                        <Avatar className="w-8 h-8">
+                          <AvatarImage src={userData.avatar_url} className="image-cover" />
+                          <AvatarFallback>
+                            {userData.nombre.slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className={getTextColor()}>{userData.nombre}</span>
+                      </div>
+                    </button>
+
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          ref={dropdownRef}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 mt-2 w-max p-1 bg-white rounded-lg shadow-2xl ring-1 ring-gray-200 focus:outline-none z-20"
+                        >
+                          <Link
+                            href="/perfil"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center px-2 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                          >
+                            <User className="mr-2 h-4 w-4" />
+                            Perfil
+                          </Link>
+                          <Link
+                            href="/publicar"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center px-2 py-2 text-sm text-green-600 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                          >
+                            <HandCoins className="mr-2 h-4 w-4 text-green-500" />
+                            Vender
+                          </Link>
+                          <button
+                            onClick={() => {
+                              setIsOpen(false)
+                              handleLogout()
+                            }}
+                            className="flex items-center w-full px-2 py-2 text-sm hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                          >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Cerrar Sesión
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -218,5 +226,5 @@ export default function Navbar() {
         )}
       </div>
     </header>
-  );
+  )
 }
