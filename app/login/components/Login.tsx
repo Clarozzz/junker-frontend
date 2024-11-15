@@ -2,14 +2,20 @@
 "use client";
 
 import { useState } from 'react';
-import Cookies from 'js-cookie';
 import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
-import { X } from "lucide-react";
-import { login } from '@/app/api/login'; // Importamos la función login
+import { AlertCircle, X } from "lucide-react";
+import { signIn } from '@/app/api/login';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
+import { z } from 'zod';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+const loginSchema = z.object({
+  email: z.string().min(1),
+  password: z.string().min(1)
+});
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,21 +27,24 @@ const Login = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
 
     try {
-      setIsLoading(true)
-      const { access_token, refresh_token } = await login(email, password);
+      setIsLoading(true);
+      const parsedData = loginSchema.parse(data);
 
-      // *  Configurar las cookies con la duración según rememberMe
-      const expiryDays = rememberMe ? 7 : 1;
-      Cookies.set('access_token', access_token, { expires: expiryDays });
-      Cookies.set('refresh_token', refresh_token, { expires: expiryDays });
+      const error = await signIn(parsedData);
 
-      window.location.href = '/';
+      if (error) {
+        setError(error);
+      } else {
+        window.location.href = '/'
+      }
     } catch (err) {
-      setError((err as Error).message);
-    } finally{
-      setIsLoading(false)
+      setError(`Ocurrió un error al intentar iniciar sesión. ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,6 +91,7 @@ const Login = () => {
               <Input
                 type="email"
                 id="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Correo electrónico"
@@ -92,6 +102,7 @@ const Login = () => {
               <Input
                 type="password"
                 id="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
@@ -99,7 +110,15 @@ const Login = () => {
               />
             </div>
 
-            {error && <p className="text-red-500 text-center">{error}</p>}
+            {error && (
+              <Alert variant="destructive" className='mt-4'>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  {error}
+                </AlertDescription>
+              </Alert>
+            )}
 
             {/* Remember Me */}
             <div className="flex items-center justify-between">
@@ -125,13 +144,13 @@ const Login = () => {
               className="w-full bg-custom-blue hover:bg-blue-900  transition-all duration-200"
             >
               {isLoading ? (
-                  <>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-                    Iniciando Sesión...
-                  </>
-                ) : (
-                  "Iniciar Sesión"
-                )}
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                  Iniciando Sesión...
+                </>
+              ) : (
+                "Iniciar Sesión"
+              )}
             </Button>
           </form>
         </div>

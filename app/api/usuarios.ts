@@ -1,20 +1,15 @@
 import axios from 'axios'
 
-export const getUser = async (token: string): Promise<Usuario> => {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/getUser`;
-
+export const getUser = async (user_id: string): Promise<Usuario> => {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/getUser/${user_id}`;
+  
     try {
-        const res = await axios.get(url, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-
-        return res.data;
+      const res = await axios.get(url);
+      return res.data;
     } catch (error) {
-        throw new Error(`Error: ${error}`);
+      throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
     }
-};
+  };
 
 export const updateUser = async (id: string, token: string, userData: object): Promise<Usuario> => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/updateUser/${id}`;

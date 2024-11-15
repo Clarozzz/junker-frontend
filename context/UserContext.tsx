@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import { readUser } from "@/app/api/login";
 import { getUser } from "@/app/api/usuarios";
 
 export const UserContext = createContext<{
@@ -10,7 +10,7 @@ export const UserContext = createContext<{
   loading: boolean;
 }>({
   userData: null,
-  setUserData: () => {},
+  setUserData: () => { },
   loading: true,
 });
 
@@ -19,23 +19,26 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = Cookies.get("access_token");
-    if (token && !userData) {
-      const loadUserData = async () => {
-        try {
-          const data = await getUser(token);
-          setUserData(data);
-        } catch {
-          setUserData(null);
-        } finally {
-          setLoading(false);
+    const loadUserData = async () => {
+      try {
+        const { data: { user } } = await readUser()
+        if (!user) {
+          throw new Error("Error al obtener el usuario");
         }
-      };
-      loadUserData();
-    } else {
-      setLoading(false);
-    }
-  }, [userData]);
+
+        const usuario = await getUser(user.id)
+        if (usuario) {
+          setUserData(usuario)
+        }
+      } catch {
+        setUserData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, []);
 
   return (
     <UserContext.Provider value={{ userData, setUserData, loading }}>
@@ -45,3 +48,4 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useUser = () => useContext(UserContext);
+
