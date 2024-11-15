@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { getCategorias } from "@/app/api/categorias";
+import { useUser } from "@/context/UserContext";
 
 
 const productSchema = z.object({
@@ -56,6 +57,7 @@ export default function PublicarClient() {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [uploadedImages, setUploadedImages] = useState<File[]>([])
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const { userData } = useUser();
 
   const {
     register,
@@ -154,7 +156,7 @@ export default function PublicarClient() {
         precio: data.precio,
         estado_producto: data.estado_producto.trim(),
         imagen_url: cloudinaryUrls,
-        id_vendedor: "129911de-148f-424f-8cf6-03145be2c694",
+        id_vendedor: userData?.vendedores[0]?.id || "",
         id_categoria: data.id_categoria,
         stock: data.stock
       }
@@ -226,7 +228,7 @@ export default function PublicarClient() {
             </h2>
             <Label
               htmlFor="cover-photo"
-              className="block font-medium dark:text-white text-gray-900"
+              className="block px-4 md:px-8 sm:px-4 font-medium dark:text-white text-gray-900"
             >
               Arrastra y suelta tus imagenes aqui como (maximo 4)
             </Label>
@@ -318,7 +320,7 @@ export default function PublicarClient() {
               <div>
                 <Label
                   htmlFor="cover-photo"
-                  className="block font-mediumtext-gray-900"
+                  className="block font-medium text-gray-900"
                 >
                   Nombre del Producto
                 </Label>
@@ -336,7 +338,7 @@ export default function PublicarClient() {
               <div>
                 <Label
                   htmlFor="cover-photo"
-                  className="block font-mediumtext-gray-900"
+                  className="block font-medium text-gray-900"
                 >
                   Precio
                 </Label>
@@ -356,7 +358,7 @@ export default function PublicarClient() {
               <div>
                 <Label
                   htmlFor="cover-photo"
-                  className="block font-mediumtext-gray-900"
+                  className="block font-medium text-gray-900"
                 >
                   Cantidad
                 </Label>
@@ -374,6 +376,12 @@ export default function PublicarClient() {
                 )}
               </div>      
               <div>
+              <Label
+                  htmlFor="cover-photo"
+                  className="block font-medium text-gray-900"
+                >
+                  Estado del Producto
+              </Label>
               <Controller
                 name="estado_producto"
                 control={control}
@@ -397,6 +405,12 @@ export default function PublicarClient() {
               )}
             </div>
             <div>
+              <Label
+                htmlFor="cover-photo"
+                className="block font-medium text-gray-900"
+              >
+                Categoría 
+              </Label>
               <Controller
                 name="id_categoria"
                 control={control}
@@ -429,6 +443,12 @@ export default function PublicarClient() {
               )}
             </div>
               <div>
+                <Label
+                  htmlFor="cover-photo"
+                  className="block font-medium text-gray-900"
+                >
+                  Descripción del producto 
+                </Label>
                 <textarea
                   id="descripcion"
                   placeholder="Descripcion"
@@ -455,7 +475,7 @@ export default function PublicarClient() {
               >
                 {isLoading ? (
                   <>
-                    <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-white border-opacity-50 mr-2"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
                     Publicando...
                   </>
                 ) : (

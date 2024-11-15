@@ -1,5 +1,4 @@
 // import DetalleProducto from './components/detalle-prod';
-import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import InfoProductos from './components/info-producto';
 
@@ -36,7 +35,6 @@ export default async function PageDetalles ( { params }: { params: { detalles: s
 
   return (
     <>
-    <Navbar/>
     <main className="min-h-screen bg-background py-4"> 
       {/* <DetalleProducto {...sampleProduct} /> */}
       <InfoProductos params={params} />

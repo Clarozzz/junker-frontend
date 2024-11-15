@@ -1,31 +1,51 @@
-// UserContext.tsx
-import { createContext, useContext, ReactNode } from "react";
+'use client';
 
-interface UserContextType {
-  userData: Usuario | undefined;
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { readUser } from "@/app/api/login";
+import { getUser } from "@/app/api/usuarios";
+
+export const UserContext = createContext<{
+  userData: Usuario | null;
+  setUserData: React.Dispatch<React.SetStateAction<Usuario | null>>;
   loading: boolean;
-}
+}>({
+  userData: null,
+  setUserData: () => { },
+  loading: true,
+});
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [userData, setUserData] = useState<Usuario | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) throw new Error("useUser must be used within UserProvider");
-  return context;
-};
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const { data: { user } } = await readUser()
+        if (!user) {
+          throw new Error("Error al obtener el usuario");
+        }
 
-export function UserProvider({
-  children,
-  userData,
-  loading,
-}: {
-  children: ReactNode;
-  userData: Usuario | undefined;
-  loading: boolean;
-}) {
+        const usuario = await getUser(user.id)
+        if (usuario) {
+          setUserData(usuario)
+        }
+      } catch {
+        setUserData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   return (
-    <UserContext.Provider value={{ userData, loading }}>
+    <UserContext.Provider value={{ userData, setUserData, loading }}>
       {children}
     </UserContext.Provider>
   );
-}
+};
+
+export const useUser = () => useContext(UserContext);
+

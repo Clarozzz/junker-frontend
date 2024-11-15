@@ -1,70 +1,81 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-
-import Link from "next/link";
-import { ShoppingCart, Menu, Search, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import LogoJunker from "./logo-junker";
-import { usePathname } from "next/navigation";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-// import { useAuth } from "@/app/contexts/AuthContext";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getUser } from "@/app/api/usuarios";
+import React, { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { ShoppingCart, Menu, X, User, HandCoins, LogOut } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import LogoJunker from "./logo-junker"
+import { usePathname } from "next/navigation"
+import { useUser } from "@/context/UserContext"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { AnimatePresence, motion } from "framer-motion"
+import { signOut } from "@/app/api/login"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
   { ruta: "Productos", href: "/productos", current: false },
   { ruta: "Nosotros", href: "/nosotros", current: false },
   { ruta: "Servicios", href: "/servicios", current: false },
-];
+]
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
-  // const { isAuthenticated, setIsAuthenticated } = useAuth();
-  const [userData, setUserData] = useState<Usuario>();
-  const [error, setError] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement | null>(null)
+  const pathname = usePathname()
+  const { userData, setUserData, loading } = useUser()
+
+  const isLandingPage = pathname === "/"
+  const isLogin = pathname === "/login"
+  const isRegistro = pathname === "/registro"
+
+  const handleToggle = (event: React.MouseEvent) => {
+    event?.stopPropagation()
+    setIsOpen(prev => !prev)
+  }
 
   useEffect(() => {
-    const token = Cookies.get("access_token") || "";
-    const loadUserData = async () => {
-      try {
-        const data = await getUser(token);
-        setUserData(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Error desconocido");
-        }
+    if (!isLandingPage) return
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 1)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isLandingPage])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
       }
-    };
+    }
 
-    loadUserData();
-  }, []);
+    document.addEventListener("click", handleClickOutside)
+    return () => { document.removeEventListener("click", handleClickOutside) }
+  }, [isOpen])
 
+  const getTextColor = () => {
+    if (isScrolled || !isLandingPage) return "text-gray-900"
+    return "text-white"
+  }
 
-  const handleLogout = () => {
-    Cookies.remove("access_token");
-    Cookies.remove("refresh_token");
-    // setIsAuthenticated(false);
-    window.location.href = "/";
-  };
+  const handleLogout = async () => {
+    await signOut()
+    setUserData(null)
+    window.location.href = "/"
+  }
 
   return (
-    <header className="bg-background shadow-md top-0 sticky z-20">
+    <header
+      className={`${isLandingPage
+        ? "bg-transparent fixed transition-colors duration-300 w-full"
+        : "bg-background shadow-md sticky"
+        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isLogin || isRegistro ? "hidden" : ""}`}
+    >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
           <div className="flex flex-row items-center md:justify-start sm:justify-start lg:justify-center xl:justify-center px-6 sm:px-2 w-full md:w-auto">
@@ -73,7 +84,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/"
-              className="text-2xl hidden lg:inline-block text-custom-blue font-bold items-center montserrat"
+              className={`text-2xl hidden lg:inline-block font-bold items-center montserrat ${getTextColor()}`}
             >
               Junker
             </Link>
@@ -83,11 +94,10 @@ export default function Navbar() {
               <Link
                 key={vista.ruta}
                 href={vista.href}
-                className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${
-                  pathname === vista.href
-                    ? 'bg-gray-200/75 w-24 rounded-full text-gray-900'
-                    : 'text-gray-900 hover:bg-gray-200/75 w-24 rounded-full hover:text-gray-900'
-                }`}
+                className={`text-center block md:inline-block py-2 transition-colors hover:text-primary ${pathname === vista.href
+                  ? 'bg-gray-200/75 w-24 rounded-full text-gray-900'
+                  : `hover:bg-gray-200/75 w-24 rounded-full ${getTextColor()} hover:text-gray-900`
+                  }`}
                 aria-current={pathname === vista.href ? "page" : undefined}
               >
                 {vista.ruta}
@@ -95,70 +105,93 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="flex items-center space-x-4 pr-6">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-            {/* <ThemeToggle /> */}
-            <Button variant="ghost" size="icon">
-              <ShoppingCart className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="group hover:text-custom-blue">
+              <ShoppingCart className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-0 md:hidden"
+              className="absolute left-0 md:hidden group hover:text-custom-blue"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
-            
-              {!error ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    {userData?.avatar_url ? (
-                      <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
-                        <AvatarImage
-                          src={userData?.avatar_url}
-                          alt={userData?.nombre}
-                          className="image-cover"
-                        />
-                        <AvatarFallback>Usuario</AvatarFallback>
-                      </Avatar>
-                    ) : (
-                      <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
-                        {(userData?.nombre?.charAt(0) ?? "").toUpperCase() +
-                          (userData?.apellido?.charAt(0) ?? "").toUpperCase()}
-                      </span>
-                    )}
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="cursor-pointer">
-                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => router.push("/perfil")}
-                      className="cursor-pointer">
-                      Perfil
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => router.push("/publicar")}
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <Skeleton className="w-8 h-8 rounded-full" />
+                <Skeleton className="w-16 h-6" />
+              </div>
+            ) : (
+              <>
+                {!userData ? (
+                  <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
+                    Iniciar Sesión
+                  </Link>
+                ) : (
+                  <div className="relative inline-block text-left">
+                    <button
+                      onClick={handleToggle}
+                      className="flex items-center space-x-2 cursor-pointer focus:outline-none"
                     >
-                      Publicar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                      Cerrar Sesión
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>   
-              ) : (
-                    <Link href="/login" className="hover:underline underline-offset-4 cursor-pointer">
-                      Iniciar Sesión
-                    </Link>
-              )}
+                      <div className="flex items-center space-x-2 cursor-pointer">
+                        <Avatar className="w-8 h-8">
+                          <AvatarImage src={userData.avatar_url} className="image-cover" />
+                          <AvatarFallback>
+                            {userData.nombre.slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className={getTextColor()}>{userData.nombre}</span>
+                      </div>
+                    </button>
+
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          ref={dropdownRef}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 mt-2 w-max p-1 bg-white rounded-lg shadow-2xl ring-1 ring-gray-200 focus:outline-none z-20"
+                        >
+                          <Link
+                            href="/perfil"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center px-2 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                          >
+                            <User className="mr-2 h-4 w-4" />
+                            Perfil
+                          </Link>
+                          <Link
+                            href="/publicar"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center px-2 py-2 text-sm text-green-600 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                          >
+                            <HandCoins className="mr-2 h-4 w-4 text-green-500" />
+                            Vender
+                          </Link>
+                          <button
+                            onClick={() => {
+                              setIsOpen(false)
+                              handleLogout()
+                            }}
+                            className="flex items-center w-full px-2 py-2 text-sm hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                          >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Cerrar Sesión
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } md:hidden`}
+          className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform z-50 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            } md:hidden`}
         >
           <nav className="p-4">
             <div
@@ -168,22 +201,21 @@ export default function Navbar() {
               <X className="h-8 w-8" />
               <span className="sr-only">Close</span>
             </div>
-              <div className="space-y-2">
-                {pages.map((vista) => (
-                  <Link
-                    key={vista.ruta}
-                    href={vista.href}
-                    className={`text-left pl-3 block md:inline-block py-2 transition-colors hover:text-primary ${
-                      pathname === vista.href
-                        ? 'bg-gray-200/75 w-full text-gray-900'
-                        : 'text-gray-900 hover:bg-gradient-to-r hover:from-gray-200 hover:via-gray-100 hover:to-white w-full hover:text-gray-900'
+            <div className="space-y-2">
+              {pages.map((vista) => (
+                <Link
+                  key={vista.ruta}
+                  href={vista.href}
+                  className={`text-left pl-3 rounded-md block md:inline-block py-2 transition-colors ${pathname === vista.href
+                    ? 'bg-gray-200/75 w-full text-gray-900 border-l-4 border-custom-blue2'
+                    : `hover:bg-gray-200/75 w-full hover:text-gray-900`
                     }`}
-                    aria-current={pathname === vista.href ? "page" : undefined}
-                  >
-                    {vista.ruta}
-                  </Link>
-                ))}
-              </div>
+                  aria-current={pathname === vista.href ? "page" : undefined}
+                >
+                  {vista.ruta}
+                </Link>
+              ))}
+            </div>
           </nav>
         </div>
         {isMenuOpen && (
@@ -194,5 +226,5 @@ export default function Navbar() {
         )}
       </div>
     </header>
-  );
+  )
 }

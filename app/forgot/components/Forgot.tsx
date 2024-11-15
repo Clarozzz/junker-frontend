@@ -1,75 +1,100 @@
+'use client'
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
+import { useState } from 'react'
+import axios from 'axios'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle, CircleCheck } from 'lucide-react'
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-
-export default function Forgot() {
-  const [email, setEmail] = useState<string>(''); // Almacena el email del usuario
-  const [message, setMessage] = useState<string | null>(null); // Mensaje de éxito
-  const [error, setError] = useState<string | null>(null); // Mensaje de error
-  const router = useRouter();
+export default function ForgotPassword() {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleForgotPassword = async () => {
-    setError(null);
-    setMessage(null);
+    setError(null)
+    setMessage(null)
+    setIsLoading(true)
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/forgot`, {
-        email,
-      });
-
-      setMessage(response.data.message);
-
-      // Después de 3 segundos, redirige a la ruta "/"
-      setTimeout(() => {
-        router.push('/');
-      }, 3000);
-    } catch (error: any) {
-      setError(error.response?.data?.detail || "Error sending reset email");
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/forgot`, { email })
+      setMessage(response.data.message)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.detail || "Error sending reset email")
+      } else {
+        setError("An unexpected error occurred")
+      }
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Restablecer contraseña</h2>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Ingresa tu email"
-          />
-        </div>
-
-        <button
-          onClick={handleForgotPassword}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Enviar correo de reinicio
-        </button>
-
-        {message && (
-          <div className="mt-4 p-2 bg-green-100 border border-green-400 text-green-700 rounded">
-            {message}
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className='text-3xl'>Restablecer contraseña</CardTitle>
+          <CardDescription>
+            Ingresa tu email para recibir instrucciones de restablecimiento.
+            <br />
+            Puedes solicitar un nuevo correo cada:
+            <span className='text-custom-blue2 font-bold'> 60 segundos</span></CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
           </div>
-        )}
-
-        {error && (
-          <div className="mt-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
+        </CardContent>
+        <CardFooter>
+          <div className='w-full'>
+            <Button
+              className="w-full bg-custom-blue hover:bg-blue-900  transition-all duration-200"
+              onClick={handleForgotPassword}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-loader-circle animate-spin mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                  Enviando...
+                </>
+              ) : (
+                "Enviar correo de reestablecimiento"
+              )}
+            </Button>
+            {message && (
+              <Alert className="mt-4 border-green-500 text-green-600">
+                <CircleCheck className="h-4 w-4" color='#22c55e' />
+                <AlertTitle>Hecho</AlertTitle>
+                <AlertDescription>{message}</AlertDescription>
+              </Alert>
+            )}
+            {error && (
+              <Alert variant="destructive" className='mt-4'>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  {error}
+                </AlertDescription>
+              </Alert>
+            )}
           </div>
-        )}
-      </div>
+        </CardFooter>
+      </Card>
     </div>
-  );
+  )
 }

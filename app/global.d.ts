@@ -78,6 +78,13 @@ interface Usuario {
   avatar_url: string;
   telefono: string;
   email: string;
+  vendedores: { 
+    id: string 
+    descripcion: string
+  }[];
+  carrito: { 
+    id: string 
+  }[];
 }
 
 interface ProductosResponse {
@@ -119,3 +126,11 @@ interface FilterState {
   categoria: string | null;
   estado: string | null;
 }
+
+
+interface UpdatePassword {
+  password: string;
+  newPassword: string;
+  confirmPass: string;
+}
+
