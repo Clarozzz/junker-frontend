@@ -2,14 +2,25 @@ import axios from 'axios'
 
 export const getUser = async (user_id: string): Promise<Usuario> => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/getUser/${user_id}`;
-  
+
     try {
-      const res = await axios.get(url);
-      return res.data;
+        const res = await axios.get(url);
+        return res.data;
     } catch (error) {
-      throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
     }
-  };
+};
+
+export const registerUser = async (userData: { id: string, nombre: string, apellido: string, email: string }): Promise<string> => {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`;
+
+    try {
+        const res = await axios.post(url, userData);
+        return res.data.message;
+    } catch (error) {
+        throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
 
 export const updateUser = async (id: string, token: string, userData: object): Promise<Usuario> => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/updateUser/${id}`;
@@ -94,7 +105,7 @@ export const verifyPass = async (id: string, token: string, updatePass: UpdatePa
     const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/verifyPassword/${id}`;
 
     try {
-        const res = await axios.post(url, updatePass , {
+        const res = await axios.post(url, updatePass, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

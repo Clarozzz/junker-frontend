@@ -1,6 +1,7 @@
+'use server'
 
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { createClient } from "@/utils/supabase/server";
+import { registerUser } from "./usuarios";
 
 interface RegisterData {
   nombre: string;
@@ -9,63 +10,35 @@ interface RegisterData {
   password: string;
 }
 
-interface RegisterResponse {
-  message: string;
-  access_token: string;
-  refresh_token: string;
-}
+export const registro = async (userData: RegisterData) => {
+  const supabase = await createClient()
 
-interface ValidationError {
-  detail: Array<{
-    type: string;
-    loc: string[];
-    msg: string;
-    input: string;
-    ctx: {
-      error: Record<string, unknown>;
-    };
-  }>;
-}
+  const { data, error } = await supabase.auth.signUp({
+    email: userData.email,
+    password: userData.password
+  })
 
-interface SupabaseError {
-  detail: string;
-}
-
-export const registro = async (userData: RegisterData): Promise<RegisterResponse> => {
-  try {
-    const response = await axios.post<RegisterResponse>(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-      userData,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    const { access_token, refresh_token } = response.data;
-    Cookies.set('access_token', access_token, { expires: 7 });
-    Cookies.set('refresh_token', refresh_token, { expires: 7 });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      // * Manejo de error 400
-      if (error.response.status === 400) {
-        const errorData = error.response.data as SupabaseError;
-        throw new Error(errorData.detail.replace('Supabase error: ', ''));
-      }
-      
-      // * Manejo para error 422
-      const errorData = error.response.data as ValidationError;
-      if (errorData.detail && Array.isArray(errorData.detail) && errorData.detail.length > 0) {
-        const errorMessage = errorData.detail[0].msg
-          .replace('Value error, ', '')
-          .replace('Value error,', '')
-          .replace('Value error', '');
-        const cleanMessage = errorMessage.charAt(0).toUpperCase() + errorMessage.slice(1);
-        throw new Error(cleanMessage);
-      }
-    }
-    throw new Error('Error en el registro');
+  if (error) {
+    return "Ocurrio un error durante el registro"
   }
+
+  if (!data) {
+    return "No fue posible registrar el usuario"
+  }
+
+  if (data.user) {
+    try {
+      await registerUser({
+        id: data.user.id,
+        nombre: userData.nombre,
+        apellido: userData.apellido,
+        email: userData.email
+      });
+      return "Registro exitoso!";
+    } catch (err) {
+      return `Ocurrio un error ${err}`;
+    }
+  }
+
+  return "Ocurrió un error inesperado";
 };

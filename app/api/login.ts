@@ -12,6 +12,11 @@ export async function signIn(dataForm: { email: string; password: string; }) {
   }
 }
 
+export async function signOut() {
+  const supabase = await createClient();
+  return await supabase.auth.signOut()
+}
+
 export async function readUser() {
   const supabase = await createClient()
   return await supabase.auth.getUser()
