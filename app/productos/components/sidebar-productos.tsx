@@ -7,13 +7,6 @@ import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/
 const MIN_PRICE = 0;
 const MAX_PRICE = 10000;
 
-interface FilterState {
-  precio_min: number;
-  precio_max: number;
-  categoria: string | null;
-  estado: string | null;
-}
-
 interface SidebarProductosProps {
   onFilterChange: (filters: FilterState) => void;
 }

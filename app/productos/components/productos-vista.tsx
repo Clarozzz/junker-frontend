@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,8 @@ export default function ProductosVista({
   estado,
 }: ProductosVistaProps) {
   const [productos, setProductos] = useState<ProductoVista[]>([]);
-  const [productosSeleccion, setproductosSeleccion] = useState<ProductoVista | null>(null);
+  const [productosSeleccion, setproductosSeleccion] =
+    useState<ProductoVista | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
@@ -34,7 +34,14 @@ export default function ProductosVista({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    fetchProductos(page, itemsPerPage, categoria, precio_min, precio_max, estado);
+    fetchProductos(
+      page,
+      itemsPerPage,
+      categoria,
+      precio_min,
+      precio_max,
+      estado
+    );
   };
 
   const handleItemsPerPageChange = (value: number) => {
@@ -51,7 +58,6 @@ export default function ProductosVista({
     precio_max: number | null,
     estado: string | null
   ) => {
-
     try {
       const data: ProductosResponse = await getProductos(
         page,
@@ -62,12 +68,13 @@ export default function ProductosVista({
         estado
       );
 
-
       if (data && data.items) {
         setProductos(data.items);
         setTotalItems(data.total);
       } else {
-        console.error("No se recibieron productos o hay un error en la estructura de datos.");
+        console.error(
+          "No se recibieron productos o hay un error en la estructura de datos."
+        );
       }
     } catch (error) {
       console.error("Error al obtener los productos:", error);
@@ -75,7 +82,14 @@ export default function ProductosVista({
   };
 
   useEffect(() => {
-    fetchProductos(currentPage, itemsPerPage, categoria, precio_min, precio_max, estado);
+    fetchProductos(
+      currentPage,
+      itemsPerPage,
+      categoria,
+      precio_min,
+      precio_max,
+      estado
+    );
   }, [currentPage, itemsPerPage, categoria, precio_min, precio_max, estado]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -83,12 +97,15 @@ export default function ProductosVista({
   return (
     <div id="contenedor filtro y card" className="flex flex-row">
       {isPending && <Cargando />}
-      <div id="tarjetas" className="flex flex-col w-full justify-center items-center">
+      <div
+        id="tarjetas"
+        className="flex flex-col w-full justify-center items-center"
+      >
         <section className="py-14 bg-background">
           <div className="container mx-auto">
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
-              {productos.length > 0 ? (
-                productos.map((product) => (
+            {productos.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
+                {productos.map((product) => (
                   <motion.div
                     key={product.id}
                     onClick={() => handleCardClick(product)}
@@ -106,7 +123,9 @@ export default function ProductosVista({
                         <h3 className="text-lg font-semibold truncate max-w-40">
                           {product.nombre}
                         </h3>
-                        <p className="text-gray-600">{product.precio.toFixed(2)}</p>
+                        <p className="text-gray-600">
+                          {product.precio.toFixed(2)}
+                        </p>
                       </CardContent>
                       <CardFooter>
                         <Button
@@ -122,11 +141,15 @@ export default function ProductosVista({
                       </CardFooter>
                     </Card>
                   </motion.div>
-                ))
-              ) : (
-                <p>No se encontraron productos.</p>
-              )}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex justify-center items-center min-h-96">
+                <p className="text-3xl text-center font-semibold text-gray-600">
+                  No se encontraron productos.
+                </p>
+              </div>
+            )}
 
             {/* Paginación */}
             <div className="flex justify-center mt-6 gap-2">
@@ -138,19 +161,21 @@ export default function ProductosVista({
                   Anterior
                 </Button>
               )}
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <Button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-2 leading-tight border border-gray-300 ${
-                    currentPage === page
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                  }`}
-                >
-                  {page}
-                </Button>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <Button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-2 leading-tight border border-gray-300 ${
+                      currentPage === page
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    }`}
+                  >
+                    {page}
+                  </Button>
+                )
+              )}
               {currentPage < totalPages && (
                 <Button
                   onClick={() => handlePageChange(currentPage + 1)}
@@ -186,4 +211,3 @@ export default function ProductosVista({
     </div>
   );
 }
-

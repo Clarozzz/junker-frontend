@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import Image from "next/image";
 import SidebarProductos from "./sidebar-productos";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 
 export default function ProductosMain() {
@@ -17,6 +18,20 @@ export default function ProductosMain() {
     categoria: null,
     estado: null,
   });
+
+  const placeholders = [
+    "Productos por categorias",
+    "Productos por precio",
+    "Esdado del producto",
+  ];
+ 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+  };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("submitted");
+  };
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -92,10 +107,19 @@ export default function ProductosMain() {
         </div>
 
         <main className="mx-auto max-w-screen-2xl px-4 sm:px-12 md:px-12 lg:px-12 xl:px-12">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-14 mr-10 sm:mr-10">
+          <div className="pt-4">
             <h1 className="text-5xl font-bold tracking-tight text-gray-900">
               Productos
             </h1>
+          </div>
+          <div className="flex items-baseline justify-between border-b lg:pl-80 border-gray-200 pb-6 pt-6 mr-10 sm:mr-10">
+            <div>
+            <PlaceholdersAndVanishInput
+              placeholders={placeholders}
+              onChange={handleChange}
+              onSubmit={onSubmit}
+            />
+            </div>
             <div className="flex items-center">
               <div className="relative inline-block text-left" ref={menuRef}>
                 <div>
