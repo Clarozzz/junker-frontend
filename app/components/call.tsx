@@ -3,12 +3,9 @@
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { TypewriterEffect } from "@/components/ui/typewriter-effect"
-import { useUser } from '@/context/UserContext'
 import Link from 'next/link'
-import { Skeleton } from "@/components/ui/skeleton"
 
 export default function CallSection() {
-  const { userData, loading } = useUser()
 
   const words = [
     { text: "Los", className: "montserrat text-white" },
@@ -38,32 +35,6 @@ export default function CallSection() {
         <TypewriterEffect words={words} className="px-4 text-3xl" />
 
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-6 mt-10 z-20">
-          {loading ? (
-            <>
-              <Skeleton className="w-40 h-12 rounded-lg" />
-              <Skeleton className="w-40 h-12 rounded-lg" />
-            </>
-          ) : !userData ? (
-            <>
-              <Button
-                className="w-40 h-12 rounded-lg bg-blue-900 text-white text-md shadow-lg hover:bg-blue-900 hover:brightness-125 transition-all duration-300"
-                asChild
-              >
-                <Link href="/login">
-                  Iniciar Sesión
-                </Link>
-              </Button>
-              <Button
-                className="w-40 h-12 rounded-lg bg-custom-beige text-black text-md shadow-lg hover:bg-custom-beige hover:brightness-125 transition-all duration-300"
-                asChild
-              >
-                <Link href="/registro">
-                  Registrarse
-                </Link>
-              </Button>
-            </>
-          ) : (
-            <>
               <Button
                 className="w-40 h-12 rounded-lg text-md shadow-lg bg-slate-950 hover:bg-slate-800 text-white transition-all duration-200"
                 asChild
@@ -80,8 +51,6 @@ export default function CallSection() {
                   Vender
                 </Link>
               </Button>
-            </>
-          )}
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import React from 'react'
 import Descripcion from '../components/descripcion'
 import { useUser } from '@/context/UserContext';
 import Cargando from '@/components/ui/cargando';
+import ProductosVendedor from '../components/productos-vendedor';
 
 export default function Vendedor() {
   const { loading } = useUser();
@@ -12,6 +13,7 @@ export default function Vendedor() {
   return (
     <div className='space-y-8'>
       <Descripcion />
+      <ProductosVendedor />
     </div>
   )
 }

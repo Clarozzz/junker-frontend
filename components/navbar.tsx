@@ -113,9 +113,11 @@ export default function Navbar({ userData }: { userData: Usuario | null }) {
               <Menu className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
             {!userData ? (
-              <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
-                Iniciar Sesión
-              </Link>
+              <Button asChild variant={"link"} className="text-md">
+                <Link href="/login" className={`${getTextColor()}`}>
+                  Iniciar Sesión
+                </Link>
+              </Button>
             ) : (
               <div className="relative inline-block text-left">
                 <button
