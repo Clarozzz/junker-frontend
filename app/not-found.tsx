@@ -16,7 +16,7 @@ export default function NotFound() {
         <>
             <div className="relative" style={{ height: "calc(100vh - 74.42px)" }}>
                 <Image
-                    src="/images/landing7.webp"
+                    src="/images/landing24.webp"
                     alt="Hubo un problema"
                     fill
                     className="image-cover"

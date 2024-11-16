@@ -1,5 +1,6 @@
 'use client'
 
+import { updateEmail } from "@/app/api/server";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +11,6 @@ import { useUser } from "@/context/UserContext";
 import { AlertCircle, CircleCheck, Mail } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
-import Cookies from "js-cookie";
-import { updateEmail } from "@/app/api/usuarios";
 
 const emailSchema = z.object({
     email: z.string().min(1, "El correo electrónico es obligatorio").email("Formato de correo electrónico no válido"),
@@ -31,20 +30,20 @@ export default function InfoCuenta() {
     const handleEmail = async (event: React.FocusEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const data = Object.fromEntries(formData.entries());
+        const datos = Object.fromEntries(formData.entries());
 
         try {
             setIsLoading(true)
 
-            const parsedData = emailSchema.parse(data);
-            const token = Cookies.get('access_token');
+            const parsedData = emailSchema.parse(datos);
 
-            if (!token) throw new Error("No se encontró el token de acceso");
-            if (!userData?.id) throw new Error("No se encontró el usuario");
+            const { data, error } = await updateEmail(parsedData.email)
 
-            const response = await updateEmail(userData.id, token, parsedData.email)
+            if (error) {
+                setError(error)
+            }
 
-            if (response) {
+            if (data) {
                 setMessage("Correo enviado!")
             }
         } catch (err) {
@@ -66,10 +65,10 @@ export default function InfoCuenta() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-3xl font-bold">Ajustes de la cuenta</CardTitle>
+                <CardTitle className="text-2xl font-bold">Información de la cuenta</CardTitle>
+                <h2 className="text-gray-500">Actualiza los datos principales de tu cuenta</h2>
             </CardHeader>
             <CardContent>
-                <h3 className="text-xl font-semibold mb-4">Información de la cuenta</h3>
                 <div className="space-y-4">
                     <div className="flex items-center space-x-4">
                         <div className="flex-grow">

@@ -2,16 +2,15 @@
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/UserContext";
 import { AlertCircle, CircleCheck } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
-import Cookies from "js-cookie";
-import { verifyPass } from "@/app/api/usuarios";
 import Cargando from "@/components/ui/cargando";
+import { verifyPass } from "@/app/api/server";
 
 const passSchema = z.object({
   password: z.string().min(1, "Contraseña incorrecta"),
@@ -30,7 +29,6 @@ export default function Password() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [passErrors, setPassErrors] = useState<Record<string, string>>({});
 
-  // States for the form inputs
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
@@ -46,12 +44,10 @@ export default function Password() {
       setPassErrors({});
 
       const parsedData = passSchema.parse(formData);
-      const token = Cookies.get('access_token');
 
-      if (!token) throw new Error("No se encontró el token de acceso");
       if (!userData?.id) throw new Error("No se encontró el usuario");
 
-      const res = await verifyPass(userData.id, token, parsedData);
+      const res = await verifyPass(userData.id, parsedData);
       if (res) {
         setSuccessMessage("Contraseña cambiada correctamente.");
         setPassword("");
@@ -72,13 +68,14 @@ export default function Password() {
       setIsLoading(false);
     }
   }
-    
+
   if (loading) return <Cargando />;
 
   return (
     <Card>
       <CardHeader>
-        <h3 className="text-3xl font-semibold">Actualiza tu contraseña</h3>
+        <CardTitle className="text-3xl font-semibold">Actualiza tu contraseña</CardTitle>
+        <h2 className="text-gray-500">Cambia tu contraseña por una nueva</h2>
       </CardHeader>
       <CardContent>
         <form onSubmit={handlePass} className="space-y-6">

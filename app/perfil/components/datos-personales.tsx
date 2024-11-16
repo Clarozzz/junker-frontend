@@ -6,15 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useUser } from "@/context/UserContext";
 import React, { useState } from "react";
-import Cookies from 'js-cookie';
 import { z } from "zod";
-import { AlertCircle, Calendar, MapPin, Phone } from "lucide-react";
+import { AlertCircle, Calendar, CircleCheck, MapPin, Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type DropzoneState, useDropzone } from 'react-dropzone';
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { updateUser, uploadAvatarUser } from "@/app/api/usuarios";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { readUser } from "@/app/api/login";
 
 const userSchema = z.object({
     nombre: z.string().min(1, "El nombre es obligatorio"),
@@ -31,6 +31,8 @@ export default function DatosPersonales() {
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
     const [uLoading, setULoading] = useState(false);
+    const [message, setMessage] = useState<string | null>(null);
+
 
     const {
         getRootProps,
@@ -49,28 +51,33 @@ export default function DatosPersonales() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const data = Object.fromEntries(formData.entries());
+        const datos = Object.fromEntries(formData.entries());
 
         try {
             setULoading(true);
+            const res = await readUser()
 
-            let avatar_url = '';
+            if (!res.data.user?.id) {
+                throw new Error("Error actualizando el usuario")
+            }
+
+            let avatarUrl = '';
             if (acceptedFiles.length > 0) {
-                avatar_url = await uploadAvatarUser({ file: acceptedFiles[0] });
+                avatarUrl = await uploadAvatarUser({ file: acceptedFiles[0] });
+            }
+            
+            if (avatarUrl) {
+                datos.avatar_url = avatarUrl
             }
 
-            if (avatar_url) {
-                data.avatar_url = avatar_url;
+            const parsedData = userSchema.parse(datos);
+
+            const response = await updateUser(res.data.user?.id, parsedData);
+
+            if (response){
+                setMessage("Datos actualizados exitosamente!")
+                window.location.reload();
             }
-
-            const parsedData = userSchema.parse(data);
-            const token = Cookies.get('access_token');
-
-            if (!token) throw new Error("No se encontró el token de acceso");
-            if (!userData?.id) throw new Error("No se encontró el usuario");
-
-            await updateUser(userData.id, token, parsedData);
-            window.location.reload();
         } catch (err) {
             if (err instanceof z.ZodError) {
                 const fieldErrors: Record<string, string> = {};
@@ -99,7 +106,8 @@ export default function DatosPersonales() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="text-xl font-semibold">Datos personales</CardTitle>
+                <CardTitle className="text-2xl font-bold">Datos personales</CardTitle>
+                <h2 className="text-gray-500">Actualiza tus datos personales</h2>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -221,6 +229,13 @@ export default function DatosPersonales() {
                         <AlertDescription>
                             {error}
                         </AlertDescription>
+                    </Alert>
+                )}
+                {message && (
+                    <Alert className="mt-4 border-green-500 text-green-600">
+                        <CircleCheck className="h-4 w-4" color='#22c55e' />
+                        <AlertTitle>Hecho</AlertTitle>
+                        <AlertDescription>{message}</AlertDescription>
                     </Alert>
                 )}
             </CardContent>

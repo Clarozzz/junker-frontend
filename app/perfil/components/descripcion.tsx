@@ -1,16 +1,16 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/context/UserContext";
 import { useState } from "react";
 import { z } from "zod";
-import Cookies from "js-cookie";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { updateDescripcion } from "@/app/api/usuarios";
+import { AlertCircle, CircleCheck } from "lucide-react";
+import { getUser, updateDescripcion } from "@/app/api/usuarios";
+import { readUser } from "@/app/api/login";
 
 const descripcionSchema = z.object({
     descripcion: z.string().min(1, "Debes incluir una descricpcion!")
@@ -20,6 +20,8 @@ export default function Descripcion() {
     const [isLoading, setIsLoading] = useState(false)
     const { userData } = useUser();
     const [error, setError] = useState<string | null>(null);
+    const [message, setMessage] = useState<string | null>(null);
+
 
     const handleDescripcion = async (event: React.FocusEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -28,15 +30,22 @@ export default function Descripcion() {
 
         try {
             setIsLoading(true);
+            const res = await readUser()
+
+            if (!res.data.user?.id) {
+                throw new Error("Error actualizando el usuario")
+            }
+
+            const usuario = await getUser(res.data.user.id)
 
             const parsedData = descripcionSchema.parse(data);
-            const token = Cookies.get('access_token');
 
-            if (!token) throw new Error("No se encontró el token de acceso");
-            if (!userData?.id) throw new Error("No se encontró el usuario");
+            const response = await updateDescripcion(usuario.vendedores[0].id, parsedData.descripcion)
 
-            await updateDescripcion(userData.vendedores[0].id, token, parsedData.descripcion)
-
+            if (response) {
+                setMessage("Datos actualizados exitosamente!")
+                window.location.reload();
+            }
         } catch (error) {
             setError(`${error}`)
         } finally {
@@ -47,7 +56,8 @@ export default function Descripcion() {
     return (
         <Card>
             <CardHeader>
-                <h3 className="text-3xl font-semibold">Perfil de vendedor</h3>
+                <CardTitle className="text-2xl font-bold">Describe quien eres</CardTitle>
+                <h2 className="text-gray-500">Escribe algo que agregue valor a tu perfil de vendedor</h2>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleDescripcion} className="space-y-6">
@@ -85,6 +95,13 @@ export default function Descripcion() {
                         <AlertDescription>
                             {error}
                         </AlertDescription>
+                    </Alert>
+                )}
+                {message && (
+                    <Alert className="mt-4 border-green-500 text-green-600">
+                        <CircleCheck className="h-4 w-4" color='#22c55e' />
+                        <AlertTitle>Hecho</AlertTitle>
+                        <AlertDescription>{message}</AlertDescription>
                     </Alert>
                 )}
             </CardContent>
