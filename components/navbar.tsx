@@ -8,7 +8,7 @@ import LogoJunker from "./logo-junker"
 import { usePathname } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { AnimatePresence, motion } from "framer-motion"
-import { signOut } from "@/app/api/login"
+import { signOut } from "@/app/api/server"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },

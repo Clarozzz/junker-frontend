@@ -38,35 +38,35 @@ interface ProductDetailProps {
   vendedor_calificacion: number;
 }
 
-  interface ProductoCreate {
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    estado_producto: string;
-    imagen_url: string[];
-    id_vendedor: string;
-    id_categoria: string;
-    stock: number;
-  }
+interface ProductoCreate {
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  imagen_url: string[];
+  id_vendedor: string;
+  id_categoria: string;
+  stock: number;
+}
 
-  interface Producto extends ProductoCreate {
-    id: string;
-    created_at: string;
-  }
+interface Producto extends ProductoCreate {
+  id: string;
+  created_at: string;
+}
 
-  interface ProductoResponse {
-    message: string;
-  }
+interface ProductoResponse {
+  message: string;
+}
 
-  interface Categoria {
-    id: string;
-    nombre: string;
-  }
+interface Categoria {
+  id: string;
+  nombre: string;
+}
 
-  interface CategoriaError {
-    message: string;
-    status?: number;
-  }
+interface CategoriaError {
+  message: string;
+  status?: number;
+}
 
 interface Usuario {
   id: string;
@@ -78,12 +78,12 @@ interface Usuario {
   avatar_url: string;
   telefono: string;
   email: string;
-  vendedores: { 
-    id: string 
+  vendedores: {
+    id: string
     descripcion: string
   }[];
-  carrito: { 
-    id: string 
+  carrito: {
+    id: string
   }[];
 }
 
@@ -110,4 +110,11 @@ interface UpdatePassword {
   password: string;
   newPassword: string;
   confirmPass: string;
+}
+
+interface ProductosVendedor {
+  id: string;
+  nombre: string;
+  precio: number;
+  imagen: string;
 }

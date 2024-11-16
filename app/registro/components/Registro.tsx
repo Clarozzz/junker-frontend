@@ -4,12 +4,12 @@ import { useState } from 'react';
 import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, CircleCheck, X } from 'lucide-react';
-import { registro } from '@/app/api/registro';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { z } from 'zod';
+import { registro } from '@/app/api/server';
 
 const registroSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio'),

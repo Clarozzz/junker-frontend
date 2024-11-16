@@ -1,4 +1,4 @@
-import { readUser } from "@/app/api/login"
+import { readUser } from "@/app/api/server"
 import Navbar from "./navbar"
 import { getUser } from "@/app/api/usuarios"
 
