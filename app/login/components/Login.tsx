@@ -11,6 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { z } from 'zod';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { signIn } from '@/app/api/server';
+import { useRouter } from 'next/navigation';
 
 const loginSchema = z.object({
   email: z.string().min(1),
@@ -23,6 +24,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,12 +42,16 @@ const Login = () => {
         setError(error)
       }
 
-      if (data) {
-        window.location.href = '/'
+      if (!data) {
+        throw new Error('Correo o contraseña incorrectos')
       }
 
+      router.push('/')
+
     } catch (err) {
-      setError(`Ocurrió un error al intentar iniciar sesión. ${err instanceof Error ? err.message : err}`);
+      if (err) {
+        setError(`Correo o contraseña incorrectos`);
+      }
     } finally {
       setIsLoading(false);
     }
