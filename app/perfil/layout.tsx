@@ -6,7 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Cargando from "@/components/ui/cargando";
 import { useUser } from "@/context/UserContext";
-import { Button } from "@/components/ui/button";
 
 export default function PerfilLayout({
     children,
@@ -44,19 +43,18 @@ export default function PerfilLayout({
                                     {userData?.nombre}
                                 </h2>
                             </div>
-                            <nav className="mt-8 space-y-3">
+                            <nav className="mt-8 space-y-6 flex flex-col">
                                 {links.map((link) => (
-                                    <Button key={link.ruta} asChild variant="link" className="w-full justify-start text-lg font-normal">
-                                        <Link
-                                            href={link.ruta}
-                                            className={`transition-colors ${pathname === link.ruta
-                                                    ? "text-primary underline underline-offset-4"
-                                                    : "text-muted-foreground hover:text-primary hover:underline hover:underline-offset-4"
-                                                }`}
-                                        >
-                                            {link.nombre}
-                                        </Link>
-                                    </Button>
+                                    <Link
+                                        key={link.ruta}
+                                        href={link.ruta}
+                                        className={`transition-colors text-lg px-3 ${pathname === link.ruta
+                                            ? "underline underline-offset-4"
+                                            : "hover:text-black hover:underline hover:underline-offset-4 text-gray-500"
+                                            }`}
+                                    >
+                                        {link.nombre}
+                                    </Link>
                                 ))}
                             </nav>
                         </div>

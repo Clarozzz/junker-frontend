@@ -74,3 +74,14 @@ export async function uploadAvatarUser({ file }: { file: File }) {
         throw error;
     }
 }
+
+export async function getProductosVendedor(id: string) {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/getProductosVendedor/${id}`;
+
+    try {
+        const res = await axios.get(url);
+        return res.data;
+    } catch (error) {
+        throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+}

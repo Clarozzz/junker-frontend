@@ -14,7 +14,7 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { updateUser, uploadAvatarUser } from "@/app/api/usuarios";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { readUser } from "@/app/api/login";
+import { readUser } from "@/app/api/server";
 
 const userSchema = z.object({
     nombre: z.string().min(1, "El nombre es obligatorio"),

@@ -10,7 +10,7 @@ import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CircleCheck } from "lucide-react";
 import { getUser, updateDescripcion } from "@/app/api/usuarios";
-import { readUser } from "@/app/api/login";
+import { readUser } from "@/app/api/server";
 
 const descripcionSchema = z.object({
     descripcion: z.string().min(1, "Debes incluir una descricpcion!")
