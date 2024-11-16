@@ -17,17 +17,23 @@ export default function ProductosMain() {
     precio_max: 10000,
     categoria: null,
     estado: null,
+    searchQuery: "",
   });
 
   const placeholders = [
     "Buscar por categorias",
     "Buscar por nombre",
-    "Esdado del producto",
+    "Estado del producto",
   ];
  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters(prev => ({
+      ...prev,
+      searchQuery: e.target.value
+    }));
     console.log(e.target.value);
   };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submitted");
@@ -52,7 +58,7 @@ export default function ProductosMain() {
     };
   }, []);
 
-  const handleFilterChange = (newFilters: FilterState) => {
+  const handleFilterChange = (newFilters: Omit<FilterState, 'searchQuery'>) => {
     setFilters({
       ...newFilters,
       precio_min: Number(newFilters.precio_min),
@@ -118,6 +124,7 @@ export default function ProductosMain() {
               placeholders={placeholders}
               onChange={handleChange}
               onSubmit={onSubmit}
+              debounce={300}
             />
             </div>
             <div className="flex items-center">
@@ -216,8 +223,8 @@ export default function ProductosMain() {
                   precio_min={filters.precio_min}
                   precio_max={filters.precio_max}
                   estado={filters.estado}
+                  searchQuery={filters.searchQuery}
                 />
-
               </div>
             </div>
           </section>

@@ -14,6 +14,7 @@ export default function ProductosVista({
   precio_min,
   precio_max,
   estado,
+  searchQuery = '',
 }: ProductosVistaProps) {
   const [productos, setProductos] = useState<ProductoVista[]>([]);
   const [productosSeleccion, setproductosSeleccion] =
@@ -24,6 +25,7 @@ export default function ProductosVista({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(8);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [filteredProductos, setFilteredProductos] = useState<ProductoVista[]>([]);
 
   const handleCardClick = (product: ProductoVista) => {
     setproductosSeleccion(product);
@@ -94,6 +96,22 @@ export default function ProductosVista({
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredProductos(productos);
+    } else {
+      const filtered = productos.filter(product => 
+        product.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (product.estado_producto && 
+         product.estado_producto.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (product.categoria && 
+         product.categoria.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+      setFilteredProductos(filtered);
+      setTotalItems(filtered.length);
+    }
+  }, [searchQuery, productos]);
+
   return (
     <div id="contenedor filtro y card" className="flex flex-row">
       {isPending && <Cargando />}
@@ -103,9 +121,9 @@ export default function ProductosVista({
       >
         <section className="py-14 bg-background">
           <div className="container mx-auto">
-            {productos.length > 0 ? (
+            {filteredProductos.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
-                {productos.map((product) => (
+                {filteredProductos.map((product) => (
                   <motion.div
                     key={product.id}
                     onClick={() => handleCardClick(product)}

@@ -109,6 +109,7 @@ interface ProductosVistaProps {
   precio_min: number | null;
   precio_max: number | null;
   estado: string | null;
+  searchQuery?: string;
 }
 
 interface SidebarProductosProps {
@@ -125,6 +126,7 @@ interface FilterState {
   precio_max: number;
   categoria: string | null;
   estado: string | null;
+  searchQuery?: string;
 }
 
 

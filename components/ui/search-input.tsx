@@ -3,6 +3,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useDebouncedCallback } from 'use-debounce'
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 type CanvasData = {
   x: number;
@@ -15,18 +18,35 @@ export function SearchInput({
   placeholders,
   onChange,
   onSubmit,
+  debounce,
 }: {
   placeholders: string[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  debounce?: number;
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams ?? '')
+    params.set('page', '1')
+
+    if (term) {
+      params.set('query', term)
+    } else {
+      params.delete('query')
+    }
+    router.replace(`${pathname}?${params.toString()}`)
+  }, debounce ?? 500)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = useCallback(() => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    }, 5000);
+    }, 3000);
   }, [placeholders.length]);
   
   const handleVisibilityChange = useCallback(() => {
@@ -53,7 +73,7 @@ export function SearchInput({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<CanvasData[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(searchParams?.get('query')?.toString() || "");
   const [animating, setAnimating] = useState(false);
 
   const draw = useCallback(() => {
@@ -169,6 +189,7 @@ export function SearchInput({
     e.preventDefault();
     vanishAndSubmit();
     onSubmit(e);
+    handleSearch(value);
   };
 
   return (
@@ -186,22 +207,29 @@ export function SearchInput({
         )}
         ref={canvasRef}
       />
-      <input
-        onChange={(e) => {
-          if (!animating) {
-            setValue(e.target.value);
-            onChange(e);
-          }
-        }}
-        onKeyDown={handleKeyDown}
-        ref={inputRef}
-        value={value}
-        type="text"
-        className={cn(
-          "w-full relative text-sm sm:text-base z-50 border border-input dark:text-white bg-transparent text-black h-full rounded-2xl focus:outline-none focus:ring-custom-blue pl-4 sm:pl-10 pr-20",
-          animating && "text-transparent dark:text-transparent"
-        )}
-      />
+      <div className="relative w-full h-full">
+        <input
+          onChange={(e) => {
+            if (!animating) {
+              setValue(e.target.value);
+              onChange(e);
+              handleSearch(e.target.value)
+            }
+          }}
+          defaultValue={searchParams?.get('query')?.toString()}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+          value={value}
+          type="text"
+          className={cn(
+            "w-full relative text-sm sm:text-base z-50 border border-input dark:text-white bg-transparent text-black h-full rounded-2xl focus:outline-none focus:ring-custom-blue pl-4 sm:pl-10 pr-20",
+            animating && "text-transparent dark:text-transparent"
+          )}
+        />
+        <MagnifyingGlassIcon 
+          className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900 dark:peer-focus:text-gray-100" 
+        />
+      </div>
 
       <button
         disabled={!value}
@@ -240,7 +268,7 @@ export function SearchInput({
         </motion.svg>
       </button>
 
-      <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
+      <div className="absolute pl-5 lg:pl-0 inset-0 flex items-center rounded-full pointer-events-none">
         <AnimatePresence mode="wait">
           {!value && (
             <motion.p
