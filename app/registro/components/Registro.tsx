@@ -45,14 +45,14 @@ const Registro = () => {
       const parsedData = registroSchema.parse(modifiedData);
 
       // Enviar la solicitud de registro
-      await registro({
+      const res = await registro({
         email: parsedData.email,
         password: parsedData.password,
         nombre: parsedData.nombre,
         apellido: parsedData.apellido,
       });
 
-      setSuccess('Registro exitoso. ¡Bienvenido!');
+      setSuccess(res);
       window.location.href = '/'
     } catch (err) {
       if (err instanceof z.ZodError) {
