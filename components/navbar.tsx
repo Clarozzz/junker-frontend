@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { AnimatePresence, motion } from "framer-motion"
 import { signOut } from "@/app/api/server"
+import { useUser } from "@/context/UserContext"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -17,12 +18,13 @@ const pages = [
   { ruta: "Servicios", href: "/servicios", current: false },
 ]
 
-export default function Navbar({ userData }: { userData: Usuario | null }) {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const pathname = usePathname()
+  const { userData } = useUser()
 
   const isLandingPage = pathname === "/"
   const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated"];
