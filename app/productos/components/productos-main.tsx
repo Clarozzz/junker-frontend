@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { Accordion } from "@/components/ui/accordion";
 import ProductosVista from "./productos-vista";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { Filter } from "lucide-react";
 import Image from "next/image";
 import SidebarProductos from "./sidebar-productos";
 import { SearchInput } from "@/components/ui/search-input";
-
 
 export default function ProductosMain() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,11 +24,11 @@ export default function ProductosMain() {
     "Buscar por nombre",
     "Estado del producto",
   ];
- 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      searchQuery: e.target.value
+      searchQuery: e.target.value,
     }));
     console.log(e.target.value);
   };
@@ -98,7 +97,7 @@ export default function ProductosMain() {
                 <form className="mt-4 border-t border-gray-200">
                   <h3 className="sr-only">Categorías</h3>
                   <Accordion type="multiple" className="w-full py-6 px-4">
-                    <SidebarProductos onFilterChange={handleFilterChange}/>
+                    <SidebarProductos onFilterChange={handleFilterChange} />
                   </Accordion>
                 </form>
               </div>
@@ -120,12 +119,14 @@ export default function ProductosMain() {
           </div>
           <div className="flex items-baseline justify-between border-b lg:pl-80 border-gray-200 pb-6 pt-6 mr-10 sm:mr-10">
             <div>
-            <SearchInput
-              placeholders={placeholders}
-              onChange={handleChange}
-              onSubmit={onSubmit}
-              debounce={300}
-            />
+              <Suspense fallback={<div>Cargando búsqueda...</div>}>
+                <SearchInput
+                  placeholders={placeholders}
+                  onChange={handleChange}
+                  onSubmit={onSubmit}
+                  debounce={300}
+                />
+              </Suspense>
             </div>
             <div className="flex items-center">
               <div className="relative inline-block text-left" ref={menuRef}>
@@ -217,9 +218,9 @@ export default function ProductosMain() {
               </div>
               <div className="lg:w-5/6">
                 {/* <ProductosVista categoria={filters.categoria} /> */}
-             
-                <ProductosVista 
-                  categoria={filters.categoria} 
+
+                <ProductosVista
+                  categoria={filters.categoria}
                   precio_min={filters.precio_min}
                   precio_max={filters.precio_max}
                   estado={filters.estado}
