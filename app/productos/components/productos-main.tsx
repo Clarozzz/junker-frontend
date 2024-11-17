@@ -14,7 +14,7 @@ export default function ProductosMain() {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     precio_min: 0,
-    precio_max: 10000,
+    precio_max: 100000,
     categoria: null,
     estado: null,
     searchQuery: "",
