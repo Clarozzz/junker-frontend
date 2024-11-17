@@ -72,7 +72,7 @@ export async function signIn(dataForm: { email: string; password: string; }) {
     throw new Error(`${error}`)
   }
 
-  redirect('/')
+  return true
 }
 
 export async function signOut() {
