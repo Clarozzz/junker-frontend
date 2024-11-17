@@ -9,7 +9,6 @@ export default function PagePublicar() {
     <> 
       <ToastProvider/>  
       <PublicarClient />
-      {/* <Nuevo/> */}
       <Footer />
     </>
   )

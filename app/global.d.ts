@@ -137,7 +137,6 @@ interface UpdatePassword {
 interface ProductosVendedor {
   id: string;
   nombre: string;
-  precio: number;
   imagen: string;
 }
 
