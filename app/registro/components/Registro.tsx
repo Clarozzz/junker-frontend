@@ -52,8 +52,10 @@ const Registro = () => {
         apellido: parsedData.apellido,
       });
 
-      setSuccess(res);
-      window.location.href = '/'
+      if (res) {
+        setSuccess("Registro exitoso!")
+        window.location.href = '/'
+      }
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
