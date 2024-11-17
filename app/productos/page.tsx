@@ -1,12 +1,12 @@
-import React from 'react'
-import Footer from '@/components/footer'
-import ProductosMain from './components/productos-main'
+import React, { Suspense } from "react";
+import Footer from "@/components/footer";
+import ProductosMain from "./components/productos-main";
 
 export default function Productos() {
   return (
-    <>
-    <ProductosMain/>
-    <Footer/>
-    </>
-  )
+    <Suspense fallback={<div>Cargando...</div>}>
+      <ProductosMain />
+      <Footer />
+    </Suspense>
+  );
 }
