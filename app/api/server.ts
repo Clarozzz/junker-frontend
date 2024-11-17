@@ -2,7 +2,6 @@
 
 import { createClient } from "@/utils/supabase/server"
 import { registerUser } from "./usuarios"
-import { redirect } from "next/navigation"
 
 export const updateEmail = async (newEmail: string) => {
   const supabase = await createClient()
@@ -117,7 +116,7 @@ export const registro = async (userData: RegisterData) => {
         apellido: userData.apellido,
         email: userData.email
       });
-      redirect('/')
+      return true
     } catch (err) {
       throw new Error(`${err}`)
     }
