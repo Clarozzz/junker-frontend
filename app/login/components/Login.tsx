@@ -5,12 +5,12 @@ import { useState } from 'react';
 import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, X } from "lucide-react";
-import { signIn } from '@/app/api/login';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { z } from 'zod';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { signIn } from '@/app/api/server';
 
 const loginSchema = z.object({
   email: z.string().min(1),
@@ -28,21 +28,17 @@ const Login = () => {
     event.preventDefault();
     setError(null);
     const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const datos = Object.fromEntries(formData.entries());
 
     try {
       setIsLoading(true);
-      const parsedData = loginSchema.parse(data);
-
-      const error = await signIn(parsedData);
-
-      if (error) {
-        setError(error);
-      } else {
-        window.location.href = '/'
-      }
+      const parsedData = loginSchema.parse(datos);
+      
+      await signIn(parsedData);
     } catch (err) {
-      setError(`Ocurrió un error al intentar iniciar sesión. ${err instanceof Error ? err.message : err}`);
+      if (err) {
+        setError(`Correo o contraseña incorrectos`);
+      }
     } finally {
       setIsLoading(false);
     }

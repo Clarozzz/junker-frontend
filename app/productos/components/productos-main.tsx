@@ -81,7 +81,7 @@ export default function ProductosMain() {
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-12 md:px-12 lg:px-12 xl:px-12 mt-4">
         <div className="relative w-full h-[200px] md:h-[300px] xl:h-[400px]">
           <Image
-            src="/images/landing24.webp"
+            src="/images/landing7.webp"
             alt="foto"
             fill
             className="object-cover rounded-2xl"

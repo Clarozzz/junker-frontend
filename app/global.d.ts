@@ -26,6 +26,7 @@ interface ProductImage {
 }
 
 interface ProductDetailProps {
+  id_producto: string;
   titulo: string;
   precio: number;
   descripcion: string;
@@ -38,35 +39,35 @@ interface ProductDetailProps {
   vendedor_calificacion: number;
 }
 
-  interface ProductoCreate {
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    estado_producto: string;
-    imagen_url: string[];
-    id_vendedor: string;
-    id_categoria: string;
-    stock: number;
-  }
+interface ProductoCreate {
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  imagen_url: string[];
+  id_vendedor: string;
+  id_categoria: string;
+  stock: number;
+}
 
-  interface Producto extends ProductoCreate {
-    id: string;
-    created_at: string;
-  }
+interface Producto extends ProductoCreate {
+  id: string;
+  created_at: string;
+}
 
-  interface ProductoResponse {
-    message: string;
-  }
+interface ProductoResponse {
+  message: string;
+}
 
-  interface Categoria {
-    id: string;
-    nombre: string;
-  }
+interface Categoria {
+  id: string;
+  nombre: string;
+}
 
-  interface CategoriaError {
-    message: string;
-    status?: number;
-  }
+interface CategoriaError {
+  message: string;
+  status?: number;
+}
 
 interface Usuario {
   id: string;
@@ -78,12 +79,12 @@ interface Usuario {
   avatar_url: string;
   telefono: string;
   email: string;
-  vendedores: { 
-    id: string 
+  vendedores: {
+    id: string
     descripcion: string
   }[];
-  carrito: { 
-    id: string 
+  carrito: {
+    id: string
   }[];
 }
 
@@ -151,3 +152,44 @@ interface UpdatePassword {
   confirmPass: string;
 }
 
+interface ProductosVendedor {
+  id: string;
+  nombre: string;
+  imagen: string;
+}
+
+
+
+interface ProductoXCarrito {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  stock: number;
+  productos_imagenes: { url: string }[];
+  vendedores: {
+    calificacion: number;
+    usuarios: {
+      nombre: string;
+      apellido: string;
+    };
+  };
+}
+
+interface Carrito {
+  id: string; 
+  productos: ProductoXCarrito; 
+  cantidad: number;
+  id_carrito: string;
+}
+
+interface CarritoCreate {
+  id_carrito: string;
+  id_producto: string;
+  cantidad: number;
+}
+
+interface CarritoResponse {
+  message: string;
+}
