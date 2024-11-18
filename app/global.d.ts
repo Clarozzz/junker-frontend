@@ -161,7 +161,7 @@ interface ProductosVendedor {
 interface UserAvatarName {
   nombre: string;
   avatar_url: string;
-
+}
 interface ProductoXCarrito {
   id: string;
   nombre: string;
