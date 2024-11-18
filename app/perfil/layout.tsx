@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { readUser } from "../api/server";
 import { getUser } from "../api/usuarios";
-import Cargando from "@/components/ui/cargando";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PerfilLayout({
     children,
@@ -50,8 +50,6 @@ export default function PerfilLayout({
     const currentLink = links.find((link) => link.ruta === pathname);
     const titulo = currentLink ? currentLink.titulo : 'Página no encontrada';
 
-    if (isLoading) return <Cargando />
-
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
             <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-8">
@@ -60,13 +58,20 @@ export default function PerfilLayout({
                     <div className="lg:w-1/4 xl:w-1/5">
                         <div className="bg-white px-6 py-8 rounded-xl shadow-md">
                             <div className="flex flex-col items-center">
-                                <Avatar className="w-24 h-24">
-                                    <AvatarImage src={userData?.avatar_url} className="object-cover" />
-                                    <AvatarFallback>{userData?.nombre?.slice(0, 2).toUpperCase()}</AvatarFallback>
-                                </Avatar>
-                                <h2 className="mt-4 text-xl font-bold text-center">
-                                    {userData?.nombre}
-                                </h2>
+                                {isLoading ?
+                                    <>
+                                        <Skeleton className="w-24 h-24 rounded-full" />
+                                        <Skeleton className="w-32 h-8 rounded-lg mt-4" />
+                                    </> :
+                                    <>
+                                        <Avatar className="w-24 h-24">
+                                            <AvatarImage src={userData?.avatar_url} className="object-cover" />
+                                            <AvatarFallback>{userData?.nombre?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                                        </Avatar>
+                                        <h2 className="mt-4 text-xl font-bold text-center">
+                                            {userData?.nombre}
+                                        </h2>
+                                    </>}
                             </div>
                             <nav className="mt-8 space-y-6 flex flex-col">
                                 {links.map((link) => (

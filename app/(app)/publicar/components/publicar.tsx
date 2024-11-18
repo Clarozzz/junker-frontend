@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { productosService } from "@/app/api/productos"
 import { getCategorias } from "@/app/api/categorias"
 import { useToast } from "@/components/ui/toast"
@@ -162,9 +162,13 @@ export default function PublicarClient({id}:{id:string | null}) {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl montserrat font-bold mb-8">Publicar Nuevo Producto</h1>
-        <Card className="overflow-hidden shadow-lg">
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Información del producto */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Información del producto</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="producto" className="text-sm font-medium text-gray-700 flex items-center">
                   <Tag className="w-4 h-4 mr-2" />
@@ -195,52 +199,65 @@ export default function PublicarClient({id}:{id:string | null}) {
                   <p className="mt-1 text-sm text-red-600">{errors.descripcion.message}</p>
                 )}
               </div>
+            </CardContent>
+          </Card>
 
-              <div>
-                <Label className="text-sm font-medium text-gray-700 flex items-center mb-2">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Imágenes del Producto
-                </Label>
-                <div
-                  {...getRootProps()}
-                  className={`mt-2 flex justify-center cursor-pointer hover:bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 px-6 py-10 transition-colors ${isDragActive ? 'border-blue-400 bg-blue-50' : ''
-                    }`}
-                >
-                  <div className="text-center">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                    <p className="mt-2 text-sm text-gray-600">
-                      <span className="font-semibold text-blue-600 hover:text-blue-500 cursor-pointer">Sube un archivo</span> o arrastra y suelta
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500">PNG, JPG hasta 10MB (máximo 4 imágenes)</p>
-                    <input {...getInputProps()} />
-                  </div>
+          {/* Imágenes */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Imágenes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Label className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                <Upload className="w-4 h-4 mr-2" />
+                Imágenes del Producto
+              </Label>
+              <div
+                {...getRootProps()}
+                className={`mt-2 flex justify-center cursor-pointer hover:bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 px-6 py-10 transition-colors ${isDragActive ? 'border-blue-400 bg-blue-50' : ''
+                  }`}
+              >
+                <div className="text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-600">
+                    <span className="font-semibold text-blue-600 hover:text-blue-500 cursor-pointer">Sube un archivo</span> o arrastra y suelta
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">PNG, JPG hasta 10MB (máximo 4 imágenes)</p>
+                  <input {...getInputProps()} />
                 </div>
-
-                <div className="flex justify-center mt-4">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {imageUrls.map((url, index) => (
-                      <div key={url} className="relative h-52 aspect-square">
-                        <Image
-                          src={url}
-                          alt={`Preview ${index + 1}`}
-                          fill
-                          className=" object-cover rounded-lg shadow-md"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute top-1 right-1 bg-rose-600 rounded-full p-1 shadow-md"
-                          aria-label="Remove image"
-                        >
-                          <X className="h-4 w-4 text-white" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
               </div>
 
+              <div className="flex justify-center mt-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {imageUrls.map((url, index) => (
+                    <div key={url} className="relative h-52 aspect-square">
+                      <Image
+                        src={url}
+                        alt={`Preview ${index + 1}`}
+                        fill
+                        className=" object-cover rounded-lg shadow-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute top-1 right-1 bg-rose-600 rounded-full p-1 shadow-md"
+                        aria-label="Remove image"
+                      >
+                        <X className="h-4 w-4 text-white" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Detalles del producto */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Detalles del producto</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="precio" className="text-sm font-medium text-gray-700 flex items-center">
@@ -251,6 +268,7 @@ export default function PublicarClient({id}:{id:string | null}) {
                     id="precio"
                     type="number"
                     placeholder="0.00"
+                    {...register('precio', { valueAsNumber: true })}
                     className={`mt-1 ${errors.precio ? 'border-red-500' : ''}`}
                   />
                   {errors.precio && (
@@ -266,6 +284,7 @@ export default function PublicarClient({id}:{id:string | null}) {
                     id="stock"
                     type="number"
                     placeholder="0"
+                    {...register('stock', { valueAsNumber: true })}
                     className={`mt-1 ${errors.stock ? 'border-red-500' : ''}`}
                   />
                   {errors.stock && (
@@ -326,27 +345,27 @@ export default function PublicarClient({id}:{id:string | null}) {
                   <p className="mt-1 text-sm text-red-600">{errors.id_categoria.message}</p>
                 )}
               </div>
+            </CardContent>
+          </Card>
 
-              <Button
-                type="submit"
-                disabled={isLoading || !isValid || uploadedImages.length === 0}
-                className="w-full bg-green-600 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-              >
-                {isLoading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Publicando...
-                  </>
-                ) : (
-                  "Publicar Producto"
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+          <Button
+            type="submit"
+            disabled={isLoading || !isValid || uploadedImages.length === 0}
+            className="h-14 bg-green-600 hover:bg-green-600 text-white text-xl font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+          >
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Publicando...
+              </>
+            ) : (
+              "Publicar Producto"
+            )}
+          </Button>
+        </form>
       </div>
     </div>
   )
