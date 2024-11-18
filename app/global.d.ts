@@ -107,25 +107,42 @@ interface ProductoVista {
 
 interface ProductosVistaProps {
   categoria: string | null;
-  precio_min: number | null;
-  precio_max: number | null;
+  precio_min: number ;
+  precio_max: number ;
   estado: string | null;
+  searchQuery?: string;
+  ordenPrecio?: boolean | null;
 }
 
+
+
+// interface SidebarProductosProps {
+//   onFilterChange: (filters: { 
+//     precio_min: number; 
+//     precio_max: number; 
+//     categoria: string; 
+//     estado: string; 
+//   }) => void;
+// }
+
 interface SidebarProductosProps {
-  onFilterChange: (filters: { 
-    precio_min: number; 
-    precio_max: number; 
-    categoria: string; 
-    estado: string; 
-  }) => void;
+  onFilterChange: (filters: Partial<{
+    precio_min: number;
+    precio_max: number;
+    categoria: string;
+    estado: string;
+    searchQuery: string;
+  }>) => void;
 }
+
 
 interface FilterState {
   precio_min: number;
-  precio_max: number;
+  precio_max: number ;
   categoria: string | null;
   estado: string | null;
+  searchQuery?: string;
+  ordenPrecio?: boolean | null;
 }
 
 
