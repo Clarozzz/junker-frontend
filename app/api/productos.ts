@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // * primera version de filtrado
-export const getProductos = async (page: number, limit: number, categoria: string | null = null, precio_min: number | null = null, precio_max: number | null = null, estado: string | null = null): Promise<ProductosResponse> => {
+export const getProductos = async (page: number, limit: number, categoria: string | null = null, precio_min: number | null = null, precio_max: number | null = null, estado: string | null = null, search_query: string, sort_asc: boolean | null = null ): Promise<ProductosResponse> => {
   try {
     const response = await axios.get<ProductosResponse>(`${process.env.NEXT_PUBLIC_API_URL}/productos`, {
       params: {
@@ -10,7 +10,9 @@ export const getProductos = async (page: number, limit: number, categoria: strin
         categoria,
         precio_min,
         precio_max,
-        estado
+        estado, 
+        search_query,
+        sort_asc
       },
     });
     return response.data;

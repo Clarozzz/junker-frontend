@@ -110,6 +110,7 @@ interface ProductosVistaProps {
   precio_max: number | null;
   estado: string | null;
   searchQuery?: string;
+  ordenPrecio?: boolean | null;
 }
 
 interface SidebarProductosProps {
@@ -127,6 +128,7 @@ interface FilterState {
   categoria: string | null;
   estado: string | null;
   searchQuery?: string;
+  ordenPrecio?: boolean | null;
 }
 
 

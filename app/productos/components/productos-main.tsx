@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { Accordion } from "@/components/ui/accordion";
@@ -13,10 +14,11 @@ export default function ProductosMain() {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     precio_min: 0,
-    precio_max: 100000,
+    precio_max: 0,
     categoria: null,
     estado: null,
     searchQuery: "",
+    ordenPrecio: null as boolean | null, // Nuevo estado para el orden
   });
 
   const placeholders = [
@@ -63,6 +65,13 @@ export default function ProductosMain() {
       precio_min: Number(newFilters.precio_min),
       precio_max: Number(newFilters.precio_max),
     }); // Actualiza el estado con los nuevos filtros
+  };
+
+  const handleSortChange = (sortOption: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      ordenPrecio: sortOption === "lowToHigh" ? true : sortOption === "highToLow" ? false : null,
+    }));
   };
 
   return (
@@ -161,25 +170,9 @@ export default function ProductosMain() {
                     <div className="py-1" role="none">
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm font-medium text-gray-900"
-                        role="menuitem"
-                        id="menu-item-0"
-                      >
-                        Nuevo
-                      </a>
-                      <a
-                        href="#"
                         className="block px-4 py-2 text-sm text-gray-500"
                         role="menuitem"
-                        id="menu-item-1"
-                      >
-                        Usado
-                      </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-500"
-                        role="menuitem"
-                        id="menu-item-2"
+                        onClick={() => handleSortChange("lowToHigh")}
                       >
                         Precio: más bajo primero
                       </a>
@@ -187,7 +180,7 @@ export default function ProductosMain() {
                         href="#"
                         className="block px-4 py-2 text-sm text-gray-500"
                         role="menuitem"
-                        id="menu-item-3"
+                        onClick={() => handleSortChange("highToLow")}
                       >
                         Precio: más alto primero
                       </a>
@@ -217,14 +210,13 @@ export default function ProductosMain() {
                 </form>
               </div>
               <div className="lg:w-5/6">
-                {/* <ProductosVista categoria={filters.categoria} /> */}
-
                 <ProductosVista
                   categoria={filters.categoria}
                   precio_min={filters.precio_min}
                   precio_max={filters.precio_max}
                   estado={filters.estado}
                   searchQuery={filters.searchQuery}
+                  ordenPrecio={filters.ordenPrecio} 
                 />
               </div>
             </div>

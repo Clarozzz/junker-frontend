@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 
 const MIN_PRICE = 0;
-const MAX_PRICE = 10000;
+const MAX_PRICE = 1000000000;
 
 interface FilterState {
   precio_min: number | null;

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -15,16 +16,18 @@ export default function ProductosVista({
   precio_max,
   estado,
   searchQuery = '',
+  ordenPrecio 
 }: ProductosVistaProps) {
   const [productos, setProductos] = useState<ProductoVista[]>([]);
-  const [productosSeleccion, setproductosSeleccion] =
-    useState<ProductoVista | null>(null);
+  const [productosSeleccion, setproductosSeleccion] = useState<ProductoVista | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(8);
   const [totalItems, setTotalItems] = useState<number>(0);
+
+  // Controla los productos mostrados (buscados o no)
   const [filteredProductos, setFilteredProductos] = useState<ProductoVista[]>([]);
 
   const handleCardClick = (product: ProductoVista) => {
@@ -36,20 +39,13 @@ export default function ProductosVista({
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    fetchProductos(
-      page,
-      itemsPerPage,
-      categoria,
-      precio_min,
-      precio_max,
-      estado
-    );
+    fetchProductos(page, itemsPerPage, categoria, precio_min, precio_max, estado, searchQuery, ordenPrecio);
   };
 
   const handleItemsPerPageChange = (value: number) => {
     setItemsPerPage(value);
     setCurrentPage(1);
-    fetchProductos(1, value, categoria, precio_min, precio_max, estado);
+    fetchProductos(1, value, categoria, precio_min, precio_max, estado, searchQuery, ordenPrecio);
   };
 
   const fetchProductos = async (
@@ -58,7 +54,9 @@ export default function ProductosVista({
     categoria: string | null,
     precio_min: number | null,
     precio_max: number | null,
-    estado: string | null
+    estado: string | null,
+    search_query: string | null = '',
+    sort_asc: boolean | null = null
   ) => {
     try {
       const data: ProductosResponse = await getProductos(
@@ -67,16 +65,17 @@ export default function ProductosVista({
         categoria,
         precio_min,
         precio_max,
-        estado
+        estado,
+        search_query || '',
+        sort_asc
       );
 
       if (data && data.items) {
         setProductos(data.items);
         setTotalItems(data.total);
+        setFilteredProductos(data.items); // Inicializa con productos paginados
       } else {
-        console.error(
-          "No se recibieron productos o hay un error en la estructura de datos."
-        );
+        console.error("No se recibieron productos o hay un error en la estructura de datos.");
       }
     } catch (error) {
       console.error("Error al obtener los productos:", error);
@@ -84,33 +83,33 @@ export default function ProductosVista({
   };
 
   useEffect(() => {
-    fetchProductos(
-      currentPage,
-      itemsPerPage,
-      categoria,
-      precio_min,
-      precio_max,
-      estado
-    );
-  }, [currentPage, itemsPerPage, categoria, precio_min, precio_max, estado]);
+    fetchProductos(currentPage, itemsPerPage, categoria, precio_min, precio_max, estado, searchQuery, ordenPrecio);
+  }, [currentPage, itemsPerPage, categoria, precio_min, precio_max, estado, searchQuery, ordenPrecio]);
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  useEffect(() => {
+    // Reinicia a la página 1 y actualiza los productos cuando cambian los filtros o la búsqueda
+    setCurrentPage(1);
+    fetchProductos(1, itemsPerPage, categoria, precio_min, precio_max, estado, searchQuery, ordenPrecio);
+  }, [categoria, precio_min, precio_max, estado, searchQuery, itemsPerPage, ordenPrecio]);
+  
 
+  // Aplica búsqueda localmente sobre los productos ya cargados
   useEffect(() => {
     if (!searchQuery) {
       setFilteredProductos(productos);
     } else {
-      const filtered = productos.filter(product => 
+      const filtered = productos.filter(product =>
         product.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.estado_producto && 
-         product.estado_producto.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (product.categoria && 
-         product.categoria.toLowerCase().includes(searchQuery.toLowerCase()))
+        (product.estado_producto &&
+          product.estado_producto.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (product.categoria &&
+          product.categoria.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       setFilteredProductos(filtered);
-      setTotalItems(filtered.length);
     }
   }, [searchQuery, productos]);
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div id="contenedor filtro y card" className="flex flex-row">
@@ -132,7 +131,7 @@ export default function ProductosVista({
                     <Card>
                       <CardContent className="p-4">
                         <Image
-                          src={product.imagen_url || "/default-image.jpg"} // Usar imagen predeterminada si no hay URL
+                          src={product.imagen_url || "/default-image.jpg"}
                           alt={product.nombre}
                           width={400}
                           height={400}
@@ -179,21 +178,19 @@ export default function ProductosVista({
                   Anterior
                 </Button>
               )}
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <Button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={`px-3 py-2 leading-tight border border-gray-300 ${
-                      currentPage === page
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                    }`}
-                  >
-                    {page}
-                  </Button>
-                )
-              )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-3 py-2 leading-tight border border-gray-300 ${
+                    currentPage === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  }`}
+                >
+                  {page}
+                </Button>
+              ))}
               {currentPage < totalPages && (
                 <Button
                   onClick={() => handlePageChange(currentPage + 1)}
@@ -202,13 +199,13 @@ export default function ProductosVista({
                   Siguiente
                 </Button>
               )}
-
-              {/* Selector de cantidad de elementos por página */}
-              <div className="mb-4 px-6 flex justify-end items-center">
-                <label htmlFor="items-per-page" className="mr-2">
+            </div>
+             {/* Selector de cantidad de elementos por página */}
+/             <div className="mb-4 px-6 flex justify-end items-center">
+               <label htmlFor="items-per-page" className="mr-2">
                   Elementos por página:
-                </label>
-                <select
+               </label>
+               <select
                   id="items-per-page"
                   value={itemsPerPage}
                   onChange={(e) =>
@@ -222,7 +219,6 @@ export default function ProductosVista({
                   <option value={16}>16</option>
                 </select>
               </div>
-            </div>
           </div>
         </section>
       </div>
