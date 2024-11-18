@@ -31,7 +31,7 @@ export default function Component() {
 
     return (
         <div className="space-y-8">
-            <InfoCuenta email={userData?.email} />
+            <InfoCuenta email={userData?.email || ''} />
             <DatosPersonales userData={userData} />
         </div>
     );

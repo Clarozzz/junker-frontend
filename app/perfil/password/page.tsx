@@ -31,7 +31,7 @@ export default function Password() {
   
   return (
     <div className="space-y-8">
-      <PassChange id={userData?.id ?? ''} />
+      <PassChange id={userData?.id || null} />
       <DangerZone />
     </div>
   )

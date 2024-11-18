@@ -19,7 +19,7 @@ const emailSchema = z.object({
     path: ["emailConfirm"]
 });
 
-export default function InfoCuenta({ email }: { email: string | undefined }) {
+export default function InfoCuenta({ email }: { email: string }) {
     const [emailErrors, setEmailErrors] = useState<Record<string, string>>({});
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false)

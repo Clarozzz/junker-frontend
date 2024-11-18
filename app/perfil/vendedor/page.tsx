@@ -32,7 +32,7 @@ export default function Vendedor() {
   return (
     <div className='space-y-8'>
       <Descripcion descripcion={userData?.vendedores[0].descripcion || ''} />
-      <ProductosVendedor />
+      <ProductosVendedor id={userData?.vendedores[0].id || null} />
     </div>
   )
 }

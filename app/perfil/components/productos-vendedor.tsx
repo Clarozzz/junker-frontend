@@ -2,26 +2,24 @@ import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { getProductosVendedor } from "@/app/api/usuarios"
-import { useUser } from "@/context/UserContext"
 import { Button } from "@/components/ui/button"
 import { AlertCircle } from 'lucide-react'
 import Link from "next/link"
 
-export default function ProductosVendedor() {
-  const { userData } = useUser()
+export default function ProductosVendedor({id}:{id: string | null}) {
   const [products, setProducts] = useState<ProductosVendedor[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!userData?.vendedores?.[0]?.id) {
+      if (!id) {
         console.error("No se encontró el ID del vendedor.");
         setLoading(false);
         return;
       }
 
       try {
-        const fetchedProducts = await getProductosVendedor(userData.vendedores[0].id);
+        const fetchedProducts = await getProductosVendedor(id);
         setProducts(fetchedProducts);
       } catch (error) {
         console.error(error);
@@ -31,7 +29,7 @@ export default function ProductosVendedor() {
     };
 
     fetchProducts();
-  }, [userData]);
+  }, [id]);
 
   return (
     <Card>
