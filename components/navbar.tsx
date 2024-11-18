@@ -17,7 +17,7 @@ const pages = [
   { ruta: "Servicios", href: "/servicios", current: false },
 ]
 
-export default function Navbar({ userData }: { userData: Usuario | null }) {
+export default function Navbar({ userData }: { userData: {nombre:string, avatar_url:string} | null }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
