@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import Nav from "@/components/nav";
+// import Nav from "@/components/nav";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable} antialiased`}>
       <body>
-        <Nav />
+        {/* <Nav /> */}
         {children}
       </body>
     </html>
