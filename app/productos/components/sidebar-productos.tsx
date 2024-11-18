@@ -12,20 +12,23 @@ const MIN_PRICE = 0;
 const MAX_PRICE = 1000000000;
 
 interface FilterState {
-  precio_min: number | null;
-  precio_max: number | null;
+  precio_min: number ;
+  precio_max: number ;
   categoria: string | null;
   estado: string | null;
 }
 
+// ! :) Este componente es un sidebar que permite filtrar productos por precio, categoría y estado.
 interface SidebarProductosProps {
   onFilterChange: (filters: FilterState) => void;
 }
 
+
+
 export default function SidebarProductos({ onFilterChange }: SidebarProductosProps) {
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({
-    precio_min: null,
-    precio_max: null,
+    precio_min: 0,
+    precio_max: 0,
     categoria: null,
     estado: null,
   });
@@ -66,8 +69,8 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
   const handleClearFilters = () => {
     setPriceError(null); // Limpiar mensaje de error al vaciar los filtros
     updateFilters({
-      precio_min: null,
-      precio_max: null,
+      precio_min: 0,
+      precio_max: 0,
       categoria: null,
       estado: null,
     });

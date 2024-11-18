@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { Accordion } from "@/components/ui/accordion";
@@ -17,8 +16,8 @@ export default function ProductosMain() {
     precio_max: 0,
     categoria: null,
     estado: null,
-    searchQuery: "",
-    ordenPrecio: null as boolean | null, // Nuevo estado para el orden
+    searchQuery: '',
+    ordenPrecio: null, // Nuevo estado para el orden
   });
 
   const placeholders = [
@@ -26,6 +25,7 @@ export default function ProductosMain() {
     "Buscar por nombre",
     "Estado del producto",
   ];
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prev) => ({
@@ -38,7 +38,7 @@ export default function ProductosMain() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submitted");
-  };
+  };  
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -67,6 +67,8 @@ export default function ProductosMain() {
     }); // Actualiza el estado con los nuevos filtros
   };
 
+
+ 
   const handleSortChange = (sortOption: string) => {
     setFilters((prev) => ({
       ...prev,
@@ -106,6 +108,7 @@ export default function ProductosMain() {
                 <form className="mt-4 border-t border-gray-200">
                   <h3 className="sr-only">Categorías</h3>
                   <Accordion type="multiple" className="w-full py-6 px-4">
+
                     <SidebarProductos onFilterChange={handleFilterChange} />
                   </Accordion>
                 </form>
