@@ -1,12 +1,25 @@
-'use client'
+"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Image from "next/image"
+import Image from "next/image";
+import { carritoService } from "@/app/api/carritos";
+import { useToast } from "@/components/ui/toast";
+import { Lens } from "@/components/ui/lens";
+import { motion } from "framer-motion";
+import { getUser } from "@/app/api/usuarios";
+import { readUser } from "@/app/api/server";
+
+// const defaultImage = {
+//   id: 'default',
+//   url: '/api/placeholder/400/400',
+//   alt: 'Product image'
+// };
 
 export default function DetalleProducto({
+  id_producto,
   titulo,
   precio,
   descripcion,
@@ -20,20 +33,90 @@ export default function DetalleProducto({
 }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(imagenes[0]);
   const [isWishlist, setIsWishlist] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showToast } = useToast();
+  const [hovering, setHovering] = useState(false);
+    const [userData, setUserData] = useState<Usuario | null>(null);
+  
+    useEffect(() => {
+      const loadUserData = async () => {
+        try {
+          const { data: { user } } = await readUser()
+          if (!user) {
+            throw new Error("Error al obtener el usuario");
+          }
+  
+          const usuario = await getUser(user.id)
+          if (usuario) {
+            setUserData(usuario)
+          }
+        } catch {
+          setUserData(null);
+        }
+      };
+  
+      loadUserData();
+    }, []);
+
+
+  const handleAgregarCarrito = async () => {
+    if (!userData?.id) {
+      showToast({
+        title: "Acceso Denegado",
+        description: "Debes iniciar sesión para agregar productos al carrito",
+        variant: "error",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const carritoData = {
+        id_carrito: "e0273ae4-3fab-4653-a616-5d2190d7d05d",
+        id_producto: id_producto,
+        cantidad: 1,
+      };
+
+      await carritoService.agregarCarrito(carritoData);
+      showToast({
+        title: "¡Éxito!",
+        description: "Producto agregado al carrito correctamente",
+        variant: "success",
+      });
+    } catch (error) {
+      showToast({
+        title: "Error",
+        description: "No se pudo agregar el producto al carrito",
+        variant: "error",
+      });
+      console.error("Error al agregar al carrito:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Seccionde las imagenes */}
         <div className="space-y-4">
-          <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-            <Image
-              src={selectedImage.url}
-              alt={selectedImage.alt}
-              width={2000}
-              height={2000}
-              className="h-full w-full object-cover object-center"
-            />
+          <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 relative z-10">
+            <Lens hovering={hovering} setHovering={setHovering}>
+              <Image
+                src={selectedImage.url}
+                alt={selectedImage.alt}
+                width={1500}
+                height={1500}
+                className="h-full w-full object-cover object-center"
+              />
+            </Lens>
+            <motion.div
+            animate={{
+              filter: hovering ? "blur(2px)" : "blur(0px)",
+            }}
+            className="py-4 relative z-20"
+          >
+          </motion.div>
           </div>
           <div className="grid grid-cols-4 gap-4">
             {imagenes.map((image) => (
@@ -49,8 +132,8 @@ export default function DetalleProducto({
                 <Image
                   src={image.url}
                   alt={image.alt}
-                  width={300}
-                  height={300}
+                  width={500}
+                  height={500}
                   className="h-full w-full object-cover object-center"
                 />
               </button>
@@ -83,11 +166,37 @@ export default function DetalleProducto({
 
           <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
             <Button
-              
-              className="flex-1 bg-custom-blue text-white hover:bg-blue-900 space-x-2"
+              type="submit"
+              onClick={handleAgregarCarrito}
+              disabled={isLoading}
+              className="flex-1 bg-custom-blue text-white hover:bg-blue-900 space-x-2 transition-all duration-200"
             >
-              <ShoppingCart className="h-5 w-5" />
-              <span>Agregar al carrito</span>
+              {" "}
+              <div className="pr-2">
+                <ShoppingCart className="h-5 w-5" />
+              </div>
+              {/* <span>{isLoading ? "Agregando..." : "Agregar al carrito"}</span> */}
+              {isLoading ? (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="lucide lucide-loader-circle animate-spin mr-2"
+                  >
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                  </svg>
+                  Agregando...
+                </>
+              ) : (
+                "Agregar al carrito"
+              )}
             </Button>
             <Button
               variant="outline"
@@ -95,14 +204,19 @@ export default function DetalleProducto({
               onClick={() => setIsWishlist(!isWishlist)}
             >
               <Heart
-                className={cn("h-5 w-5", isWishlist && "fill-current text-red-500")}
+                className={cn(
+                  "h-5 w-5",
+                  isWishlist && "fill-current text-red-500"
+                )}
               />
               <span>Agregar a favoritos</span>
             </Button>
           </div>
 
           <div className="mt-8 border-t border-gray-200 pt-8">
-            <h3 className="text-sm font-medium text-gray-900">Detalles del Vendedor</h3>
+            <h3 className="text-sm font-medium text-gray-900">
+              Detalles del Vendedor
+            </h3>
             <div className="mt-4 prose prose-sm text-gray-500">
               <ul className="list-disc pl-5 space-y-2">
                 <li>Nombre: {nombre_vendedor}</li>

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 interface Product {
   id: number;
@@ -22,7 +23,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
             <CardTitle>{product.name}</CardTitle>
           </CardHeader>
           <CardContent>
-            <img src={product.image_url} alt={product.name} className="w-full h-48 object-cover mb-4" />
+            <Image src={product.image_url} alt={product.name} width={500} height={500} className="w-full h-48 object-cover mb-4" />
             <p className="text-sm text-gray-600">{product.description}</p>
             <p className="text-lg font-bold mt-2">${product.price.toFixed(2)}</p>
           </CardContent>
