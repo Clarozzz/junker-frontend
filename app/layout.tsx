@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import { UserProvider } from "@/context/UserContext";
 import Nav from "@/components/nav";
 
 const inter = Inter({
@@ -30,10 +29,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${montserrat.variable} antialiased`}>
       <body>
-        <UserProvider>
-            <Nav />
-            {children}
-        </UserProvider>
+        <Nav />
+        {children}
       </body>
     </html>
   );

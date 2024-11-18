@@ -4,8 +4,9 @@ import Footer from "@/components/footer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Cargando from "@/components/ui/cargando";
-import { useUser } from "@/context/UserContext";
+import { useEffect, useState } from "react";
+import { readUser } from "../api/server";
+import { getUser } from "../api/usuarios";
 
 export default function PerfilLayout({
     children,
@@ -13,7 +14,27 @@ export default function PerfilLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const { userData, loading } = useUser();
+    const [userData, setUserData] = useState<Usuario | null>(null);
+  
+    useEffect(() => {
+      const loadUserData = async () => {
+        try {
+          const { data: { user } } = await readUser()
+          if (!user) {
+            throw new Error("Error al obtener el usuario");
+          }
+  
+          const usuario = await getUser(user.id)
+          if (usuario) {
+            setUserData(usuario)
+          }
+        } catch {
+          setUserData(null);
+        }
+      };
+  
+      loadUserData();
+    }, []);
 
     const links = [
         { nombre: 'Ajustes de la cuenta', ruta: '/perfil', titulo: 'Ajustes de la cuenta' },
@@ -24,8 +45,6 @@ export default function PerfilLayout({
 
     const currentLink = links.find((link) => link.ruta === pathname);
     const titulo = currentLink ? currentLink.titulo : 'Página no encontrada';
-
-    if (loading) return <Cargando />;
 
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
