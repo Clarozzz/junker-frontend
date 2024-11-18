@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import LogoJunker from '@/components/logo-junker';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CircleCheck, X } from 'lucide-react';
+import { AlertCircle, X } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -26,7 +26,6 @@ const registroSchema = z.object({
 
 const Registro = () => {
 
-  const [success, setSuccess] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -45,17 +44,13 @@ const Registro = () => {
       const parsedData = registroSchema.parse(modifiedData);
 
       // Enviar la solicitud de registro
-      const res = await registro({
+      await registro({
         email: parsedData.email,
         password: parsedData.password,
         nombre: parsedData.nombre,
         apellido: parsedData.apellido,
       });
 
-      if (res) {
-        setSuccess("Registro exitoso!")
-        window.location.href = '/'
-      }
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
@@ -173,14 +168,6 @@ const Registro = () => {
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            {success && (
-              <Alert className="mt-4 border-green-500 text-green-600">
-                <CircleCheck className="h-4 w-4" color='#22c55e' />
-                <AlertTitle>Hecho</AlertTitle>
-                <AlertDescription>{success}</AlertDescription>
               </Alert>
             )}
 

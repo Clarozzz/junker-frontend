@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/context/UserContext";
 import { useState } from "react";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,9 +15,8 @@ const descripcionSchema = z.object({
     descripcion: z.string().min(1, "Debes incluir una descricpcion!")
 })
 
-export default function Descripcion() {
+export default function Descripcion({descripcion}:{descripcion: string}) {
     const [isLoading, setIsLoading] = useState(false)
-    const { userData } = useUser();
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
 
@@ -67,7 +65,7 @@ export default function Descripcion() {
                             id="descripcion"
                             name="descripcion"
                             placeholder="Describe quien eres..."
-                            defaultValue={userData?.vendedores[0].descripcion}
+                            defaultValue={descripcion}
                         />
                         <p className="text-sm text-muted-foreground">
                             La descripcion la podrán ver los clientes en tu <span className="text-blue-600">perfil de vendedor</span>

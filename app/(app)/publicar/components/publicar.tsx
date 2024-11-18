@@ -21,7 +21,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { productosService } from "@/app/api/productos"
 import { getCategorias } from "@/app/api/categorias"
-import { useUser } from "@/context/UserContext"
 import { useToast } from "@/components/ui/toast"
 
 const productSchema = z.object({
@@ -35,13 +34,12 @@ const productSchema = z.object({
 
 type ProductFormData = z.infer<typeof productSchema>
 
-export default function PublicarClient() {
+export default function PublicarClient({id}:{id:string | null}) {
   const { showToast } = useToast()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [uploadedImages, setUploadedImages] = useState<File[]>([])
   const [categorias, setCategorias] = useState<Categoria[]>([])
-  const { userData } = useUser()
 
   const {
     register,
@@ -121,7 +119,7 @@ export default function PublicarClient() {
         precio: data.precio,
         estado_producto: data.estado_producto.trim(),
         imagen_url: cloudinaryUrls,
-        id_vendedor: userData?.vendedores[0]?.id || "",
+        id_vendedor: id || "",
         id_categoria: data.id_categoria,
         stock: data.stock
       }

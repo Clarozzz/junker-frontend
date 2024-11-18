@@ -4,9 +4,7 @@ import { verifyPass } from "@/app/api/server";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import Cargando from "@/components/ui/cargando";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/context/UserContext";
 import { Label } from "@radix-ui/react-label";
 import { CircleCheck, AlertCircle } from "lucide-react";
 import { useState } from "react";
@@ -22,12 +20,11 @@ const passSchema = z.object({
     path: ["confirmPass"]
 });
 
-export default function PassChange() {
+export default function PassChange({id}:{id: string | null}) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [passErrors, setPassErrors] = useState<Record<string, string>>({});
-    const { userData, loading } = useUser();
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
@@ -44,9 +41,9 @@ export default function PassChange() {
 
             const parsedData = passSchema.parse(formData);
 
-            if (!userData?.id) throw new Error("No se encontró el usuario");
+            if (!id) throw new Error("No se encontró el usuario");
 
-            const res = await verifyPass(userData.id, parsedData);
+            const res = await verifyPass(id, parsedData);
             if (res) {
                 setSuccessMessage("Contraseña cambiada correctamente.");
                 setPassword("");
@@ -67,8 +64,6 @@ export default function PassChange() {
             setIsLoading(false);
         }
     }
-
-    if (loading) return <Cargando />;
 
     return (
         <Card>

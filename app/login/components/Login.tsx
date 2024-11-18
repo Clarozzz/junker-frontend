@@ -33,10 +33,8 @@ const Login = () => {
     try {
       setIsLoading(true);
       const parsedData = loginSchema.parse(datos);
-
-      const res = await signIn(parsedData);
-
-      if (res) window.location.href = '/'
+      
+      await signIn(parsedData);
     } catch (err) {
       if (err) {
         setError(`Correo o contraseña incorrectos`);

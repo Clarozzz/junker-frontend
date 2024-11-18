@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useUser } from "@/context/UserContext";
 import React, { useState } from "react";
 import { z } from "zod";
 import { AlertCircle, Calendar, CircleCheck, MapPin, Phone } from "lucide-react";
@@ -26,8 +25,7 @@ const userSchema = z.object({
     avatar_url: z.string().optional()
 });
 
-export default function DatosPersonales() {
-    const { userData } = useUser();
+export default function DatosPersonales({userData}:{userData: Usuario | null}) {
     const [error, setError] = useState<string | null>(null);
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
     const [uLoading, setULoading] = useState(false);

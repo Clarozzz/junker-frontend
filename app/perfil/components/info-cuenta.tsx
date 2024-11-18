@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/context/UserContext";
 import { AlertCircle, CircleCheck, Mail } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -20,8 +19,7 @@ const emailSchema = z.object({
     path: ["emailConfirm"]
 });
 
-export default function InfoCuenta() {
-    const { userData } = useUser();
+export default function InfoCuenta({ email }: { email: string | undefined }) {
     const [emailErrors, setEmailErrors] = useState<Record<string, string>>({});
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false)
@@ -76,7 +74,7 @@ export default function InfoCuenta() {
                             <div className="flex items-center mt-1">
                                 <div className="relative flex-grow">
                                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                                    <Input disabled defaultValue={userData?.email} className="pl-10" />
+                                    <Input disabled defaultValue={email} className="pl-10" />
                                 </div>
                                 <Dialog>
                                     <DialogTrigger>
