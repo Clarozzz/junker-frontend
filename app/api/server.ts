@@ -72,7 +72,7 @@ export async function signIn(dataForm: { email: string; password: string; }) {
     throw new Error(`${error}`)
   }
 
-  redirect('/')
+  return redirect('/')
 }
 
 export async function signOut() {
@@ -117,7 +117,7 @@ export const registro = async (userData: RegisterData) => {
         apellido: userData.apellido,
         email: userData.email
       });
-      redirect('/')
+      return redirect('/')
     } catch (err) {
       throw new Error(`${err}`)
     }
