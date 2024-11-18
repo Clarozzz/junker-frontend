@@ -26,6 +26,7 @@ interface ProductImage {
 }
 
 interface ProductDetailProps {
+  id_producto: string;
   titulo: string;
   precio: number;
   descripcion: string;
@@ -140,3 +141,38 @@ interface ProductosVendedor {
   imagen: string;
 }
 
+
+
+interface ProductoXCarrito {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  stock: number;
+  productos_imagenes: { url: string }[];
+  vendedores: {
+    calificacion: number;
+    usuarios: {
+      nombre: string;
+      apellido: string;
+    };
+  };
+}
+
+interface Carrito {
+  id: string; 
+  productos: ProductoXCarrito; 
+  cantidad: number;
+  id_carrito: string;
+}
+
+interface CarritoCreate {
+  id_carrito: string;
+  id_producto: string;
+  cantidad: number;
+}
+
+interface CarritoResponse {
+  message: string;
+}

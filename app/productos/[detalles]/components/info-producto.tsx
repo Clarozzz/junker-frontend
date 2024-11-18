@@ -32,6 +32,7 @@ export default function InfoProductos({ params }: { params: { detalles: string }
 
   return (
     <DetalleProducto
+      id_producto={producto.id}
       titulo={producto.nombre}
       precio={producto.precio}
       descripcion={producto.descripcion}
