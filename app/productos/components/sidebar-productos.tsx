@@ -2,42 +2,63 @@
 "use client";
 
 import React, { useState } from "react";
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const MIN_PRICE = 0;
-const MAX_PRICE = 10000;
+const MAX_PRICE = 1000000000;
 
 interface FilterState {
-  precio_min: number;
-  precio_max: number;
+  precio_min: number ;
+  precio_max: number ;
   categoria: string | null;
   estado: string | null;
 }
 
+// ! :) Este componente es un sidebar que permite filtrar productos por precio, categoría y estado.
 interface SidebarProductosProps {
   onFilterChange: (filters: FilterState) => void;
 }
 
+
+
 export default function SidebarProductos({ onFilterChange }: SidebarProductosProps) {
   const [selectedFilters, setSelectedFilters] = useState<FilterState>({
-    precio_min: MIN_PRICE,
-    precio_max: MAX_PRICE,
+    precio_min: 0,
+    precio_max: 0,
     categoria: null,
     estado: null,
   });
 
+  const [priceError, setPriceError] = useState<string | null>(null); // Estado para el error
+
   const updateFilters = (updatedValues: Partial<FilterState>) => {
     const newFilters = { ...selectedFilters, ...updatedValues };
     setSelectedFilters(newFilters);
-    onFilterChange(newFilters); // Propagar el cambio al componente padre
+    onFilterChange(newFilters);
   };
 
-  const handleRangeChange = (key: "precio_min" | "precio_max", value: number) => {
-    const updatedValue =
-      key === "precio_min"
-        ? Math.min(value, selectedFilters.precio_max - 100)
-        : Math.max(value, selectedFilters.precio_min + 100);
-    updateFilters({ [key]: updatedValue } as Partial<FilterState>);
+  const handlePriceChange = (key: "precio_min" | "precio_max", value: string) => {
+    const numericValue: number | null = value === "" ? null : Number(value);
+
+    // No interferir con la entrada del usuario, solo mostrar un mensaje de error si es necesario
+    if (numericValue !== null) {
+      // Validación: si se trata de precio_min y es mayor que precio_max, mostramos un error
+      if (key === "precio_min" && selectedFilters.precio_max !== null && numericValue >= selectedFilters.precio_max) {
+        setPriceError("El precio mínimo debe ser menor que el precio máximo.");
+      } else if (key === "precio_max" && selectedFilters.precio_min !== null && numericValue <= selectedFilters.precio_min) {
+        setPriceError("El precio máximo debe ser mayor que el precio mínimo.");
+      } else {
+        // Si la entrada es válida, se limpia el mensaje de error
+        setPriceError(null);
+      }
+    }
+
+    // Actualizamos los filtros sin interferir con la entrada del usuario
+    updateFilters({ [key]: numericValue });
   };
 
   const handleRadioToggle = (key: "categoria" | "estado", value: string) => {
@@ -46,53 +67,82 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
   };
 
   const handleClearFilters = () => {
+    setPriceError(null); // Limpiar mensaje de error al vaciar los filtros
     updateFilters({
-      precio_min: MIN_PRICE,
-      precio_max: MAX_PRICE,
+      precio_min: 0,
+      precio_max: 0,
       categoria: null,
       estado: null,
     });
   };
 
   return (
-    <div>
+    <div className="p-4 bg-white shadow-lg rounded-lg">
       {/* Filtro por precio */}
       <AccordionItem value="item-1">
-        <AccordionTrigger>Precio</AccordionTrigger>
+        <AccordionTrigger className="text-lg font-medium text-gray-700">
+          Precio
+        </AccordionTrigger>
         <AccordionContent>
           <div className="px-4 py-2">
-            <label className="block text-gray-600 text-sm mb-2">Rango de precio</label>
-            <div className="flex justify-between text-xs mb-2">
-              <span>Lps. {selectedFilters.precio_min}</span>
-              <span>Lps. {selectedFilters.precio_max}</span>
+            <label className="block text-gray-600 text-sm mb-2">
+              Rango de precio
+            </label>
+            <div className="flex flex-col gap-2">
+              <div>
+                <label
+                  htmlFor="precio_min"
+                  className="text-sm text-gray-500 block"
+                >
+                  Precio mínimo
+                </label>
+                <input
+                  id="precio_min"
+                  type="number"
+                  min={MIN_PRICE}
+                  max={MAX_PRICE}
+                  value={selectedFilters.precio_min ?? ""}
+                  onChange={(e) =>
+                    handlePriceChange("precio_min", e.target.value)
+                  }
+                  placeholder="Mínimo"
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="precio_max"
+                  className="text-sm text-gray-500 block"
+                >
+                  Precio máximo
+                </label>
+                <input
+                  id="precio_max"
+                  type="number"
+                  min={MIN_PRICE}
+                  max={MAX_PRICE}
+                  value={selectedFilters.precio_max ?? ""}
+                  onChange={(e) =>
+                    handlePriceChange("precio_max", e.target.value)
+                  }
+                  placeholder="Máximo"
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              {/* Mostrar mensaje de error si lo hay */}
+              {priceError && (
+                <div className="text-red-500 text-sm mt-2">{priceError}</div>
+              )}
             </div>
-            <input
-              title="Precio mínimo"
-              type="range"
-              min={MIN_PRICE}
-              max={MAX_PRICE}
-              step={100}
-              value={selectedFilters.precio_min}
-              onChange={(e) => handleRangeChange("precio_min", Number(e.target.value))}
-              className="w-full"
-            />
-            <input
-              title="Precio máximo"
-              type="range"
-              min={MIN_PRICE}
-              max={MAX_PRICE}
-              step={100}
-              value={selectedFilters.precio_max}
-              onChange={(e) => handleRangeChange("precio_max", Number(e.target.value))}
-              className="w-full"
-            />
           </div>
         </AccordionContent>
       </AccordionItem>
 
       {/* Filtro por categoría */}
       <AccordionItem value="item-2">
-        <AccordionTrigger>Categoría</AccordionTrigger>
+        <AccordionTrigger className="text-lg font-medium text-gray-700">
+          Categoría
+        </AccordionTrigger>
         <AccordionContent>
           {[
             "Ruedas",
@@ -120,7 +170,9 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
 
       {/* Filtro por estado */}
       <AccordionItem value="item-3">
-        <AccordionTrigger>Estado</AccordionTrigger>
+        <AccordionTrigger className="text-lg font-medium text-gray-700">
+          Estado
+        </AccordionTrigger>
         <AccordionContent>
           {["Nuevo", "Usado"].map((estado) => (
             <div key={estado} className="flex items-center pl-2 pt-1">
@@ -142,7 +194,7 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
       <div className="mt-4">
         <button
           onClick={handleClearFilters}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg w-full"
+          className="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400 rounded-lg w-full transition-colors duration-200"
         >
           Vaciar filtros
         </button>
@@ -150,4 +202,3 @@ export default function SidebarProductos({ onFilterChange }: SidebarProductosPro
     </div>
   );
 }
-

@@ -1,6 +1,7 @@
 // import DetalleProducto from './components/detalle-prod';
 import Footer from '@/components/footer';
 import InfoProductos from './components/info-producto';
+import { ToastProvider } from '@/components/ui/toast';
 
 // const sampleProduct = {
 //   titulo: "Premium Wireless Headphones",
@@ -35,6 +36,7 @@ export default async function PageDetalles ( { params }: { params: { detalles: s
 
   return (
     <>
+    <ToastProvider/> 
     <main className="min-h-screen bg-background py-4"> 
       {/* <DetalleProducto {...sampleProduct} /> */}
       <InfoProductos params={params} />

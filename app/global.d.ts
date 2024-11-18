@@ -26,6 +26,7 @@ interface ProductImage {
 }
 
 interface ProductDetailProps {
+  id_producto: string;
   titulo: string;
   precio: number;
   descripcion: string;
@@ -106,25 +107,42 @@ interface ProductoVista {
 
 interface ProductosVistaProps {
   categoria: string | null;
-  precio_min: number | null;
-  precio_max: number | null;
+  precio_min: number ;
+  precio_max: number ;
   estado: string | null;
+  searchQuery?: string;
+  ordenPrecio?: boolean | null;
 }
 
+
+
+// interface SidebarProductosProps {
+//   onFilterChange: (filters: { 
+//     precio_min: number; 
+//     precio_max: number; 
+//     categoria: string; 
+//     estado: string; 
+//   }) => void;
+// }
+
 interface SidebarProductosProps {
-  onFilterChange: (filters: { 
-    precio_min: number; 
-    precio_max: number; 
-    categoria: string; 
-    estado: string; 
-  }) => void;
+  onFilterChange: (filters: Partial<{
+    precio_min: number;
+    precio_max: number;
+    categoria: string;
+    estado: string;
+    searchQuery: string;
+  }>) => void;
 }
+
 
 interface FilterState {
   precio_min: number;
-  precio_max: number;
+  precio_max: number ;
   categoria: string | null;
   estado: string | null;
+  searchQuery?: string;
+  ordenPrecio?: boolean | null;
 }
 
 
@@ -143,4 +161,37 @@ interface ProductosVendedor {
 interface UserAvatarName {
   nombre: string;
   avatar_url: string;
+
+interface ProductoXCarrito {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  stock: number;
+  productos_imagenes: { url: string }[];
+  vendedores: {
+    calificacion: number;
+    usuarios: {
+      nombre: string;
+      apellido: string;
+    };
+  };
+}
+
+interface Carrito {
+  id: string; 
+  productos: ProductoXCarrito; 
+  cantidad: number;
+  id_carrito: string;
+}
+
+interface CarritoCreate {
+  id_carrito: string;
+  id_producto: string;
+  cantidad: number;
+}
+
+interface CarritoResponse {
+  message: string;
 }
