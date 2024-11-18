@@ -13,7 +13,6 @@ export default function ProductosVendedor({id}:{id: string | null}) {
   useEffect(() => {
     const fetchProducts = async () => {
       if (!id) {
-        console.error("No se encontró el ID del vendedor.");
         setLoading(false);
         return;
       }

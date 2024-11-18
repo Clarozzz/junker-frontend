@@ -18,7 +18,5 @@ export default async function Nav() {
         return <Navbar userData={null} />;
     }
 
-    console.log(usuario.data)
-
     return <Navbar userData={usuario.data} />;
 }

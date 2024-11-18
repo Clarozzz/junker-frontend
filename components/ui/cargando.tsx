@@ -5,13 +5,13 @@ import LogoJunker from "../logo-junker";
 
 export default function Cargando() {
   return (
-    <div className="absolute top-0 left-0 w-full h-full bg-white/50 dark:bg-black/50 z-50 flex items-center  justify-center">
-      <div className="flex flex-col justify-center items-center animate-spin animate-infinite">
-        <div role="status">
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="flex flex-col items-center">
+        <div className="animate-spin">
           <LogoJunker className="h-20 w-20 " />
         </div>
+        <p className="mt-4 text-lg font-semibold text-gray-700">Cargando...</p>
       </div>
-      <p className="montserrat font-medium text-custom-blue ml-4 text-xl">Cargando...</p>
     </div>
   );
 }

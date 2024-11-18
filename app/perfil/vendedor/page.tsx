@@ -5,9 +5,12 @@ import Descripcion from '../components/descripcion'
 import ProductosVendedor from '../components/productos-vendedor';
 import { readUser } from '@/app/api/server';
 import { getUser } from '@/app/api/usuarios';
+import Cargando from '@/components/ui/cargando';
 
 export default function Vendedor() {
   const [userData, setUserData] = useState<Usuario | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -23,11 +26,15 @@ export default function Vendedor() {
         }
       } catch {
         setUserData(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadUserData();
   }, []);
+
+  if (isLoading) return <Cargando />
 
   return (
     <div className='space-y-8'>
