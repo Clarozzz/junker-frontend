@@ -1,16 +1,16 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import React from "react";
-import LogoJunker from "../logo-junker";
 
 export default function Cargando() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center text-gray-600">
         <div className="animate-spin">
-          <LogoJunker className="h-20 w-20 " />
+          <Loader2 size={80} />
         </div>
-        <p className="mt-4 text-lg font-semibold text-gray-700">Cargando...</p>
+        <p className="mt-4 text-lg font-semibold montserrat">Cargando...</p>
       </div>
     </div>
   );

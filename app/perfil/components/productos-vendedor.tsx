@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { getProductosVendedor } from "@/app/api/usuarios"
 import { Button } from "@/components/ui/button"
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import Link from "next/link"
 
-export default function ProductosVendedor({id}:{id: string | null}) {
+export default function ProductosVendedor({ id }: { id: string | null }) {
   const [products, setProducts] = useState<ProductosVendedor[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,18 +31,21 @@ export default function ProductosVendedor({id}:{id: string | null}) {
   }, [id]);
 
   return (
-    <Card>
-      <CardHeader>
+    <div>
+      <CardHeader className="px-0">
         <CardTitle className="text-2xl font-bold">Tus productos</CardTitle>
         <h2 className="text-gray-500">Gestiona los productos que tienes actualmente en venta</h2>
       </CardHeader>
-      <CardContent className="p-0 md:p-6">
+      <CardContent className="!mt-0 p-0">
         {loading ? (
-          <div className="flex justify-center items-center h-48">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          <div className="flex flex-col items-center text-gray-600 h-48">
+            <div className="animate-spin">
+              <Loader2 size={80} />
+            </div>
+            <p className="mt-4 text-lg font-semibold montserrat">Cargando...</p>
           </div>
         ) : products.length > 0 ? (
-          <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 xl:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 xl:gap-6">
             {products.map((product) => (
               <Card key={product.id}>
                 <CardHeader className="pt-0 px-0">
@@ -75,6 +78,6 @@ export default function ProductosVendedor({id}:{id: string | null}) {
           </div>
         )}
       </CardContent>
-    </Card>
+    </div>
   )
 }
