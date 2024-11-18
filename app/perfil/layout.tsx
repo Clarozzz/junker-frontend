@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { readUser } from "../api/server";
 import { getUser } from "../api/usuarios";
+import Cargando from "@/components/ui/cargando";
 
 export default function PerfilLayout({
     children,
@@ -15,25 +16,28 @@ export default function PerfilLayout({
 }) {
     const pathname = usePathname();
     const [userData, setUserData] = useState<Usuario | null>(null);
-  
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-      const loadUserData = async () => {
-        try {
-          const { data: { user } } = await readUser()
-          if (!user) {
-            throw new Error("Error al obtener el usuario");
-          }
-  
-          const usuario = await getUser(user.id)
-          if (usuario) {
-            setUserData(usuario)
-          }
-        } catch {
-          setUserData(null);
-        }
-      };
-  
-      loadUserData();
+        const loadUserData = async () => {
+            try {
+                const { data: { user } } = await readUser()
+                if (!user) {
+                    throw new Error("Error al obtener el usuario");
+                }
+
+                const usuario = await getUser(user.id)
+                if (usuario) {
+                    setUserData(usuario)
+                }
+            } catch {
+                setUserData(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadUserData();
     }, []);
 
     const links = [
@@ -45,6 +49,8 @@ export default function PerfilLayout({
 
     const currentLink = links.find((link) => link.ruta === pathname);
     const titulo = currentLink ? currentLink.titulo : 'Página no encontrada';
+
+    if (isLoading) return <Cargando />
 
     return (
         <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">

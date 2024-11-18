@@ -140,3 +140,7 @@ interface ProductosVendedor {
   imagen: string;
 }
 
+interface UserAvatarName {
+  nombre: string;
+  avatar_url: string;
+}
