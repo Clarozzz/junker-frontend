@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useUser } from "@/context/UserContext";
 import { carritoService } from "@/app/api/carritos";
 import { useToast } from "@/components/ui/toast";
 import { Lens } from "@/components/ui/lens";
 import { motion } from "framer-motion";
+import { getUser } from "@/app/api/usuarios";
+import { readUser } from "@/app/api/server";
 
 // const defaultImage = {
 //   id: 'default',
@@ -33,9 +34,30 @@ export default function DetalleProducto({
   const [selectedImage, setSelectedImage] = useState(imagenes[0]);
   const [isWishlist, setIsWishlist] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { userData } = useUser();
   const { showToast } = useToast();
   const [hovering, setHovering] = useState(false);
+    const [userData, setUserData] = useState<Usuario | null>(null);
+  
+    useEffect(() => {
+      const loadUserData = async () => {
+        try {
+          const { data: { user } } = await readUser()
+          if (!user) {
+            throw new Error("Error al obtener el usuario");
+          }
+  
+          const usuario = await getUser(user.id)
+          if (usuario) {
+            setUserData(usuario)
+          }
+        } catch {
+          setUserData(null);
+        }
+      };
+  
+      loadUserData();
+    }, []);
+
 
   const handleAgregarCarrito = async () => {
     if (!userData?.id) {

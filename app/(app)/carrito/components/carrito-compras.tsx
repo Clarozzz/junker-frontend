@@ -1,6 +1,7 @@
 "use client";
 
 import { carritoService } from "@/app/api/carritos";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -184,23 +186,23 @@ export default function CarritoCLient() {
                 <p>Lps. 262.00</p>
               </div>
             </div>
-            <div className="mt-6">
-              <a
-                href="#"
-                className="flex items-center justify-center rounded-md border border-transparent bg-custom-blue px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-800"
+            <div className="mt-6 flex justify-center">
+              <Button
+                type="submit"
+                className="flex items-center w-full justify-center rounded-md border border-transparent bg-custom-blue px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-800"
               >
                 Comprar ahora
-              </a>
+              </Button>
             </div>
             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
               <p>
                 o
-                <button
-                  type="button"
+                <Link
+                  href={"/productos"}
                   className="font-medium text-custom-blue hover:text-blue-800 pl-3"
                 >
                   Continuar comprando
-                </button>
+                </Link>
               </p>
             </div>
           </div>
