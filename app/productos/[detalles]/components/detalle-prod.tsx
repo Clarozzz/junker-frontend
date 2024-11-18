@@ -99,6 +99,7 @@ export default function DetalleProducto({
           <div className="grid grid-cols-4 gap-4">
             {imagenes.map((image) => (
               <button
+              title="Seleccionar imagen"  
                 key={image.id}
                 onClick={() => setSelectedImage(image)}
                 className={cn(

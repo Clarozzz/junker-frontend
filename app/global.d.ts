@@ -39,35 +39,35 @@ interface ProductDetailProps {
   vendedor_calificacion: number;
 }
 
-  interface ProductoCreate {
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    estado_producto: string;
-    imagen_url: string[];
-    id_vendedor: string;
-    id_categoria: string;
-    stock: number;
-  }
+interface ProductoCreate {
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  imagen_url: string[];
+  id_vendedor: string;
+  id_categoria: string;
+  stock: number;
+}
 
-  interface Producto extends ProductoCreate {
-    id: string;
-    created_at: string;
-  }
+interface Producto extends ProductoCreate {
+  id: string;
+  created_at: string;
+}
 
-  interface ProductoResponse {
-    message: string;
-  }
+interface ProductoResponse {
+  message: string;
+}
 
-  interface Categoria {
-    id: string;
-    nombre: string;
-  }
+interface Categoria {
+  id: string;
+  nombre: string;
+}
 
-  interface CategoriaError {
-    message: string;
-    status?: number;
-  }
+interface CategoriaError {
+  message: string;
+  status?: number;
+}
 
 interface Usuario {
   id: string;
@@ -79,26 +79,69 @@ interface Usuario {
   avatar_url: string;
   telefono: string;
   email: string;
+  vendedores: {
+    id: string
+    descripcion: string
+  }[];
+  carrito: {
+    id: string
+  }[];
 }
 
 interface ProductosResponse {
-  items: Producto[];
+  items: ProductoVista[];
   total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
 }
 
 interface ProductoVista {
   id: string;
   nombre: string;
-  descripcion: string;
   precio: number;
-  estado: string;
-  id_vendedor: string;
-  productos_imagenes: { url: string; orden: number }[];
-  productos_categorias: { categorias: { nombre: string } }[];
-  vendedores: {
-    usuarios: { email: string; nombre: string; apellido: string };
-  };
+  estado_producto: string;
+  categoria: string;
+  imagen_url: string;
 }
+
+interface ProductosVistaProps {
+  categoria: string | null;
+  precio_min: number | null;
+  precio_max: number | null;
+  estado: string | null;
+}
+
+interface SidebarProductosProps {
+  onFilterChange: (filters: { 
+    precio_min: number; 
+    precio_max: number; 
+    categoria: string; 
+    estado: string; 
+  }) => void;
+}
+
+interface FilterState {
+  precio_min: number;
+  precio_max: number;
+  categoria: string | null;
+  estado: string | null;
+}
+
+
+interface UpdatePassword {
+  password: string;
+  newPassword: string;
+  confirmPass: string;
+}
+
+interface ProductosVendedor {
+  id: string;
+  nombre: string;
+  imagen: string;
+}
+
+
 
 interface ProductoXCarrito {
   id: string;

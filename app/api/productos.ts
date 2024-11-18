@@ -1,13 +1,16 @@
 import axios from "axios";
 
 // * primera version de filtrado
-export const getProductos = async (page: number, limit: number, categoria: string | null = null): Promise<ProductosResponse> => {
+export const getProductos = async (page: number, limit: number, categoria: string | null = null, precio_min: number | null = null, precio_max: number | null = null, estado: string | null = null): Promise<ProductosResponse> => {
   try {
     const response = await axios.get<ProductosResponse>(`${process.env.NEXT_PUBLIC_API_URL}/productos`, {
       params: {
         page,
         limit,
-        categoria
+        categoria,
+        precio_min,
+        precio_max,
+        estado
       },
     });
     return response.data;

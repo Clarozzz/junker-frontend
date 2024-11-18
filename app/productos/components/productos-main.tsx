@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Accordion } from "@/components/ui/accordion";
@@ -8,13 +7,15 @@ import { Filter } from "lucide-react";
 import Image from "next/image";
 import SidebarProductos from "./sidebar-productos";
 
+
 export default function ProductosMain() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    precio: "",
-    categoria: "",
-    estado: "",
+  const [filters, setFilters] = useState<FilterState>({
+    precio_min: 0,
+    precio_max: 10000,
+    categoria: null,
+    estado: null,
   });
 
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -36,8 +37,12 @@ export default function ProductosMain() {
     };
   }, []);
 
-  const handleFilterChange = (newFilters: { precio: string; categoria: string; estado: string }) => {
-    setFilters(newFilters); // Actualiza el estado con los nuevos filtros
+  const handleFilterChange = (newFilters: FilterState) => {
+    setFilters({
+      ...newFilters,
+      precio_min: Number(newFilters.precio_min),
+      precio_max: Number(newFilters.precio_max),
+    }); // Actualiza el estado con los nuevos filtros
   };
 
   return (
@@ -45,7 +50,7 @@ export default function ProductosMain() {
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-12 md:px-12 lg:px-12 xl:px-12 mt-4">
         <div className="relative w-full h-[200px] md:h-[300px] xl:h-[400px]">
           <Image
-            src="/images/landing24.webp"
+            src="/images/landing7.webp"
             alt="foto"
             fill
             className="object-cover rounded-2xl"
@@ -184,8 +189,9 @@ export default function ProductosMain() {
              
                 <ProductosVista 
                   categoria={filters.categoria} 
-          
-    
+                  precio_min={filters.precio_min}
+                  precio_max={filters.precio_max}
+                  estado={filters.estado}
                 />
 
               </div>
@@ -196,4 +202,3 @@ export default function ProductosMain() {
     </div>
   );
 }
-

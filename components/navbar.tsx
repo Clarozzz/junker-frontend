@@ -1,68 +1,76 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { ShoppingCart, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import LogoJunker from "./logo-junker";
-import { usePathname } from "next/navigation";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUser } from "@/context/UserContext";
+import React, { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { ShoppingCart, Menu, X, User, HandCoins, LogOut } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import LogoJunker from "./logo-junker"
+import { usePathname } from "next/navigation"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { AnimatePresence, motion } from "framer-motion"
+import { signOut } from "@/app/api/server"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
   { ruta: "Productos", href: "/productos", current: false },
   { ruta: "Nosotros", href: "/nosotros", current: false },
   { ruta: "Servicios", href: "/servicios", current: false },
-];
+]
 
-export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
-  const { userData, setUserData } = useUser();
+export default function Navbar({ userData }: { userData: Usuario | null }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement | null>(null)
+  const pathname = usePathname()
 
-  const isLandingPage = pathname === "/";
+  const isLandingPage = pathname === "/"
+  const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated"];
+  const isHidden = hiddenRoutes.includes(pathname);
+
+  const handleToggle = (event: React.MouseEvent) => {
+    event?.stopPropagation()
+    setIsOpen(prev => !prev)
+  }
 
   useEffect(() => {
-    if (!isLandingPage) return;
+    if (!isLandingPage) return
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 1);
-    };
+      setIsScrolled(window.scrollY > 1)
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLandingPage]);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isLandingPage])
 
-  const handleLogout = () => {
-    Cookies.remove("access_token");
-    Cookies.remove("refresh_token");
-    setUserData(null);
-    window.location.href = "/";
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
 
-  // Función para determinar el color de texto según la ruta actual
+    document.addEventListener("click", handleClickOutside)
+    return () => { document.removeEventListener("click", handleClickOutside) }
+  }, [isOpen])
+
   const getTextColor = () => {
-    if (isScrolled || !isLandingPage) return "text-gray-900"; // color cuando se hace scroll o no estamos en la landing page
-    return "text-white"; // color por defecto en la landing page
-  };
+    if (isScrolled || !isLandingPage) return "text-gray-900"
+    return "text-white"
+  }
+
+  const handleLogout = async () => {
+    await signOut()
+    window.location.href = "/"
+  }
 
   return (
     <header
       className={`${isLandingPage
-        ? "bg-transparent fixed transition-all duration-300"
+        ? "bg-transparent fixed transition-colors duration-300 w-full"
         : "bg-background shadow-md sticky"
-        } top-0 z-20 w-screen ${isScrolled ? "bg-white shadow-md text-gray-900" : ""}`}
+        } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isHidden ? "hidden" : ""}`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
@@ -104,41 +112,67 @@ export default function Navbar() {
             >
               <Menu className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
-
             {!userData ? (
               <Link href="/login" className={`hover:underline underline-offset-4 cursor-pointer ${getTextColor()}`}>
                 Iniciar Sesión
               </Link>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              <div className="relative inline-block text-left">
+                <button
+                  onClick={handleToggle}
+                  className="flex items-center space-x-2 cursor-pointer focus:outline-none"
+                >
                   <div className="flex items-center space-x-2 cursor-pointer">
-                    {userData.avatar_url ? (
-                      <Avatar className="w-8 h-8 cursor-pointer hover:cursor-pointer">
-                        <AvatarImage src={userData.avatar_url} alt={userData.nombre} className="image-cover" />
-                        <AvatarFallback>Usuario</AvatarFallback>
-                      </Avatar>
-                    ) : (
-                      <span className="h-8 w-8 rounded-full flex justify-center items-center border-gray-300 border hover:cursor-pointer cursor-pointer border-spacing-1">
-                        {(userData.nombre?.charAt(0) ?? "").toUpperCase() +
-                          (userData.apellido?.charAt(0) ?? "").toUpperCase()}
-                      </span>
-                    )}
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={userData.avatar_url} className="image-cover" />
+                      <AvatarFallback>
+                        {userData.nombre.slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
                     <span className={getTextColor()}>{userData.nombre}</span>
                   </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="cursor-pointer">
-                  <DropdownMenuItem onClick={() => router.push("/perfil")} className="cursor-pointer">
-                    Perfil
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push("/publicar")} className="cursor-pointer">
-                    Publicar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                    Cerrar Sesión
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </button>
+
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      ref={dropdownRef}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-2 w-max p-1 bg-white rounded-lg shadow-2xl ring-1 ring-gray-200 focus:outline-none z-20"
+                    >
+                      <Link
+                        href="/perfil"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center px-2 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        Perfil
+                      </Link>
+                      <Link
+                        href="/publicar"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center px-2 py-2 text-sm text-green-600 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                      >
+                        <HandCoins className="mr-2 h-4 w-4 text-green-500" />
+                        Vender
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setIsOpen(false)
+                          handleLogout()
+                        }}
+                        className="flex items-center w-full px-2 py-2 text-sm hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Cerrar Sesión
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
           </div>
         </div>
@@ -179,5 +213,5 @@ export default function Navbar() {
         )}
       </div>
     </header>
-  );
+  )
 }
