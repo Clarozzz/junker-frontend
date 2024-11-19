@@ -11,6 +11,16 @@ import { Lens } from "@/components/ui/lens";
 import { motion } from "framer-motion";
 import { getUser } from "@/app/api/usuarios";
 import { readUser } from "@/app/api/server";
+import { Controller, useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // const defaultImage = {
 //   id: 'default',
@@ -30,34 +40,71 @@ export default function DetalleProducto({
   nombre_vendedor,
   contacto_vendedor,
   vendedor_calificacion,
+  stock,
 }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(imagenes[0]);
   const [isWishlist, setIsWishlist] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showToast } = useToast();
   const [hovering, setHovering] = useState(false);
-    const [userData, setUserData] = useState<Usuario | null>(null);
-  
-    useEffect(() => {
-      const loadUserData = async () => {
-        try {
-          const { data: { user } } = await readUser()
-          if (!user) {
-            throw new Error("Error al obtener el usuario");
-          }
-  
-          const usuario = await getUser(user.id)
-          if (usuario) {
-            setUserData(usuario)
-          }
-        } catch {
-          setUserData(null);
-        }
-      };
-  
-      loadUserData();
-    }, []);
+  const [userData, setUserData] = useState<Usuario | null>(null);
+  // const [quantity, setQuantity] = useState(1);
+  const { control, watch } = useForm({
+    defaultValues: {
+      cantidad: "1", // Valor predeterminado para el Select
+    },
+  });
 
+  const selectedQuantity = watch("cantidad");
+
+  // useEffect(() => {
+  //   const fetchProductStock = async () => {
+  //     try {
+  //       const stockData = await carritoService.getProductStock(id_producto);
+  //       setProductStock(stockData);
+  //     } catch (error) {
+  //       console.error('Error al obtener el stock:', error);
+  //       showToast({
+  //         title: "Error",
+  //         description: "No se pudo obtener la información del stock",
+  //         variant: "error",
+  //       });
+  //     }
+  //   };
+
+  //   if (id_producto) {
+  //     fetchProductStock();
+  //   }
+  // }, [id_producto]);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const {
+          data: { user },
+        } = await readUser();
+        if (!user) {
+          throw new Error("Error al obtener el usuario");
+        }
+
+        const usuario = await getUser(user.id);
+        if (usuario) {
+          setUserData(usuario);
+        }
+      } catch {
+        setUserData(null);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  // const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = parseInt(e.target.value);
+  //   if (!isNaN(value) && value > 0 && value <= stock) {
+  //     setQuantity(value);
+  //   }
+  // };
 
   const handleAgregarCarrito = async () => {
     if (!userData?.id) {
@@ -69,27 +116,47 @@ export default function DetalleProducto({
       return;
     }
 
+    // if (quantity + productStock.currentCartQuantity > productStock.stock) {
+    //   showToast({
+    //     title: "Error",
+    //     description: `Solo hay ${productStock.stock} unidades disponibles`,
+    //     variant: "error",
+    //   });
+    //   return;
+    // }
+
     setIsLoading(true);
     try {
       const carritoData = {
-        id_carrito: "e0273ae4-3fab-4653-a616-5d2190d7d05d",
+        id_carrito: userData?.carrito[0]?.id || "",
         id_producto: id_producto,
-        cantidad: 1,
+        cantidad: parseInt(selectedQuantity),
       };
 
       await carritoService.agregarCarrito(carritoData);
+
+      // setProductStock(prev => ({
+      //   ...prev,
+      //   currentCartQuantity: prev.currentCartQuantity + quantity
+      // }));
+
       showToast({
         title: "¡Éxito!",
         description: "Producto agregado al carrito correctamente",
         variant: "success",
       });
+
+      // Resetear la cantidad a 1 después de agregar al carrito
+      // setQuantity(1);
     } catch (error) {
       showToast({
         title: "Error",
-        description: "No se pudo agregar el producto al carrito",
+        description:
+          error instanceof Error
+            ? error.message
+            : "No se pudo agregar el producto al carrito",
         variant: "error",
       });
-      console.error("Error al agregar al carrito:", error);
     } finally {
       setIsLoading(false);
     }
@@ -111,17 +178,16 @@ export default function DetalleProducto({
               />
             </Lens>
             <motion.div
-            animate={{
-              filter: hovering ? "blur(2px)" : "blur(0px)",
-            }}
-            className="py-4 relative z-20"
-          >
-          </motion.div>
+              animate={{
+                filter: hovering ? "blur(2px)" : "blur(0px)",
+              }}
+              className="py-4 relative z-20"
+            ></motion.div>
           </div>
           <div className="grid grid-cols-4 gap-4">
             {imagenes.map((image) => (
               <button
-              title="Seleccionar imagen"  
+                title="Seleccionar imagen"
                 key={image.id}
                 onClick={() => setSelectedImage(image)}
                 className={cn(
@@ -162,6 +228,35 @@ export default function DetalleProducto({
           </div>
           <div className="prose prose-sm text-gray-600">
             <p> Categorias: {categorias}</p>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <Controller
+              name={"cantidad"} // Identifica cada producto por su ID.
+              control={control}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className="max-w-40 focus:ring-custom-blue">
+                    <SelectValue placeholder="Cantidad" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Cantidad</SelectLabel>
+                      {Array.from({ length: stock }, (_, i) => i + 1).map(
+                        (qty) => (
+                          <SelectItem key={qty} value={qty.toString()}>
+                            {qty}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <span className="text-sm text-gray-500">
+              Productos disponibles: {stock}
+            </span>
           </div>
 
           <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">

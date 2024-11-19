@@ -1,6 +1,8 @@
 "use client";
 
 import { carritoService } from "@/app/api/carritos";
+import { readUser } from "@/app/api/server";
+import { getUser } from "@/app/api/usuarios";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -21,25 +23,68 @@ export default function CarritoCLient() {
   const [carritos, setCarrito] = useState<Carrito[]>([]);
   const { control } = useForm();
   // const [error, setError] = useState<string | null>(null);
+  const [userData, setUserData] = useState<Usuario | null>(null);
+  const [cantidades, setCantidades] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
-    const fetchCarrito = async () => {
+    const loadUserData = async () => {
       try {
-        const data = await carritoService.getCarrito();
-        setCarrito(data);
-      } catch (error) {
-        // setError("Error al obtener los detalles del carrito");
-        console.error("Error al obtener carrito:", error);
+        const {
+          data: { user },
+        } = await readUser();
+        if (!user) {
+          throw new Error("Error al obtener el usuario");
+        }
+
+        const usuario = await getUser(user.id);
+        if (usuario) {
+          setUserData(usuario);
+        }
+      } catch {
+        setUserData(null);
       }
     };
 
-    fetchCarrito();
+    loadUserData();
   }, []);
+
+  useEffect(() => {
+    if (userData?.carrito && userData.carrito.length > 0) {
+      const fetchCarrito = async () => {
+        try {
+          const carrito_id = userData.carrito[0].id;
+          const data = await carritoService.getCarrito(carrito_id);
+          setCarrito(data);
+          const cantidadesIniciales = data.reduce(
+            (acc, item) => ({
+              ...acc,
+              [item.id]: item.cantidad,
+            }),
+            {}
+          );
+          setCantidades(cantidadesIniciales);
+        } catch (error) {
+          console.error("Error al obtener carrito:", error);
+        }
+      };
+
+      fetchCarrito();
+    }
+  }, [userData]);
+
+
+  // Actualizar cantidad de un producto
+  const actualizarCantidad = (id: string, cantidad: number) => {
+    setCantidades((prev) => ({ ...prev, [id]: cantidad }));
+  };
 
   return (
     <div className="flex flex-col">
       <div className="pt-10 px-16">
-        <h2 className="text-3xl  md:text-4xl font-bold montserrat text-custom-blue" id="slide-over-title">
+        <h2
+          className="text-3xl  md:text-4xl font-bold montserrat text-custom-blue"
+          id="slide-over-title"
+        >
           Carrito de compras
         </h2>
       </div>
@@ -49,7 +94,7 @@ export default function CarritoCLient() {
             <p>{error}</p>
           ) : ( */}
           <div className="px-4 py-6 sm:px-6">
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <div className="ml-3 flex items-center">
                 <button
                   type="button"
@@ -58,7 +103,7 @@ export default function CarritoCLient() {
                   <span className="sr-only">Close panel</span>
                 </button>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-6 mt-8">
               {carritos.map((carrito) => (
@@ -100,12 +145,15 @@ export default function CarritoCLient() {
                         </div>
                         <div>
                           <Controller
-                            name="id_carrito"
+                            name={`cantidad_${carrito.id}`} // Identifica cada producto por su ID.
                             control={control}
                             render={({ field }) => (
                               <Select
-                                onValueChange={field.onChange}
-                                value={field.value}
+                                value={field.value || cantidades[carrito.id]?.toString()} // Usa el valor del field o el estado local.
+                                onValueChange={(value) => {
+                                  field.onChange(value); // Actualiza el valor en react-hook-form.
+                                  actualizarCantidad(carrito.id, Number(value)); // Actualiza tu lógica personalizada.
+                                }}
                               >
                                 <SelectTrigger className="w-full focus:ring-custom-blue">
                                   <SelectValue placeholder="Cantidad" />
@@ -113,9 +161,15 @@ export default function CarritoCLient() {
                                 <SelectContent>
                                   <SelectGroup>
                                     <SelectLabel>Cantidad</SelectLabel>
-                                    {carritos.map((carr) => (
-                                      <SelectItem key={carr.id} value={carr.id}>
-                                        {carr.productos?.stock}
+                                    {Array.from(
+                                      { length: carrito.productos.stock },
+                                      (_, i) => i + 1
+                                    ).map((qty) => (
+                                      <SelectItem
+                                        key={qty}
+                                        value={qty.toString()}
+                                      >
+                                        {qty}
                                       </SelectItem>
                                     ))}
                                   </SelectGroup>
@@ -127,7 +181,11 @@ export default function CarritoCLient() {
                       </div>
                       <div className="min-w-36">
                         <p className="ml-4">
-                          Lps. {carrito.productos?.precio.toFixed(2)}
+                          Lps.{" "}
+                          {(
+                            carrito.productos?.precio *
+                            (cantidades[carrito.id] || 1)
+                          ).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -135,13 +193,13 @@ export default function CarritoCLient() {
                   <div>
                     <div className="flex items-end justify-end text-sm pt-4">
                       <div className="flex px-3">
-                          <button
-                            type="button"
-                            className="font-medium text-custom-blue hover:text-blue-800"
-                          >
-                            Comprar ahora
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          className="font-medium text-custom-blue hover:text-blue-800"
+                        >
+                          Comprar ahora
+                        </button>
+                      </div>
                       <div className="flex px-3">
                         <button
                           type="button"

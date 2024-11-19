@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { AnimatePresence, motion } from "framer-motion"
 import { signOut } from "@/app/api/server"
+import { useRouter } from "next/navigation"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -23,6 +24,7 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const pathname = usePathname()
+  const router = useRouter()
 
   const isLandingPage = pathname === "/"
   const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated"];
@@ -65,6 +67,10 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
     window.location.href = "/"
   }
 
+  const handleRedirect = () => {
+    router.push("/carrito");
+  };
+
   return (
     <header
       className={`${isLandingPage
@@ -101,8 +107,10 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
             ))}
           </nav>
           <div className="flex items-center space-x-4 pr-6">
-            <Button variant="ghost" size="icon" className="group hover:text-custom-blue">
-              <ShoppingCart className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
+            <Button variant="ghost" size="icon" className="group hover:text-custom-blue"
+            onClick={handleRedirect} >
+              <ShoppingCart 
+              className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
             </Button>
             <Button
               variant="ghost"
