@@ -206,6 +206,7 @@ export default function PublicarClient({id}:{id:string | null}) {
           <Card>
             <CardHeader>
               <CardTitle>Imágenes</CardTitle>
+              <h2 className="text-gray-500">*Ten en cuenta que la primera imagen que subas será la imagen que se mostrará del producto</h2>
             </CardHeader>
             <CardContent>
               <Label className="text-sm font-medium text-gray-700 flex items-center mb-2">
@@ -351,7 +352,7 @@ export default function PublicarClient({id}:{id:string | null}) {
           <Button
             type="submit"
             disabled={isLoading || !isValid || uploadedImages.length === 0}
-            className="h-14 bg-green-600 hover:bg-green-600 text-white text-xl font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+            className="h-12 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
           >
             {isLoading ? (
               <>
