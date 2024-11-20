@@ -24,10 +24,10 @@ import { getCategorias } from "@/app/api/categorias"
 import { useToast } from "@/components/ui/toast"
 
 const productSchema = z.object({
-  producto: z.string().min(3, { message: 'El nombre debe tener al menos 3 caracteres' }).max(100, { message: 'El nombre no puede exceder 100 caracteres' }),
-  precio: z.number().min(0.01, { message: 'El precio debe ser mayor a 0' }),
+  producto: z.string().min(1, { message: 'El nombre debe tener al menos un caracteres' }).max(100, { message: 'El nombre no puede exceder 100 caracteres' }),
+  precio: z.number().min(1, { message: 'El precio debe ser mayor a 0' }),
   estado_producto: z.string().min(2, { message: 'Debe seleccionar el estado del producto' }).max(50, { message: 'La condición no puede exceder 50 caracteres' }),
-  descripcion: z.string().min(20, { message: 'La descripción debe tener al menos 20 caracteres' }).max(1000, { message: 'La descripción no puede tener mas de 1000 caracteres' }),
+  descripcion: z.string().min(1, { message: 'La descripción debe tener al menos un caracteres' }).max(1000, { message: 'La descripción no puede tener mas de 1000 caracteres' }),
   stock: z.number().min(1, { message: 'La cantidad debe ser mayor a 0' }),
   id_categoria: z.string().min(1, { message: 'Debe seleccionar una categoría' })
 })
@@ -46,16 +46,16 @@ export default function PublicarClient({id}:{id:string | null}) {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isValid }
+    formState: { errors }
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       producto: "",
-      precio: 0,
+      precio: undefined,
       estado_producto: "",
       descripcion: "",
       id_categoria: "",
-      stock: 0
+      stock: undefined
     }
   })
 
@@ -159,8 +159,8 @@ export default function PublicarClient({id}:{id:string | null}) {
   })
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl montserrat font-bold mb-8">Publicar Nuevo Producto</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Información del producto */}
@@ -206,6 +206,7 @@ export default function PublicarClient({id}:{id:string | null}) {
           <Card>
             <CardHeader>
               <CardTitle>Imágenes</CardTitle>
+              <h2 className="text-gray-500">*Ten en cuenta que la primera imagen que subas será la imagen que se mostrará del producto</h2>
             </CardHeader>
             <CardContent>
               <Label className="text-sm font-medium text-gray-700 flex items-center mb-2">
@@ -230,12 +231,12 @@ export default function PublicarClient({id}:{id:string | null}) {
               <div className="flex justify-center mt-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {imageUrls.map((url, index) => (
-                    <div key={url} className="relative h-52 aspect-square">
+                    <div key={url} className="relative h-40 aspect-square">
                       <Image
                         src={url}
                         alt={`Preview ${index + 1}`}
                         fill
-                        className=" object-cover rounded-lg shadow-md"
+                        className="object-cover rounded-lg shadow-md"
                       />
                       <button
                         type="button"
@@ -269,6 +270,7 @@ export default function PublicarClient({id}:{id:string | null}) {
                     type="number"
                     placeholder="0.00"
                     {...register('precio', { valueAsNumber: true })}
+                    defaultValue=""
                     className={`mt-1 ${errors.precio ? 'border-red-500' : ''}`}
                   />
                   {errors.precio && (
@@ -350,8 +352,8 @@ export default function PublicarClient({id}:{id:string | null}) {
 
           <Button
             type="submit"
-            disabled={isLoading || !isValid || uploadedImages.length === 0}
-            className="h-14 bg-green-600 hover:bg-green-600 text-white text-xl font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+            disabled={isLoading || uploadedImages.length === 0}
+            className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
           >
             {isLoading ? (
               <>

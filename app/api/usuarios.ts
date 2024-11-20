@@ -75,13 +75,17 @@ export async function uploadAvatarUser({ file }: { file: File }) {
     }
 }
 
-export async function getProductosVendedor(id: string) {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/getProductosVendedor/${id}`;
+export async function getProductosVendedor(id: string, limit: number, offset: number) {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/usuarios/getProductosVendedor/${id}?limit=${limit}&offset=${offset}`;
 
     try {
         const res = await axios.get(url);
         return res.data;
     } catch (error) {
+        // Si el error es un 404, retornamos un array vacío para evitar romper el flujo
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+            return [];
+        }
         throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
