@@ -201,7 +201,7 @@ export default function ProductosVista({
               )}
             </div>
              {/* Selector de cantidad de elementos por página */}
-/             <div className="mb-4 px-6 flex justify-end items-center">
+              <div className="mb-4 px-6 flex justify-end items-center">
                <label htmlFor="items-per-page" className="mr-2">
                   Elementos por página:
                </label>

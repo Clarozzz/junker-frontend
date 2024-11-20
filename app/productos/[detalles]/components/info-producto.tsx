@@ -38,6 +38,7 @@ export default function InfoProductos({ params }: { params: { detalles: string }
       descripcion={producto.descripcion}
       categorias={producto.productos_categorias[0]?.categorias.nombre}
       estado={producto.estado_producto}
+      stock={producto.stock} 
       vendedor_descripcion={producto.vendedores.descripcion}
       nombre_vendedor={producto.vendedores.usuarios.nombre}
       contacto_vendedor={producto.vendedores.usuarios.email}

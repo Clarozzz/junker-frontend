@@ -6,6 +6,7 @@ interface Producto {
   fecha_publicacion: string;
   estado_producto: string;
   disponibilidad: string;
+  stock: number;
   productos_imagenes: { url: string }[];
   productos_categorias: { categorias: { nombre: string } }[];
   vendedores: {
@@ -37,6 +38,7 @@ interface ProductDetailProps {
   nombre_vendedor: string;
   contacto_vendedor: string;
   vendedor_calificacion: number;
+  stock: number;
 }
 
 interface ProductoCreate {
@@ -194,4 +196,9 @@ interface CarritoCreate {
 
 interface CarritoResponse {
   message: string;
+}
+
+interface ProductStock {
+  stock: number;
+  currentCartQuantity: number;
 }

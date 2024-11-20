@@ -100,6 +100,7 @@ export default function Navbar({ userData }: { userData: { nombre: string, avata
               </Link>
             ))}
           </nav>
+
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
