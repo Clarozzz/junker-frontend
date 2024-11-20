@@ -82,6 +82,10 @@ export async function getProductosVendedor(id: string, limit: number, offset: nu
         const res = await axios.get(url);
         return res.data;
     } catch (error) {
+        // Si el error es un 404, retornamos un array vacío para evitar romper el flujo
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+            return [];
+        }
         throw new Error(`Error: ${error instanceof Error ? error.message : String(error)}`);
     }
 }

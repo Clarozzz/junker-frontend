@@ -90,18 +90,22 @@ function ProductTable({ products }: { products: Product[] }) {
           <TableBody>
             {products.map((product) => (
               <TableRow key={product.id}>
-                <TableCell>
+                <TableCell className="p-2 sm:p-4">
                   <Image
                     src={product.imagen}
                     alt={product.nombre}
                     width={100}
                     height={100}
-                    className="object-cover rounded-md h-24 w-24"
+                    className="object-cover rounded-md h-16 w-16 sm:h-24 sm:w-24"
                   />
                 </TableCell>
                 <TableCell className="font-medium">{product.nombre}</TableCell>
                 <TableCell className="text-right">
-                  <Button className="primary">Editar</Button>
+                  <Button asChild className="primary">
+                    <Link href={`/vendedor/productos/${product.id}`}>
+                      Editar
+                    </Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -110,7 +114,7 @@ function ProductTable({ products }: { products: Product[] }) {
       </div>
       <div className="flex justify-center">
         <Button asChild className="shadow-md bg-custom-blue hover:bg-blue-900 text-white transition-all duration-200">
-          <Link href="/vendedor/productos">Ver más productos</Link>
+          <Link href="/vendedor/productos">Todos los productos</Link>
         </Button>
       </div>
     </div>
