@@ -4,7 +4,7 @@ import { getProductosVendedor } from "@/app/api/usuarios";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Plus, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Plus, Loader2, AlertCircle } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
@@ -22,9 +22,15 @@ export default function TablaProductos({ id }: { id: string | null }) {
         setLoading(true);
         try {
             const fetchedProducts = await getProductosVendedor(id, limit, offset);
-            setProducts(prevProducts => [...prevProducts, ...fetchedProducts]);
-            setOffset(prevOffset => prevOffset + limit);
-            setHasMore(fetchedProducts.length === limit);
+
+            // Si el backend retorna una lista vacía, hasMore debe ser false
+            if (fetchedProducts.length === 0) {
+                setHasMore(false);
+            } else {
+                setProducts(prevProducts => [...prevProducts, ...fetchedProducts]);
+                setOffset(prevOffset => prevOffset + limit);
+                setHasMore(fetchedProducts.length === limit); // Esto controla si aún hay más productos
+            }
         } catch (error) {
             console.error("Error fetching products:", error);
         } finally {
@@ -50,15 +56,9 @@ export default function TablaProductos({ id }: { id: string | null }) {
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl montserrat font-bold mb-8">Mis productos</h1>
                 <Card>
                     <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                            <Link href='/perfil/vendedor' className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md hover:bg-gray-100 transition-colors duration-200">
-                                <ArrowLeft className="w-6 h-6" />
-                                <span className="sr-only">Volver al perfil de vendedor</span>
-                            </Link>
-                            <div>
-                                <CardTitle className="text-xl sm:text-2xl font-bold">Tus productos</CardTitle>
-                                <p className="text-sm sm:text-base text-gray-500">Gestiona los productos que tienes actualmente en venta</p>
-                            </div>
+                        <div>
+                            <CardTitle className="text-xl sm:text-2xl font-bold">Tus productos</CardTitle>
+                            <p className="text-sm sm:text-base text-gray-500">Gestiona los productos que tienes actualmente en venta</p>
                         </div>
                         <Button asChild className="shadow-md bg-green-600 hover:bg-green-700 text-white transition-all duration-200 w-full sm:w-auto">
                             <Link href="/publicar">
@@ -104,7 +104,7 @@ export default function TablaProductos({ id }: { id: string | null }) {
                                         </TableBody>
                                     </Table>
                                 </div>
-                                {hasMore && (
+                                {hasMore && products.length > 0 && (
                                     <div className="flex justify-center mt-6 sm:mt-8">
                                         <Button
                                             onClick={loadMore}

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ShoppingCart, Menu, X, User, HandCoins, LogOut } from 'lucide-react'
+import { ShoppingCart, Menu, X, User, LogOut, Tag, Store, Heart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import LogoJunker from "./logo-junker"
 import { usePathname } from "next/navigation"
@@ -17,7 +17,7 @@ const pages = [
   { ruta: "Servicios", href: "/servicios", current: false },
 ]
 
-export default function Navbar({ userData }: { userData: {nombre:string, avatar_url:string} | null }) {
+export default function Navbar({ userData }: { userData: { nombre: string, avatar_url: string } | null }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -73,7 +73,7 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
         } top-0 z-20 ${isScrolled ? "bg-white shadow-md text-gray-900" : ""} ${isHidden ? "hidden" : ""}`}
     >
       <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center mx-4 md:justify-between w-full md:w-auto">
+        <div className="flex justify-between items-center mx-4 w-full md:w-auto">
           <div className="flex flex-row items-center md:justify-start sm:justify-start lg:justify-center xl:justify-center px-6 sm:px-2 w-full md:w-auto">
             <Link href="/">
               <LogoJunker className="w-11" />
@@ -100,10 +100,7 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
               </Link>
             ))}
           </nav>
-          <div className="flex items-center space-x-4 pr-6">
-            <Button variant="ghost" size="icon" className="group hover:text-custom-blue">
-              <ShoppingCart className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
-            </Button>
+          <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
               size="icon"
@@ -118,20 +115,35 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
               </Link>
             ) : (
               <div className="relative inline-block text-left">
-                <button
-                  onClick={handleToggle}
-                  className="flex items-center space-x-2 cursor-pointer focus:outline-none"
-                >
-                  <div className="flex items-center space-x-2 cursor-pointer">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage src={userData.avatar_url} className="image-cover" />
-                      <AvatarFallback>
-                        {userData.nombre.slice(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className={getTextColor()}>{userData.nombre}</span>
-                  </div>
-                </button>
+                {/* Contenedor flex para alinear los botones y el avatar en una fila */}
+                <div className="flex items-center">
+                  <Button asChild variant="ghost" size="icon" className="group hover:text-custom-blue">
+                    <Link href="/carrito">
+                      <ShoppingCart className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="ghost" size="icon" className="group hover:text-custom-blue mx-2">
+                    <Link href="/favoritos">
+                      <Heart className={`h-5 w-5 ${getTextColor()} group-hover:text-custom-blue transition-colors`} />
+                    </Link>
+                  </Button>
+
+                  {/* Avatar y nombre de usuario */}
+                  <button
+                    onClick={handleToggle}
+                    className="flex items-center cursor-pointer focus:outline-none px-2"
+                  >
+                    <div className="flex items-center space-x-2 cursor-pointer">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={userData.avatar_url} className="image-cover" />
+                        <AvatarFallback>
+                          {userData.nombre.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className={getTextColor()}>{userData.nombre}</span>
+                    </div>
+                  </button>
+                </div>
 
                 <AnimatePresence>
                   {isOpen && (
@@ -156,8 +168,16 @@ export default function Navbar({ userData }: { userData: {nombre:string, avatar_
                         onClick={() => setIsOpen(false)}
                         className="flex items-center px-2 py-2 text-sm text-green-600 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
                       >
-                        <HandCoins className="mr-2 h-4 w-4 text-green-500" />
-                        Vender
+                        <Tag className="mr-2 h-4 w-4 text-green-500" />
+                        Publicar
+                      </Link>
+                      <Link
+                        href="/vendedor/productos"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center px-2 py-2 text-sm text-gray-800 hover:bg-gray-100 rounded-md transition-all duration-150 ease-in-out"
+                      >
+                        <Store className="mr-2 h-4 w-4" />
+                        Mis productos
                       </Link>
                       <button
                         onClick={() => {
