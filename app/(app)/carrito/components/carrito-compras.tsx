@@ -52,8 +52,8 @@ export default function CarritoCLient() {
     if (userData?.carrito && userData.carrito.length > 0) {
       const fetchCarrito = async () => {
         try {
-          const carrito_id = userData.carrito[0].id;
-          const data = await carritoService.getCarrito(carrito_id);
+          // const carrito_id = userData.carrito[0].id;
+          const data = await carritoService.getCarrito(userData.carrito[0].id);
           setCarrito(data);
           const cantidadesIniciales = data.reduce(
             (acc, item) => ({
@@ -149,10 +149,10 @@ export default function CarritoCLient() {
                             control={control}
                             render={({ field }) => (
                               <Select
-                                value={field.value || cantidades[carrito.id]?.toString()} // Usa el valor del field o el estado local.
+                                value={field.value || cantidades[carrito.id]?.toString()} 
                                 onValueChange={(value) => {
-                                  field.onChange(value); // Actualiza el valor en react-hook-form.
-                                  actualizarCantidad(carrito.id, Number(value)); // Actualiza tu lógica personalizada.
+                                  field.onChange(value); 
+                                  actualizarCantidad(carrito.id, Number(value)); 
                                 }}
                               >
                                 <SelectTrigger className="w-full focus:ring-custom-blue">

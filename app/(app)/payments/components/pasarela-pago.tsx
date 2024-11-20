@@ -12,23 +12,50 @@ import FormPagosClient from "./form-pago-client";
 import FormPasarela from "./form-pasarela";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { readUser } from "@/app/api/server";
+import { getUser } from "@/app/api/usuarios";
 
 export default function PasarelaPago() {
   const [carritos, setCarrito] = useState<Carrito[]>([]);
+  const [userData, setUserData] = useState<Usuario | null>(null);
 
   useEffect(() => {
-    const fetchCarrito = async () => {
+    const loadUserData = async () => {
       try {
-        const data = await carritoService.getCarrito();
-        setCarrito(data);
-      } catch (error) {
-        // setError("Error al obtener los detalles del carrito");
-        console.error("Error al obtener carrito:", error);
+        const {
+          data: { user },
+        } = await readUser();
+        if (!user) {
+          throw new Error("Error al obtener el usuario");
+        }
+
+        const usuario = await getUser(user.id);
+        if (usuario) {
+          setUserData(usuario);
+        }
+      } catch {
+        setUserData(null);
       }
     };
 
-    fetchCarrito();
+    loadUserData();
   }, []);
+
+  useEffect(() => {
+    if (userData?.carrito && userData.carrito.length > 0) {
+      const fetchCarrito = async () => {
+        try {
+          const carrito_id = userData.carrito[0].id;
+          const data = await carritoService.getCarrito(carrito_id);
+          setCarrito(data);
+        } catch (error) {
+          console.error("Error al obtener carrito:", error);
+        }
+      };
+
+      fetchCarrito();
+    }
+  }, [userData]);
 
   return (
     <div className="flex flex-col">
@@ -74,7 +101,7 @@ export default function PasarelaPago() {
                 <p>Total</p>
               </div>
               <div>
-                <p>Lps. 262.00</p>
+                <p>Lps. 222.22</p>
               </div>
             </div>
             <div className="mt-6 flex justify-center">
