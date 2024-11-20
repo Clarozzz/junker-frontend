@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { AnimatePresence, motion } from "framer-motion"
 import { signOut } from "@/app/api/server"
-import { useRouter } from "next/navigation"
 
 const pages = [
   { ruta: "Inicio", href: "/", current: true },
@@ -24,7 +23,6 @@ export default function Navbar({ userData }: { userData: { nombre: string, avata
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const pathname = usePathname()
-  const router = useRouter()
 
   const isLandingPage = pathname === "/"
   const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated"];
