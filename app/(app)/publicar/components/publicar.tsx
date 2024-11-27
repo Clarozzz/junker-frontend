@@ -353,7 +353,7 @@ export default function PublicarClient({id}:{id:string | null}) {
           <Button
             type="submit"
             disabled={isLoading || uploadedImages.length === 0}
-            className="w-full bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+            className="w-full max-w-64 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
           >
             {isLoading ? (
               <>

@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { favoritoService } from "@/app/api/favorito";
 
 // const defaultImage = {
 //   id: 'default',
@@ -56,26 +57,6 @@ export default function DetalleProducto({
   });
 
   const selectedQuantity = watch("cantidad");
-
-  // useEffect(() => {
-  //   const fetchProductStock = async () => {
-  //     try {
-  //       const stockData = await carritoService.getProductStock(id_producto);
-  //       setProductStock(stockData);
-  //     } catch (error) {
-  //       console.error('Error al obtener el stock:', error);
-  //       showToast({
-  //         title: "Error",
-  //         description: "No se pudo obtener la información del stock",
-  //         variant: "error",
-  //       });
-  //     }
-  //   };
-
-  //   if (id_producto) {
-  //     fetchProductStock();
-  //   }
-  // }, [id_producto]);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -155,6 +136,45 @@ export default function DetalleProducto({
           error instanceof Error
             ? error.message
             : "No se pudo agregar el producto al carrito",
+        variant: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAgregarfavorito = async () => {
+    if (!userData?.id) {
+      showToast({
+        title: "Acceso Denegado",
+        description: "Debes iniciar sesión para agregar productos a favoritos",
+        variant: "error",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const favoritodata = {
+        id_usuario: userData?.id || "",
+        id_producto: id_producto,
+      };
+
+      await favoritoService.agregarFavoritos(favoritodata);
+
+      showToast({
+        title: "¡Éxito!",
+        description: "Producto agregado a tus favoritos correctamente",
+        variant: "success",
+      });
+
+    } catch (error) {
+      showToast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "No se pudo agregar el producto a favoritos",
         variant: "error",
       });
     } finally {
@@ -270,7 +290,6 @@ export default function DetalleProducto({
               <div className="pr-2">
                 <ShoppingCart className="h-5 w-5" />
               </div>
-              {/* <span>{isLoading ? "Agregando..." : "Agregar al carrito"}</span> */}
               {isLoading ? (
                 <>
                   <svg
@@ -295,8 +314,13 @@ export default function DetalleProducto({
             </Button>
             <Button
               variant="outline"
+              type="submit"
               className="flex-1 space-x-2 bg-custom-beige text-black hover:bg-orange-100"
-              onClick={() => setIsWishlist(!isWishlist)}
+              onClick={async () => {
+                setIsWishlist((prev) => !prev); // Cambia el estado del wishlist
+                await handleAgregarfavorito(); // Llama a la función para agregar a favoritos
+              }}
+              disabled={isLoading}
             >
               <Heart
                 className={cn(

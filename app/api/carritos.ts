@@ -58,6 +58,21 @@ class CarritoService {
           throw error;
         }
       }
+
+      async eliminarProductoDelCarrito(carrito_id: string, producto_id: string): Promise<void> {
+        try {
+            const response = await axios.delete(`${this.baseURL}/carrito/${carrito_id}/producto/${producto_id}`);
+            
+            if (response.status !== 200) {
+              throw new Error('No se pudo eliminar el producto');
+            }
+
+            console.log(response.data.message);
+        } catch (error) {
+            console.error("Error al eliminar el producto del carrito:", error);
+            throw error;
+        }
+    }
   }
   
   

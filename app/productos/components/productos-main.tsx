@@ -129,7 +129,7 @@ export default function ProductosMain() {
               Productos
             </h1>
           </div>
-          <div className="flex items-baseline justify-between border-b lg:pl-80 border-gray-200 pb-6 pt-6 mr-10 sm:mr-10">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-6 mr-10 sm:mr-10">
             <div>
               <Suspense fallback={<div>Cargando búsqueda...</div>}>
                 <SearchInput
