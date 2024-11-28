@@ -61,7 +61,7 @@ export default function ListaFavoritos() {
     const handleEliminarProducto = async (usuario_id: string, producto_id: string) => {
     try {
       await favoritoService.eliminarProductoDeFavoritos(usuario_id, producto_id);
-      // Actualizar el carrito en el frontend después de eliminar el producto
+      // Actualizar despues de eliminar el producto
       setFavorito((prevFavoritos) =>
         prevFavoritos.filter((favorito) =>
           favorito.productos.id !== producto_id

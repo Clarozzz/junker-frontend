@@ -60,7 +60,7 @@ export default function CarritoCLient() {
           const cantidadesIniciales = data.reduce(
             (acc, item) => ({
               ...acc,
-              [item.id]: item.cantidad,
+              [item.id_producto]: item.cantidad,
             }),
             {}
           );
@@ -76,13 +76,32 @@ export default function CarritoCLient() {
 
 
   // Actualizar cantidad de un producto
-  const actualizarCantidad = (id: string, cantidad: number) => {
-    setCantidades((prev) => ({ ...prev, [id]: cantidad }));
+  // const handleactualizarCantidad  = (producto_id: string, cantidad: number) => {
+  //   setCantidades((prev) => ({ ...prev, [producto_id]: cantidad }));
+  // };
+
+  const handleactualizarCantidad  = async (producto_id: string, cantidad: number) => {
+    try {
+      if (userData?.carrito && userData.carrito.length > 0) {
+        const carrito_id = userData.carrito[0].id;
+        
+        await carritoService.actualizarCantidad(carrito_id, producto_id, cantidad);
+        
+        // Actualizar el estado de las cantidadds
+        setCantidades((prev) => ({ ...prev, [producto_id]: cantidad }));
+        
+        // Refrescar el carrito despues de cambiar la cantidad de un producto en especifico
+        const updatedCarrito = await carritoService.getCarrito(carrito_id);
+        setCarrito(updatedCarrito);
+      }
+    } catch (error) {
+      console.error("Error al actualizar la cantidad del producto:", error);
+    }
   };
 
   const subtotal = carritos.reduce(
     (total, carrito) =>
-      total + carrito.productos?.precio * (cantidades[carrito.id] || 1),
+      total + carrito.productos?.precio * (cantidades[carrito.productos.id] || carrito.cantidad),
     0
   );
   
@@ -105,6 +124,13 @@ export default function CarritoCLient() {
           carrito.productos.id !== producto_id
         )
       );
+
+      setCantidades((prev) => {
+        const newCantidades = { ...prev };
+        delete newCantidades[producto_id];
+        return newCantidades;
+      });
+
     } catch (error) {
       console.error("Error al eliminar el producto:", error);
     }
@@ -128,7 +154,7 @@ export default function CarritoCLient() {
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm px-4 py-6 sm:px-6">
             <div className="flex flex-col gap-6 mt-8">
               {carritos.map((carrito) => (
-                <motion.div key={carrito.id} className="cursor-pointer">
+                <motion.div key={carrito.productos.id} className="cursor-pointer">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center space-x-2 cursor-pointer">
                       <div>
@@ -183,14 +209,14 @@ export default function CarritoCLient() {
                           </div>
                           <div>
                             <Controller
-                              name={`cantidad_${carrito.id}`} // Identifica cada producto por su ID.
+                              name={`cantidad_${carrito.productos.id}`} // Identifica cada producto por su ID.
                               control={control}
                               render={({ field }) => (
                                 <Select
-                                  value={field.value || cantidades[carrito.id]?.toString()} 
+                                  value={field.value || cantidades[carrito.productos.id]?.toString()} 
                                   onValueChange={(value) => {
                                     field.onChange(value); 
-                                    actualizarCantidad(carrito.id, Number(value)); 
+                                    handleactualizarCantidad (carrito.productos.id, Number(value)); 
                                   }}
                                 >
                                   <SelectTrigger className="w-full focus:ring-custom-blue">
@@ -221,7 +247,7 @@ export default function CarritoCLient() {
                           <p className="ml-4">
                             Lps.{" "}
                             {formatCurrency(
-                              carrito.productos?.precio * (cantidades[carrito.id] || 1)
+                              carrito.productos?.precio * (cantidades[carrito.productos.id] || 1)
                             )}
                           </p>
                         </div>

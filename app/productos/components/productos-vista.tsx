@@ -10,6 +10,11 @@ import { usePathname, useRouter } from "next/navigation";
 import Cargando from "@/components/ui/cargando";
 import { Heart, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/toast";
+import { getUser } from "@/app/api/usuarios";
+import { readUser } from "@/app/api/server";
+import { favoritoService } from "@/app/api/favorito";
+import { carritoService } from "@/app/api/carritos";
 
 export default function ProductosVista({
   categoria,
@@ -29,18 +34,124 @@ export default function ProductosVista({
   const [itemsPerPage, setItemsPerPage] = useState<number>(8);
   const [totalItems, setTotalItems] = useState<number>(0);
   // const [isWishlist, setIsWishlist] = useState(false);
-  const [isWishlist, setIsWishlist] = useState<{[key: string]: boolean}>({});
+  const [favoriteStatus, setFavoriteStatus] = useState<{[key: string]: boolean}>({});
+  const [userData, setUserData] = useState<Usuario | null>(null);
+  const [loadingProducto, setLoadingProducto] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   // Controla los productos mostrados (buscados o no)
   const [filteredProductos, setFilteredProductos] = useState<ProductoVista[]>(
     []
   );
 
-  const handleWishlistToggle = (productId: string) => {
-    setIsWishlist(prev => ({
-      ...prev,
-      [productId]: !prev[productId]
-    }));
+  const handleAgregarFavoritos = async (productId: string) => {
+    if (!userData?.id) {
+      showToast({
+        title: "Iniciar sesión",
+        description: "Debes iniciar sesión para agregar a favoritos",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Comprobar el estado actual en que esta el producto en los favoritos
+      const EstaEnFavorito = favoriteStatus[productId];
+
+      if (EstaEnFavorito) {
+        // Eliminar el producto de los favoritos
+        await favoritoService.eliminarProductoDeFavoritos(userData?.id, productId);
+        
+        // Actualizar el estado de los productos
+        setFavoriteStatus(prev => ({
+          ...prev,
+          [productId]: false
+        }));
+
+        showToast({
+          title: "Favoritos",
+          description: "Producto eliminado de favoritos",
+          variant: "success"
+        });
+      } else {
+        // Agregar a los favoritos
+        await favoritoService.agregarFavoritos({
+          id_usuario: userData?.id,
+          id_producto: productId
+        });
+
+        // Actualizar el estado de los favoritos
+        setFavoriteStatus(prev => ({
+          ...prev,
+          [productId]: true
+        }));
+
+        showToast({
+          title: "Favoritos",
+          description: "Producto agregado a favoritos",
+          variant: "success"
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+      
+      showToast({
+        title: "Error",
+        description: "No se pudo modificar favoritos",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleAgregarCarrito = async (producto_id: string) => {
+    if (!userData?.id) {
+      showToast({
+        title: "Acceso Denegado",
+        description: "Debes iniciar sesión para agregar productos al carrito",
+        variant: "error",
+      });
+      return;
+    }
+    
+    setLoadingProducto(producto_id);
+    try {
+
+      const carrito = await carritoService.getCarrito(userData?.carrito[0]?.id || "");
+      const productoExisteEnCarrito = carrito.some(item => item.id_producto === producto_id);
+
+      if (productoExisteEnCarrito) {
+        showToast({
+          title: "Producto Existente",
+          description: "El producto ya está en el carrito",
+          variant: "error"
+        });
+      } else {
+        const carritoData = {
+          id_carrito: userData?.carrito[0]?.id || "",
+          id_producto: producto_id,
+          cantidad: 1,
+        };
+  
+        await carritoService.agregarCarrito(carritoData);
+  
+        showToast({
+          title: "¡Éxito!",
+          description: "Producto agregado al carrito correctamente",
+          variant: "success",
+        });
+  
+      }
+    } catch (error) {
+      showToast({
+        title: "Error",
+        description: error instanceof Error
+          ? error.message
+          : "No se pudo agregar el producto al carrito",
+        variant: "error",
+      });
+    } finally {
+      setLoadingProducto(null);
+    }
   };
 
   const handleCardClick = (product: ProductoVista) => {
@@ -179,6 +290,51 @@ export default function ProductosVista({
     }
   }, [searchQuery, productos]);
 
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const {
+          data: { user },
+        } = await readUser();
+        if (!user) {
+          throw new Error("Error al obtener el usuario");
+        }
+
+        const usuario = await getUser(user.id);
+        if (usuario) {
+          setUserData(usuario);
+        }
+      } catch {
+        setUserData(null);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
+  useEffect(() => {
+    const loadFavoriteStatus = async () => {
+      if (!userData?.id) return;
+
+      try {
+        // Fetch user's current favorites
+        const favoritos = await favoritoService.getFavorito(userData?.id);
+        
+        // Create a map of favorite product IDs
+        const favoritosMap = favoritos.reduce((acc, fav) => {
+          acc[fav.id_producto] = true;
+          return acc;
+        }, {} as {[key: string]: boolean});
+
+        setFavoriteStatus(favoritosMap);
+      } catch (error) {
+        console.error("Error al cambiar el estado de los favoritos:", error);
+      }
+    };
+
+    loadFavoriteStatus();
+  }, [userData]);
+
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const formatCurrency = (value: number): string =>
@@ -228,7 +384,8 @@ export default function ProductosVista({
                         <div className="flex justify-center p-6 pt-0 gap-3">
                           <div className="">
                             <Button
-                              onClick={() => handleCardClick(product)}
+                              onClick={() => handleAgregarCarrito(product.id)}
+                              disabled={loadingProducto === product.id}
                               className={` w-28 bg-custom-blue text-white hover:bg-blue-900 hover:text-white ${
                                 productosSeleccion?.id === product.id
                                   ? "ring-2 ring-ring ring-sec ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
@@ -240,18 +397,19 @@ export default function ProductosVista({
                           </div>
                           <div className="">
                             <Button
+                              type="submit"
                               variant="outline"
                               className={`space-x-2 bg-custom-beige text-black hover:bg-orange-100 ${
                                 productosSeleccion?.id === product.id
                                   ? "ring-2 ring-ring ring-sec ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
                                   : ""
                               }`}
-                              onClick={() => handleWishlistToggle(product.id)}
+                              onClick={() => handleAgregarFavoritos(product.id)}
                             >
                               <Heart
                                 className={cn(
                                   "h-4 w-4",
-                                  isWishlist[product.id] && "fill-current text-red-500"
+                                  favoriteStatus[product.id] && "fill-current text-red-500"
                                 )}
                               />
                             </Button>

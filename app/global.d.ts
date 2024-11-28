@@ -183,7 +183,7 @@ interface ProductoXCarritoXFavorito {
 }
 
 interface Carrito {
-  id: string; 
+  id_producto: string; 
   productos: ProductoXCarritoXFavorito; 
   cantidad: number;
   id_carrito: string;
@@ -203,7 +203,6 @@ interface ProductStock {
   stock: number;
   currentCartQuantity: number;
 }
-
 
 interface Favorito {
   id_usuario: string; 

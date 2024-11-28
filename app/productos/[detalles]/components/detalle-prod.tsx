@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -44,7 +44,7 @@ export default function DetalleProducto({
   stock,
 }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(imagenes[0]);
-  const [isWishlist, setIsWishlist] = useState(false);
+  const [isFavorito, setIsFavorito] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showToast } = useToast();
   const [hovering, setHovering] = useState(false);
@@ -57,6 +57,20 @@ export default function DetalleProducto({
   });
 
   const selectedQuantity = watch("cantidad");
+
+  const checkProductosEnFavoritos = useCallback(async () => {
+    if (!userData?.id) return;
+
+    try {
+      const favoritos = await favoritoService.getFavorito(userData.id);
+      const isProductInFavorites = favoritos.some(
+        (favorito) => favorito.id_producto === id_producto
+      );
+      setIsFavorito(isProductInFavorites);
+    } catch (error) {
+      console.error("Error en verificar los favorites:", error);
+    }
+  }, [userData, id_producto]);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -86,6 +100,12 @@ export default function DetalleProducto({
   //     setQuantity(value);
   //   }
   // };
+
+  useEffect(() => {
+    if (userData?.id) {
+      checkProductosEnFavoritos();
+    }
+  }, [userData, id_producto, checkProductosEnFavoritos]);
 
   const handleAgregarCarrito = async () => {
     if (!userData?.id) {
@@ -160,14 +180,28 @@ export default function DetalleProducto({
         id_producto: id_producto,
       };
 
-      await favoritoService.agregarFavoritos(favoritodata);
+      if (isFavorito) {
+        // Eliminar de los favoritos
+        await favoritoService.eliminarProductoDeFavoritos(
+          userData.id,
+          id_producto
+        );
+        showToast({
+          title: "¡Éxito!",
+          description: "Producto eliminado de tus favoritos",
+          variant: "success",
+        });
+      } else {
+        // Agregar a favoritos
+        await favoritoService.agregarFavoritos(favoritodata);
+        showToast({
+          title: "¡Éxito!",
+          description: "Producto agregado a tus favoritos correctamente",
+          variant: "success",
+        });
+      }
 
-      showToast({
-        title: "¡Éxito!",
-        description: "Producto agregado a tus favoritos correctamente",
-        variant: "success",
-      });
-
+      setIsFavorito((prev) => !prev);
     } catch (error) {
       showToast({
         title: "Error",
@@ -316,19 +350,18 @@ export default function DetalleProducto({
               variant="outline"
               type="submit"
               className="flex-1 space-x-2 bg-custom-beige text-black hover:bg-orange-100"
-              onClick={async () => {
-                setIsWishlist((prev) => !prev); // Cambia el estado del wishlist
-                await handleAgregarfavorito(); // Llama a la función para agregar a favoritos
-              }}
+              onClick={handleAgregarfavorito}
               disabled={isLoading}
             >
               <Heart
                 className={cn(
                   "h-5 w-5",
-                  isWishlist && "fill-current text-red-500"
+                  isFavorito && "fill-current text-red-500"
                 )}
               />
-              <span>Agregar a favoritos</span>
+              <span>
+                {isFavorito ? "Eliminar de favoritos" : "Agregar a favoritos"}
+              </span>
             </Button>
           </div>
 
