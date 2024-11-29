@@ -31,21 +31,11 @@ class CarritoService {
         }
       }
 
-      async getProductStock(productId: string): Promise<ProductStock> {
+      async actualizarCantidad(carrito_id: string, producto_id: string, cantidad: number): Promise<CarritoResponse> {
         try {
-          const response = await axios.get(`${this.baseURL}/productos/${productId}/stock`);
-          return response.data;
-        } catch (error) {
-          console.error("Error al obtener el stock del producto:", error);
-          throw error;
-        }
-      }
-
-      async actualizarCantidad(carritoId: string, productoId: string, cantidad: number): Promise<CarritoResponse> {
-        try {
-          const response = await axios.patch(`${this.baseURL}/carrito/cantidad`, {
-            id_carrito: carritoId,
-            id_producto: productoId,
+          const response = await axios.put(`${this.baseURL}/carrito/cantidad`, {
+            id_carrito: carrito_id,
+            id_producto: producto_id,
             cantidad
           }, {
             headers: {
@@ -58,6 +48,21 @@ class CarritoService {
           throw error;
         }
       }
+
+      async eliminarProductoDelCarrito(carrito_id: string, producto_id: string): Promise<void> {
+        try {
+            const response = await axios.delete(`${this.baseURL}/carrito/${carrito_id}/producto/${producto_id}`);
+            
+            if (response.status !== 200) {
+              throw new Error('No se pudo eliminar el producto');
+            }
+
+            console.log(response.data.message);
+        } catch (error) {
+            console.error("Error al eliminar el producto del carrito:", error);
+            throw error;
+        }
+    }
   }
   
   

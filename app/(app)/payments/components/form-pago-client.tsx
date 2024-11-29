@@ -72,7 +72,7 @@ export default function FormPagosClient() {
                       htmlFor="Nombre"
                       className="block font-medium text-gray-900 pb-3"
                     >
-                      Direccion
+                      Direccion de entrega
                     </Label>
                     <Input
                       className=""

@@ -164,26 +164,27 @@ interface UserAvatarName {
   nombre: string;
   avatar_url: string;
 }
-interface ProductoXCarrito {
+interface ProductoXCarritoXFavorito {
   id: string;
   nombre: string;
   descripcion: string;
   precio: number;
   estado_producto: string;
   stock: number;
-  productos_imagenes: { url: string }[];
+  productos_imagenes_filtradas: { url: string }[];
   vendedores: {
     calificacion: number;
     usuarios: {
       nombre: string;
       apellido: string;
+      avatar_url: string;
     };
   };
 }
 
 interface Carrito {
-  id: string; 
-  productos: ProductoXCarrito; 
+  id_producto: string; 
+  productos: ProductoXCarritoXFavorito; 
   cantidad: number;
   id_carrito: string;
 }
@@ -201,4 +202,19 @@ interface CarritoResponse {
 interface ProductStock {
   stock: number;
   currentCartQuantity: number;
+}
+
+interface Favorito {
+  id_usuario: string; 
+  productos: ProductoXCarritoXFavorito; 
+  id_producto: string;
+}
+
+interface FavoritoCreate {
+  id_usuario: string;
+  id_producto: string;
+}
+
+interface FavoritoResponse {
+  message: string;
 }
