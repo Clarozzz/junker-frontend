@@ -110,18 +110,15 @@ export const registro = async (userData: RegisterData) => {
   }
 
   if (data.user) {
-    try {
-      await registerUser({
-        id: data.user.id,
-        nombre: userData.nombre,
-        apellido: userData.apellido,
-        email: userData.email
-      });
-      return redirect('/')
-    } catch (err) {
-      throw new Error(`${err}`)
-    }
+    await registerUser({
+      id: data.user.id,
+      nombre: userData.nombre,
+      apellido: userData.apellido,
+      email: userData.email
+    });
+    
+    return redirect('/')
   }
-
+  
   throw new Error("Error registandote")
 };
