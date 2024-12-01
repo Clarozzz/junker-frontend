@@ -25,7 +25,7 @@ export default function Navbar({ userData }: { userData: { nombre: string, avata
   const pathname = usePathname()
 
   const isLandingPage = pathname === "/"
-  const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated"];
+  const hiddenRoutes = ["/login", "/registro", "/forgot", "/reset", "/emailUpdated", "/administrador"];
   const isHidden = hiddenRoutes.includes(pathname);
 
   const handleToggle = (event: React.MouseEvent) => {
