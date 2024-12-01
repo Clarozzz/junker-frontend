@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { getProducto } from "@/app/api/productos";
 import DetalleProducto from "./detalle-prod";
+import Cargando from "@/components/ui/cargando";
 
 export default function InfoProductos({ params }: { params: { detalles: string } }) {
   const { detalles } = params; 
@@ -27,7 +28,7 @@ export default function InfoProductos({ params }: { params: { detalles: string }
   }
 
   if (!producto) {
-    return <div>Cargando...</div>;
+    return <Cargando />
   }
 
   return (
