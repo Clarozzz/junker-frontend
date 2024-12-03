@@ -80,16 +80,16 @@ export default function CarritoCLient() {
   //   setCantidades((prev) => ({ ...prev, [producto_id]: cantidad }));
   // };
 
-  const handleactualizarCantidad  = async (producto_id: string, cantidad: number) => {
+  const handleactualizarCantidad = async (producto_id: string, cantidad: number) => {
     try {
       if (userData?.carrito && userData.carrito.length > 0) {
         const carrito_id = userData.carrito[0].id;
-        
+
         await carritoService.actualizarCantidad(carrito_id, producto_id, cantidad);
-        
+
         // Actualizar el estado de las cantidadds
         setCantidades((prev) => ({ ...prev, [producto_id]: cantidad }));
-        
+
         // Refrescar el carrito despues de cambiar la cantidad de un producto en especifico
         const updatedCarrito = await carritoService.getCarrito(carrito_id);
         setCarrito(updatedCarrito);
@@ -104,9 +104,9 @@ export default function CarritoCLient() {
       total + carrito.productos?.precio * (cantidades[carrito.productos.id] || carrito.cantidad),
     0
   );
-  
+
   const isv = subtotal * 0.15;
-  
+
   const total = subtotal + isv;
 
   const formatCurrency = (value: number): string =>
@@ -115,7 +115,7 @@ export default function CarritoCLient() {
       maximumFractionDigits: 2,
     });
 
-    const handleEliminarProducto = async (carrito_id: string, producto_id: string) => {
+  const handleEliminarProducto = async (carrito_id: string, producto_id: string) => {
     try {
       await carritoService.eliminarProductoDelCarrito(carrito_id, producto_id);
       // Actualizar el carrito en el frontend después de eliminar el producto
@@ -213,10 +213,10 @@ export default function CarritoCLient() {
                               control={control}
                               render={({ field }) => (
                                 <Select
-                                  value={field.value || cantidades[carrito.productos.id]?.toString()} 
+                                  value={field.value || cantidades[carrito.productos.id]?.toString()}
                                   onValueChange={(value) => {
-                                    field.onChange(value); 
-                                    handleactualizarCantidad (carrito.productos.id, Number(value)); 
+                                    field.onChange(value);
+                                    handleactualizarCantidad(carrito.productos.id, Number(value));
                                   }}
                                 >
                                   <SelectTrigger className="w-full focus:ring-custom-blue">
@@ -282,7 +282,7 @@ export default function CarritoCLient() {
           </div>
           {/* )}   */}
         </div>
-        
+
         <div className="grid grid-cols-1 items-start min-w-96 lg:w-1/3 relative py-10 pl-4 md:pl-0">
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col border-t border-gray-200 px-16 py-6 sticky top-20">
             <div className="flex justify-between py-4 text-base font-medium text-gray-900">
@@ -304,10 +304,12 @@ export default function CarritoCLient() {
             </div>
             <div className="mt-6 flex justify-center">
               <Button
-                type="submit"
+                asChild
                 className="flex items-center w-full justify-center rounded-md border border-transparent bg-custom-blue px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-800"
               >
-                Comprar ahora
+                <Link href="/shippingInfo">
+                  Comprar ahora
+                </Link>
               </Button>
             </div>
             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
