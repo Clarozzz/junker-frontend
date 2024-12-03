@@ -8,6 +8,7 @@ import { Plus, Loader2, AlertCircle } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 export default function TablaProductos({ id }: { id: string | null }) {
     const [products, setProducts] = useState<ProductosVendedor[]>([]);
@@ -48,6 +49,11 @@ export default function TablaProductos({ id }: { id: string | null }) {
         if (!loading && hasMore) {
             fetchProducts();
         }
+    };
+
+    const router = useRouter();
+    const handleRedirect = (id: string) => {
+        router.push(`/vendedor/productos/${id}`); // Redirige a la ruta dinámica
     };
 
     return (
@@ -93,8 +99,9 @@ export default function TablaProductos({ id }: { id: string | null }) {
                                                         />
                                                     </TableCell>
                                                     <TableCell className="font-medium">{product.nombre}</TableCell>
-                                                    <TableCell className="text-right">
-                                                        <Button className="rounded-md text-xs sm:text-sm font-medium shadow-md bg-slate-950 hover:bg-slate-800 text-white transition-all duration-200">
+                                                    <TableCell className="text-right" >
+                                                        <Button  className="rounded-md text-xs sm:text-sm font-medium shadow-md bg-slate-950 hover:bg-slate-800 text-white transition-all duration-200"   onClick={() => handleRedirect(product.id)}>
+                                                           
                                                             Editar
                                                             <span className="sr-only">Editar {product.nombre}</span>
                                                         </Button>

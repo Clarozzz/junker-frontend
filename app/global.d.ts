@@ -52,6 +52,17 @@ interface ProductoCreate {
   stock: number;
 }
 
+interface ProductoEdit {
+  id: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  estado_producto: string;
+  stock: number;
+  id_vendedor: string;
+  imagen_url: string[];
+}
+
 interface Producto extends ProductoCreate {
   id: string;
   created_at: string;
