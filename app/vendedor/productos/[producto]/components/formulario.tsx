@@ -186,6 +186,7 @@ export default function Formulario({ id }: { id: string }) {
       {/* Image Gallery Section */}
       <div className="lg:w-1/3 mb-6 lg:mb-0">
         <h2 className="text-xl font-semibold mb-4">Imágenes del Producto</h2>
+        {errors.imagen_url && <p className="text-red-600 text-sm mt-1">{errors.imagen_url.message}</p>}
         {initialProduct && (
           <div className="grid grid-cols-2 gap-4">
             {initialProduct.productos_imagenes.map((img: { url: string }, index: number) => (
@@ -199,7 +200,6 @@ export default function Formulario({ id }: { id: string }) {
                 />           
               </div>
             ))}
-            {errors.imagen_url && <p className="text-red-600 text-sm mt-1">{errors.imagen_url.message}</p>}
           </div>
         )}
       </div>
