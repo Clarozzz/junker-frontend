@@ -1,6 +1,4 @@
 
-//  Test area
-
 'use client'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -29,9 +27,11 @@ const productSchema = z.object({
   nombre: z.string().trim().min(1, { message: 'El nombre es obligatorio' }).max(100, { message: 'Máximo 100 caracteres' }),
   descripcion: z.string().trim().min(1, { message: 'La descripción es obligatoria' }).max(1000, { message: 'Máximo 1000 caracteres' }),
   precio: z.number().positive({ message: 'Debe ser un número positivo' }),
-  estado_producto: z.enum(['Nuevo', 'Usado', 'Reacondicionado'], { errorMap: () => ({ message: 'Seleccione un estado válido' }) }),
-  stock: z.number().positive({ message: 'Debe ser un número mayor a 0' }),
-  imagen_url: z.array(z.string().url()).optional(),
+  estado_producto: z.enum(['Nuevo', 'Usado'], { errorMap: () => ({ message: 'Seleccione un estado válido' }) }),
+  stock: z.number().positive({ message: 'Debe ser un número mayor a 0' }).refine((val) => val !== null, {
+    message: "El campo stock no puede estar vacío",
+  }),
+  imagen_url: z.array(z.string().url()).min(1, { message: 'Deber subir al menos una imagen' }).max(4, { message: 'Máximo 4 imágenes permitidas' }),
   id_vendedor: z.string().min(1, { message: 'El ID del vendedor es obligatorio' }),
   id_categoria: z.string().min(1, { message: 'Debe seleccionar una categoría' })
 })
@@ -66,7 +66,7 @@ export default function Formulario({ id }: { id: string }) {
           nombre: producto.nombre,
           descripcion: producto.descripcion,
           precio: producto.precio,
-          estado_producto: producto.estado_producto as "Nuevo" | "Usado" | "Reacondicionado",
+          estado_producto: producto.estado_producto as "Nuevo" | "Usado",
           stock: producto.stock,
           imagen_url: producto.productos_imagenes.map((img: { url: string }) => img.url),
           id_vendedor: producto.id_vendedor,
@@ -196,9 +196,10 @@ export default function Formulario({ id }: { id: string }) {
                   width={200} 
                   height={200} 
                   className="rounded-lg object-cover w-full h-40"
-                />
+                />           
               </div>
             ))}
+            {errors.imagen_url && <p className="text-red-600 text-sm mt-1">{errors.imagen_url.message}</p>}
           </div>
         )}
       </div>
