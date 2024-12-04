@@ -1,13 +1,6 @@
 
+//  Test area
 
-// export default function Formulario({ id }: { id: string }) {
-//     return (
-//         <div className="bg-gray-100 py-8 min-h-[calc(100vh-74.42px)]">
-//             <h1>Editar Producto</h1>
-//             <p className="text-black">ID del producto: {id}</p>
-//         </div>
-//     )
-// }
 'use client'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -31,7 +24,6 @@ import { useToast } from '@/components/ui/toast'
 import { useEffect, useState } from 'react'
 import { productosService } from '@/app/api/productos'
 import { getProducto } from "@/app/api/productos"
-// import { getCategorias } from "@/app/api/categorias"
 
 const productSchema = z.object({
   nombre: z.string().trim().min(1, { message: 'El nombre es obligatorio' }).max(100, { message: 'Máximo 100 caracteres' }),
@@ -49,9 +41,7 @@ type ProductFormData = z.infer<typeof productSchema>
 export default function Formulario({ id }: { id: string }) {
   const { showToast } = useToast()
   const [initialProduct, setInitialProduct] = useState<Producto>()
-  // const [isLoading, setIsLoading] = useState<boolean>(false)
-  // const [uploadedImages, setUploadedImages] = useState<File[]>([])
-  // const [categorias, setCategorias] = useState<Categoria[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const {
     register,
@@ -62,40 +52,37 @@ export default function Formulario({ id }: { id: string }) {
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
   })
-// * Renderizado de los productos
+
+  // Renderizado de los productos
   useEffect(() => {
-  // Si ya se cargó el producto inicial, no vuelvas a llamarlo
-  if (initialProduct) return;
+    if (initialProduct) return;
     
-  
+    const fetchProduct = async () => {
+      try {
+        const producto = await getProducto(id);
+        setInitialProduct(producto);
 
-  const fetchProduct = async () => {
-    try {
-      const producto = await getProducto(id);
-      setInitialProduct(producto);
+        reset({
+          nombre: producto.nombre,
+          descripcion: producto.descripcion,
+          precio: producto.precio,
+          estado_producto: producto.estado_producto as "Nuevo" | "Usado" | "Reacondicionado",
+          stock: producto.stock,
+          imagen_url: producto.productos_imagenes.map((img: { url: string }) => img.url),
+          id_vendedor: producto.id_vendedor,
+          id_categoria: producto.productos_categorias[0]?.categorias?.nombre,
+        });
+      } catch  {
+        showToast({
+          title: 'Error',
+          description: 'No se pudo obtener el producto',
+          variant: 'destructive',
+        });
+      }
+    };
 
-      // Configura el formulario solo una vez al cargar los datos iniciales
-      reset({
-        nombre: producto.nombre,
-        descripcion: producto.descripcion,
-        precio: producto.precio,
-        estado_producto: producto.estado_producto as "Nuevo" | "Usado" | "Reacondicionado",
-        stock: producto.stock,
-        imagen_url: producto.productos_imagenes.map((img: { url: string }) => img.url),
-        id_vendedor: producto.id_vendedor,
-        id_categoria: producto.productos_categorias[0]?.categorias?.nombre,
-      });
-    } catch {
-      showToast({
-        title: 'Error',
-        description: 'No se pudo obtener el producto',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  fetchProduct();
-}, [id, initialProduct, reset, showToast]);
+    fetchProduct();
+  }, [id, initialProduct, reset, showToast]);
 
   const onDrop = async (acceptedFiles: File[]): Promise<void> => {
     try {
@@ -134,33 +121,63 @@ export default function Formulario({ id }: { id: string }) {
   })
 
   const onSubmit = async (data: ProductFormData): Promise<void> => {
-  
-    const payload = {
-      id: id,
-      nombre: data.nombre,
-      descripcion: data.descripcion,
-      precio: data.precio,
-      estado_producto: data.estado_producto,
-      stock: data.stock,
-      imagen_url: data.imagen_url || [],
-      id_vendedor: data.id_vendedor,
-    }
-
     try {
-      // setIsLoading(true)
+      setIsLoading(true)
+      
+      if (!data.imagen_url || data.imagen_url.length === 0) {
+        showToast({
+          title: "Error",
+          description: "Debe cargar al menos una imagen",
+          variant: "destructive",
+        })
+        return
+      }
+
+      if (data.imagen_url.length > 4) {
+        showToast({
+          title: "Error",
+          description: "Máximo 4 imágenes permitidas",
+          variant: "destructive",
+        })
+        return
+      }
+
+      const payload = {
+        id: id,
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+        precio: data.precio,
+        estado_producto: data.estado_producto,
+        stock: data.stock,
+        imagen_url: data.imagen_url || [],
+        id_vendedor: data.id_vendedor,
+      }
+
       await productosService.editProduct(payload)
+      
+      // Refrescar solo la información de las imágenes
+      const updatedProduct = await getProducto(id);
+      
+      // Actualizar solo las imágenes
+      setInitialProduct(prevProduct => prevProduct ? {
+        ...prevProduct,
+        productos_imagenes: updatedProduct.productos_imagenes
+      } : prevProduct);
+
       showToast({
-        title: 'Éxito',
-        description: 'Producto actualizado con éxito',
-        variant: 'success',
+        title: "Éxito",
+        description: "Producto actualizado correctamente",
+        variant: "success",
       })
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al actualizar el producto'
       showToast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -186,7 +203,7 @@ export default function Formulario({ id }: { id: string }) {
         )}
       </div>
 
-      {/* Form Section */}
+        {/* Form Section */}
       <form onSubmit={handleSubmit(onSubmit)} className="lg:w-2/3 space-y-4">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
@@ -222,36 +239,13 @@ export default function Formulario({ id }: { id: string }) {
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
-          {/* <div>
-            <Label htmlFor="estado_producto">Estado del Producto</Label>
-            <Controller
-              name="estado_producto"
-              control={control}
-              render={({ field }) => (
-                <Select 
-                  onValueChange={field.onChange} 
-                  value={field.value} 
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona el estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Nuevo">Nuevo</SelectItem>
-                    <SelectItem value="Usado">Usado</SelectItem>
-                    <SelectItem value="Reacondicionado">Reacondicionado</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.estado_producto && <p className="text-red-600 text-sm mt-1">{errors.estado_producto.message}</p>}
-          </div> */}
           <div className="grid md:grid-cols-2 gap-4">
   <div>
     <Label htmlFor="estado_producto">Estado del Producto</Label>
     <Controller
       name="estado_producto"
       control={control}
-      defaultValue={initialProduct?.estado_producto as "Nuevo" | "Usado" | "Reacondicionado" | undefined} // Valor inicial
+      defaultValue={initialProduct?.estado_producto as "Nuevo" | "Usado" | undefined} // Valor inicial
       render={({ field }) => (
         <Select 
           onValueChange={field.onChange} 
@@ -263,7 +257,6 @@ export default function Formulario({ id }: { id: string }) {
           <SelectContent>
             <SelectItem value="Nuevo">Nuevo</SelectItem>
             <SelectItem value="Usado">Usado</SelectItem>
-            <SelectItem value="Reacondicionado">Reacondicionado</SelectItem>
           </SelectContent>
         </Select>
       )}
@@ -335,12 +328,9 @@ export default function Formulario({ id }: { id: string }) {
         )}
 
         <div className="flex justify-end">
-          <Button type="submit" variant="default" className="w-full md:w-auto bg-lime-500">
-            Guardar Cambios
-          </Button>
-          {/* <Button
+           <Button
             type="submit"
-            disabled={isLoading || uploadedImages.length === 0}
+            disabled={isLoading  || control._formValues.imagen_url > 4 }  
             className="w-full max-w-64 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
           >
             {isLoading ? (
@@ -354,7 +344,7 @@ export default function Formulario({ id }: { id: string }) {
             ) : (
               "Guardar Cambios"
             )}
-          </Button> */}
+          </Button>
         </div>
       </form>
     </div>
