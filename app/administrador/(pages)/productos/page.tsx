@@ -14,18 +14,19 @@ export default function AdministradorPageTable() {
   )
 }
 
+// This component will be a client component
 import { useState } from 'react'
 import { ToastProvider } from '@/components/ui/toast'
-import DataTableAdmin from './components/tabla-users-admin'
+import DataTableProductos from '../../components/tabla-productos'
 
 function AdministradorPageTableContent() {
   const [filters, setFilters] = useState({
-    nombre: null,
-    apellido: null,
-    email: null,
-    rol: null,
+    categoria: null,
+    precio_min: 0,
+    precio_max: 0,
+    estado: null,
     searchQuery: '',
-    ordenNombre: null
+    ordenPrecio: null
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,13 +39,11 @@ function AdministradorPageTableContent() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Implement search logic if needed
   };
 
   const placeholders = [
-    "Buscar por apellido",
+    "Buscar por categoria",
     "Buscar por nombre",
-    "buscar por correo",
   ];
 
   return (
@@ -61,13 +60,13 @@ function AdministradorPageTableContent() {
         <div>
         <Suspense fallback={<div>Cargando usuarios...</div>}>
         <ToastProvider/> 
-          <DataTableAdmin 
-            nombre={filters.nombre}
-            apellido={filters.apellido}
-            email={filters.email}
-            rol={filters.rol}
+          <DataTableProductos 
+            categoria={filters.categoria}
+            precio_min={filters.precio_min}
+            precio_max={filters.precio_max}
+            estado={filters.estado}
             searchQuery={filters.searchQuery}
-            ordenNombre={filters.ordenNombre} 
+            ordenPrecio={filters.ordenPrecio} 
           />
         </Suspense>
         </div>

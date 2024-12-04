@@ -1,4 +1,5 @@
-"use client";
+'use client'
+
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
@@ -8,35 +9,52 @@ import {
   IconUserBolt,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import LogoJunker from "@/components/logo-junker";
+import { signOut } from "@/app/api/server"; 
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { User } from "lucide-react";
 
-export default function SidebarAdministrador({userData }:{userData: Usuario | null }) {
+
+export default function SidebarAdministrador({ userData }: { userData: { nombre: string, avatar_url: string, apellido: string} | null }) {
+
+  const handleLogout = async () => {
+    await signOut();
+    window.location.href = "/";  // Redirect to login after logout
+  };
+
   const links = [
     {
-      label: "Clientes",
-      href: "#",
+      label: "Inicio",
+      href: "/",
       icon: (
         <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
+      label: "Clientes",
+      href: "/administrador/clientes",
+      icon: (
+        <User className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
       label: "Administradores",
-      href: "#",
+      href: "/administrador/administradores",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
       label: "Productos",
-      href: "#",
+      href: "/administrador/productos",
       icon: (
         <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
       label: "Cerrar Sesión",
-      href: "#",
+      href: "/",
+      onClick: handleLogout,
       icon: (
         <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -68,19 +86,26 @@ export default function SidebarAdministrador({userData }:{userData: Usuario | nu
           <div>
             <SidebarLink
               link={{
-                label: userData ? `${userData.nombre} ${userData.apellido}` : "Usuario desconocido",
+                label: userData
+                  ? `${userData.nombre} ${userData.apellido}`
+                  : "Usuario desconocido",
                 href: "#",
                 icon: userData?.avatar_url ? (
-                  <Image
-                    src={userData.avatar_url}
-                    className="h-7 w-7 flex-shrink-0 rounded-full"
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
+                  <div className="flex items-center space-x-2 cursor-pointer">
+                    <Avatar className="w-7 h-7">
+                      <AvatarImage
+                        src={userData.avatar_url}
+                        alt="Avatar"
+                        className="image-cover"
+                      />
+                      <AvatarFallback>
+                        {userData?.nombre?.slice(0, 2).toUpperCase() || "?"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
                 ) : (
-                  <div className="h-7 w-7 flex-shrink-0 rounded-full bg-neutral-300 flex items-center justify-center text-xs font-bold text-neutral-700">
-                    {userData?.nombre?.charAt(0)?.toUpperCase() || "?"}
+                  <div className="h-7 w-7 flex items-center justify-center rounded-full bg-neutral-300 text-neutral-700">
+                    ?
                   </div>
                 ),
               }}

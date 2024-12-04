@@ -14,9 +14,10 @@ export default function AdministradorPageTable() {
   )
 }
 
+// This component will be a client component
 import { useState } from 'react'
 import { ToastProvider } from '@/components/ui/toast'
-import DataTableAdmin from './components/tabla-users-admin'
+import DataTableAdmin from '../../components/tabla-users-admin'
 
 function AdministradorPageTableContent() {
   const [filters, setFilters] = useState({
@@ -44,7 +45,7 @@ function AdministradorPageTableContent() {
   const placeholders = [
     "Buscar por apellido",
     "Buscar por nombre",
-    "buscar por correo",
+    "Buscar por correo",
   ];
 
   return (

@@ -31,7 +31,7 @@ import { ToastProvider } from '@/components/ui/toast';
 //   ]
 // };
 
-export default async function PageDetalles ( { params }: { params: { detalles: string } } ) {
+export default function PageDetalles ( { params }: { params: { detalles: string } } ) {
 
 
   return (
