@@ -2,24 +2,12 @@
 
 import { Suspense } from 'react'
 import { SearchInput } from '@/components/ui/search-input'
-
-
-export default function AdministradorPageTable() {
-  return (
-    <main className="w-full px-8 py-2">
-      <div className="">
-          <AdministradorPageTableContent />
-      </div>
-    </main>
-  )
-}
-
-// This component will be a client component
 import { useState } from 'react'
 import { ToastProvider } from '@/components/ui/toast'
 import DataTableProductos from '../../components/tabla-productos'
 
-function AdministradorPageTableContent() {
+
+export default function AdministradorPageProductos() {
   const [filters, setFilters] = useState({
     categoria: null,
     precio_min: 0,
@@ -47,7 +35,8 @@ function AdministradorPageTableContent() {
   ];
 
   return (
-    <>
+    <main className="w-full px-8 py-2">
+      <div className="">
       <div className='fex flex-row'>      
         <div className='flex items-start justify-start'>
           <SearchInput
@@ -71,6 +60,7 @@ function AdministradorPageTableContent() {
         </Suspense>
         </div>
       </div>
-    </>
-  );
+      </div>
+    </main>
+  )
 }

@@ -31,16 +31,18 @@ export function SearchInput({
   const pathname = usePathname()
 
   const handleSearch = useDebouncedCallback((term: string) => {
-    const params = new URLSearchParams(searchParams ?? '')
-    params.set('page', '1')
-
-    if (term) {
-      params.set('query', term)
-    } else {
-      params.delete('query')
+    if (term !== searchParams?.get('query')) {
+      const params = new URLSearchParams(searchParams ?? '')
+      params.set('page', '1')
+  
+      if (term) {
+        params.set('query', term)
+      } else {
+        params.delete('query')
+      }
+      router.replace(`${pathname}?${params.toString()}`)
     }
-    router.replace(`${pathname}?${params.toString()}`)
-  }, debounce ?? 500)
+  }, debounce ?? 300);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = useCallback(() => {

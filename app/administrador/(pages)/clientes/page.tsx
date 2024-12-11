@@ -2,23 +2,12 @@
 
 import { Suspense } from 'react'
 import { SearchInput } from '@/components/ui/search-input'
-
-
-export default function AdministradorPageTable() {
-  return (
-    <main className="w-full px-8 py-2">
-      <div className="">
-          <AdministradorPageTableContent />
-      </div>
-    </main>
-  )
-}
-
 import { useState } from 'react'
 import { ToastProvider } from '@/components/ui/toast'
 import DataTableClientes from '../../components/tabla-users-data'
 
-function AdministradorPageTableContent() {
+
+export default function AdministradorPageClientes() {
   const [filters, setFilters] = useState({
     nombre: null,
     apellido: null,
@@ -38,7 +27,6 @@ function AdministradorPageTableContent() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Implement search logic if needed
   };
 
   const placeholders = [
@@ -47,8 +35,10 @@ function AdministradorPageTableContent() {
     "Buscar por correo",
   ];
 
+
   return (
-    <>
+    <main className="w-full px-8 py-2">
+      <div className="">
       <div className='fex flex-row'>      
         <div className='flex items-start justify-start'>
           <SearchInput
@@ -72,6 +62,7 @@ function AdministradorPageTableContent() {
         </Suspense>
         </div>
       </div>
-    </>
-  );
+      </div>
+    </main>
+  )
 }

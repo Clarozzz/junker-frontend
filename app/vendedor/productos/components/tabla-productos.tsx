@@ -94,7 +94,7 @@ export default function TablaProductos({ id }: { id: string | null }) {
                                                     </TableCell>
                                                     <TableCell className="font-medium">{product.nombre}</TableCell>
                                                     <TableCell className="text-right">
-                                                        <Button className="rounded-md text-xs sm:text-sm font-medium shadow-md bg-slate-950 hover:bg-slate-800 text-white transition-all duration-200">
+                                                        <Button className="rounded-md text-xs sm:text-sm font-medium shadow-md bg-custom-blue hover:bg-slate-800 text-white transition-all duration-200">
                                                             Editar
                                                             <span className="sr-only">Editar {product.nombre}</span>
                                                         </Button>

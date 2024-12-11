@@ -2,23 +2,11 @@
 
 import { Suspense } from 'react'
 import { SearchInput } from '@/components/ui/search-input'
-
-
-export default function AdministradorPageTable() {
-  return (
-    <main className="w-full px-8 py-2">
-      <div className="">
-          <AdministradorPageTableContent />
-      </div>
-    </main>
-  )
-}
-
 import { useState } from 'react'
 import { ToastProvider } from '@/components/ui/toast'
 import DataTableAdmin from './components/tabla-users-admin'
 
-function AdministradorPageTableContent() {
+export default function AdministradorPerfil() {
   const [filters, setFilters] = useState({
     nombre: null,
     apellido: null,
@@ -48,7 +36,8 @@ function AdministradorPageTableContent() {
   ];
 
   return (
-    <>
+    <main className="w-full px-8 py-2">
+      <div className="">
       <div className='fex flex-row'>      
         <div className='flex items-start justify-start'>
           <SearchInput
@@ -72,6 +61,7 @@ function AdministradorPageTableContent() {
         </Suspense>
         </div>
       </div>
-    </>
-  );
+      </div>
+    </main>
+  )
 }

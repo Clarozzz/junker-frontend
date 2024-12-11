@@ -11,16 +11,10 @@ import ButtonMoreDataTable from "@/components/ui/button-table";
 import { Button } from "@/components/ui/button";
 import { EllipsisVerticalIcon, LinkIcon } from "lucide-react";
 import ModalAgregarRol from "./modal-agregar-rol";
+import { SearchInput } from "@/components/ui/search-input";
 
 
-export default function DataTableAdmin ({
-    nombre = null,
-    apellido = null,
-    email = null,
-    rol = null,
-    searchQuery = "",
-    ordenNombre = null,
-  }: UsuariosVistaProps) {
+export default function DataTableAdmin () {
     const [usuarios, setUsuarios] = useState<UsuarioVista[]>([]);
     const pathname = usePathname();
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -28,71 +22,92 @@ export default function DataTableAdmin ({
     const [totalItems, setTotalItems] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
 
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
     const [personaSeleccionada, setPersonaSeleccionada] =
     useState<UsuarioVista | null>(null)
 
 
-  const fetchUsuarios = useCallback(async () => {
-    try {
-      const data: UsuariosResponse = await getUsuarios(
-        currentPage,
-        itemsPerPage,
-        nombre,
-        apellido,
-        email,
-        "administrador",
-        searchQuery,
-        ordenNombre
-      );
-
-      if (data && data.items) {
-        setUsuarios(data.items);
-        setTotalItems(data.total);
-        setTotalPages(data.total_pages);  // Use the backend-provided total_pages
-      } else {
-        console.error("No se recibieron usuarios o hay un error en la estructura de datos.");
+    const fetchUsuarios = useCallback(async () => {
+      try {
+        const data: UsuariosResponse = await getUsuarios(
+          currentPage,
+          itemsPerPage,
+          null,
+          null,
+          null,
+          "administrador",
+          searchQuery,
+          null
+        );
+    
+        if (data && data.items) {
+          setUsuarios(data.items);
+          setTotalItems(data.total);
+          setTotalPages(data.total_pages);  
+        }
+      } catch (error) {
+        console.error("Error al obtener los usuarios:", error);
         setUsuarios([]);
         setTotalItems(0);
         setTotalPages(0);
       }
-    } catch (error) {
-      console.error("Error al obtener los usuarios:", error);
-      setUsuarios([]);
-      setTotalItems(0);
-      setTotalPages(0);
-    }
-  }, [
-    currentPage,
-    itemsPerPage,
-    nombre,
-    apellido,
-    email,
-    searchQuery,
-    ordenNombre
-  ]);
+    }, [
+      currentPage,
+      itemsPerPage,
+      searchQuery,
+    ]);
+    
+    // Add a useEffect to watch for searchQuery changes
+    useEffect(() => {
+      setCurrentPage(1);
+      fetchUsuarios();
+    }, [searchQuery, fetchUsuarios]);
 
-  // Add a useEffect to reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [nombre, apellido, email, rol, searchQuery, ordenNombre]);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchUsuarios();
   }, [fetchUsuarios]);
 
-  // Optional: Add method to change items per page
+ 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);  // Reset to first page
+    setCurrentPage(1);  
   };
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
+  const placeholders = [
+    "Buscar por apellido",
+    "Buscar por nombre",
+    "Buscar por correo",
+  ];
 
   return (
     <div className='flex flex-col my-4'>
+      <div className='mb-4 flex items-center'>
+                <div className='relative w-full max-w-md'>
+                <SearchInput
+            placeholders={placeholders}
+            onChange={handleChange}
+            onSubmit={onSubmit}
+            debounce={300}
+          />
+                </div>
+            </div>
       <div className='-m-1.5 overflow-x-auto'>
         <div className='p-1.5 min-w-full inline-block align-middle'>
           <div className='border rounded-lg overflow-hidden dark:border-gray-700'>
