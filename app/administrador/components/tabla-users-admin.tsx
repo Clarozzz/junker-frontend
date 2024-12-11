@@ -262,6 +262,7 @@ export default function DataTableAdmin() {
                               <ModalAgregarRol usuario={personaSeleccionada} />
                             )}
                           </>
+                          
 
                         </ButtonMoreDataTable>
                       </TableCell>
