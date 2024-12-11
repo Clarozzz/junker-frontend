@@ -229,3 +229,79 @@ interface FavoritoCreate {
 interface FavoritoResponse {
   message: string;
 }
+
+
+interface UsuarioVista {
+  id: string;
+  nombre: string;
+  apellido: string;
+  avatar_url: string;
+  telefono: string
+  estado: string
+  email: string;
+  rol: string[];
+}
+
+interface UsuariosResponse {
+  items: UsuarioVista[];
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+  filters_applied: {
+    nombre?: string | null;
+    apellido?: string | null;
+    email?: string | null;
+    rol?: string | null;
+    search_query?: string;
+    sort_asc?: boolean | null;
+  };
+}
+interface UsuariosVistaProps {
+  nombre: string | null;
+  apellido: string | null ;
+  email: string | null;
+  rol: string | null ;
+  searchQuery?: string;
+  ordenNombre?: boolean | null;
+}
+
+interface FilterStateUsuario {
+  nombre: string | null;
+  apellido: string ;
+  email: string ;
+  rol: string ;
+  searchQuery?: string;
+  ordenNombre?: boolean | null;
+}
+
+type RolesPermissons = 'cliente' | 'vendedor' | 'administrador'
+interface UsuarioRoles {
+    id: string;
+    nombre: string;
+    apellido: string;
+    genero: string;
+    fecha_nacimiento: string;
+    direccion: string;
+    avatar_url: string;
+    telefono: string;
+    estado: string;
+    email: string;
+    roles_usuarios: RolUsuario[];
+  }
+  
+interface RolUsuario {
+  roles: {
+    nombre: RolesPermissons;
+  };
+}
+
+interface Roles {
+  id: string;
+  nombre: string;
+}
+
+interface AsignarRol {
+  id_rol: string;
+  id_rol: string;
+}
