@@ -242,12 +242,11 @@ export default function DataTableClientes ({
                             </Link>
                           </Button>
 
-                            <>
-                              <ModalAgregarRol
-                                usuario={personaSeleccionada}
-                              />
-
-                            </>
+                          <>
+                            {personaSeleccionada && (
+                              <ModalAgregarRol usuario={personaSeleccionada} />
+                            )}
+                          </>
 
                         </ButtonMoreDataTable>
                       </TableCell>
