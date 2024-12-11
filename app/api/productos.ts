@@ -55,6 +55,20 @@ class ProductosService {
       throw error;
     }
   }
+  // ? Primera version del update del producto
+  async editProduct(productoData: ProductoEdit): Promise<ProductoResponse> {
+    try{
+      const response = await axios.put(`${this.baseURL}/productos`, productoData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error al actualizar el producto", error);
+      throw error;
+    }
+  }
 
   async uploadToCloudinary(file: File): Promise<string> {
     try {
@@ -83,6 +97,8 @@ class ProductosService {
     }
   }
 }
+
+
 
 
 export const productosService = new ProductosService();

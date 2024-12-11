@@ -34,7 +34,7 @@ export default function ProductosVista({
   const [itemsPerPage, setItemsPerPage] = useState<number>(8);
   const [totalItems, setTotalItems] = useState<number>(0);
   // const [isWishlist, setIsWishlist] = useState(false);
-  const [favoriteStatus, setFavoriteStatus] = useState<{[key: string]: boolean}>({});
+  const [favoriteStatus, setFavoriteStatus] = useState<{ [key: string]: boolean }>({});
   const [userData, setUserData] = useState<Usuario | null>(null);
   const [loadingProducto, setLoadingProducto] = useState<string | null>(null);
   const { showToast } = useToast();
@@ -61,7 +61,7 @@ export default function ProductosVista({
       if (EstaEnFavorito) {
         // Eliminar el producto de los favoritos
         await favoritoService.eliminarProductoDeFavoritos(userData?.id, productId);
-        
+
         // Actualizar el estado de los productos
         setFavoriteStatus(prev => ({
           ...prev,
@@ -94,7 +94,7 @@ export default function ProductosVista({
       }
     } catch (error) {
       console.error("Error toggling wishlist:", error);
-      
+
       showToast({
         title: "Error",
         description: "No se pudo modificar favoritos",
@@ -112,7 +112,7 @@ export default function ProductosVista({
       });
       return;
     }
-    
+
     setLoadingProducto(producto_id);
     try {
 
@@ -131,15 +131,15 @@ export default function ProductosVista({
           id_producto: producto_id,
           cantidad: 1,
         };
-  
+
         await carritoService.agregarCarrito(carritoData);
-  
+
         showToast({
           title: "¡Éxito!",
           description: "Producto agregado al carrito correctamente",
           variant: "success",
         });
-  
+
       }
     } catch (error) {
       showToast({
@@ -319,12 +319,12 @@ export default function ProductosVista({
       try {
         // Fetch user's current favorites
         const favoritos = await favoritoService.getFavorito(userData?.id);
-        
+
         // Create a map of favorite product IDs
         const favoritosMap = favoritos.reduce((acc, fav) => {
           acc[fav.id_producto] = true;
           return acc;
-        }, {} as {[key: string]: boolean});
+        }, {} as { [key: string]: boolean });
 
         setFavoriteStatus(favoritosMap);
       } catch (error) {
@@ -343,9 +343,10 @@ export default function ProductosVista({
       maximumFractionDigits: 2,
     });
 
+  if (isPending) return <Cargando />
+
   return (
     <div id="contenedor filtro y card" className="flex flex-row">
-      {isPending && <Cargando />}
       <div
         id="tarjetas"
         className="flex flex-col w-full justify-center items-center"
@@ -361,8 +362,8 @@ export default function ProductosVista({
                   >
                     <Card>
                       <CardContent
-                      onClick={() => handleCardClick(product)}
-                      className="p-4">
+                        onClick={() => handleCardClick(product)}
+                        className="p-4">
                         <Image
                           src={product.imagen_url || "/default-image.jpg"}
                           alt={product.nombre}
@@ -377,44 +378,36 @@ export default function ProductosVista({
                           Lps.{" "}
                           {formatCurrency(
                             product.precio
-                            )}
+                          )}
                         </p>
                       </CardContent>
-                      <div>
-                        <div className="flex justify-center p-6 pt-0 gap-3">
-                          <div className="">
-                            <Button
-                              onClick={() => handleAgregarCarrito(product.id)}
-                              disabled={loadingProducto === product.id}
-                              className={` w-28 bg-custom-blue text-white hover:bg-blue-900 hover:text-white ${
-                                productosSeleccion?.id === product.id
-                                  ? "ring-2 ring-ring ring-sec ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
-                                  : ""
-                              }`}
-                            >
-                              <ShoppingCart/>
-                            </Button>
-                          </div>
-                          <div className="">
-                            <Button
-                              type="submit"
-                              variant="outline"
-                              className={`space-x-2 bg-custom-beige text-black hover:bg-orange-100 ${
-                                productosSeleccion?.id === product.id
-                                  ? "ring-2 ring-ring ring-sec ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 "
-                                  : ""
-                              }`}
-                              onClick={() => handleAgregarFavoritos(product.id)}
-                            >
-                              <Heart
-                                className={cn(
-                                  "h-4 w-4",
-                                  favoriteStatus[product.id] && "fill-current text-red-500"
-                                )}
-                              />
-                            </Button>
-                          </div>
-                        </div>
+                      <div className="p-4 pt-0 flex gap-3">
+                        <Button
+                          onClick={() => handleAgregarCarrito(product.id)}
+                          disabled={loadingProducto === product.id}
+                          className={cn(
+                            "flex-1 bg-custom-blue text-white hover:bg-blue-900",
+                            productosSeleccion?.id === product.id && "ring-2 ring-custom-blue"
+                          )}
+                        >
+                          <ShoppingCart className="mr-2 h-4 w-4" />
+                          Agregar
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "bg-custom-beige text-black hover:bg-orange-100",
+                            productosSeleccion?.id === product.id && "ring-2 ring-custom-blue"
+                          )}
+                          onClick={() => handleAgregarFavoritos(product.id)}
+                        >
+                          <Heart
+                            className={cn(
+                              "h-4 w-4",
+                              favoriteStatus[product.id] && "fill-current text-red-500"
+                            )}
+                          />
+                        </Button>
                       </div>
                     </Card>
                   </motion.div>
@@ -443,11 +436,10 @@ export default function ProductosVista({
                   <Button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-3 py-2 leading-tight border border-gray-300 ${
-                      currentPage === page
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                    }`}
+                    className={`px-3 py-2 leading-tight border border-gray-300 ${currentPage === page
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                      }`}
                   >
                     {page}
                   </Button>
