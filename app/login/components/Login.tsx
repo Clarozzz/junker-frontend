@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="min-h-screen flex flex-row">
       {/* Left side (image) */}
       <div className="hidden md:flex w-1/2 bg-cover bg-gray-900 bg-opacity-50 bg-center bg-[url('https://wgsthklptjwlberpnsqy.supabase.co/storage/v1/object/sign/landing/sign-in.webp?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJsYW5kaW5nL3NpZ24taW4ud2VicCIsImlhdCI6MTcyOTYyMjI3OSwiZXhwIjoxNzYxMTU4Mjc5fQ.9sudVwNSmAK3Uv7xY6fFOrqk-gW3KoexJGh-yHgD0Vg&t=2024-10-22T18%3A37%3A59.695Z')]">
       </div>
